@@ -1,10 +1,47 @@
 package com.example.front
 
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.front.databinding.FragmentHomeBinding
+import com.example.front.databinding.ReviewRecyclerviewBinding
+
+data class ReviewObject(
+    val ratings: Float,
+    val storeTitle: String,
+    val reviewContent: String,
+    val reviewTime : String,
+)
+class ReviewViewHolder(val binding: ReviewRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root)
+
+class ReviewAdapter(val datas: MutableList<ReviewObject>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+    override fun getItemCount(): Int {
+        return datas.size
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
+        ReviewViewHolder(ReviewRecyclerviewBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val binding = (holder as ReviewViewHolder).binding
+        binding.reviewTime.text = datas[position].reviewTime
+        binding.reviewStoreName.text = datas[position].storeTitle
+        binding.reviewStoreText.text = datas[position].reviewContent
+        binding.reviewRatingbar.rating = datas[position].ratings
+    }
+}
+
+
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,7 +71,24 @@ class fragment_home : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+
+        val binding = FragmentHomeBinding.inflate(inflater,container,false)
+        val datas = mutableListOf<ReviewObject>()
+        for(i in 0..10){
+            val data = ReviewObject(
+                ratings = (i.toFloat() / 2),
+                storeTitle = "무슨 무슨 가게",
+                reviewContent = "리뷰 내용",
+                reviewTime = "2024-06-18"
+            )
+            datas.add(data)
+        }
+        val adapter = ReviewAdapter(datas)
+        val layoutManager = LinearLayoutManager(activity)
+        binding.fragmenthome.layoutManager = layoutManager
+        binding.fragmenthome.adapter = adapter
+
+        return binding.root // 바인딩된 레이아웃 반환
     }
 
     companion object {

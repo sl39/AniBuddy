@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.topAppBar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         fragmentManager.beginTransaction().replace(R.id.menu_frame_layout, fragmentHome).commitAllowingStateLoss()
 
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.search, menu)
 
-        val menuItem = menu?.findItem(R.id.menu_search)
+        val menuItem = menu?.findItem(R.id.menu_search_icon)
         val searchView = menuItem?.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
