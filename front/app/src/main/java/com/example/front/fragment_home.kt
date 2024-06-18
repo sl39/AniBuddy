@@ -10,7 +10,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.front.databinding.FragmentHomeBinding
-import com.example.front.databinding.ReviewRecyclerviewBinding
+import com.example.front.databinding.HomeReviewRecyclerviewBinding
+
 
 data class ReviewObject(
     val ratings: Float,
@@ -18,7 +19,7 @@ data class ReviewObject(
     val reviewContent: String,
     val reviewTime : String,
 )
-class ReviewViewHolder(val binding: ReviewRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root)
+class ReviewViewHolder(val binding: HomeReviewRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root)
 
 
 class ReviewAdapter(val datas: MutableList<ReviewObject>, val itemClickListener: OnItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -32,15 +33,15 @@ class ReviewAdapter(val datas: MutableList<ReviewObject>, val itemClickListener:
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder =
-        ReviewViewHolder(ReviewRecyclerviewBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+        ReviewViewHolder(HomeReviewRecyclerviewBinding.inflate(LayoutInflater.from(parent.context),parent,false))
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val binding = (holder as ReviewViewHolder).binding
         val review = datas[position]
-        binding.reviewTime.text = datas[position].reviewTime
-        binding.reviewStoreName.text = datas[position].storeTitle
-        binding.reviewStoreText.text = datas[position].reviewContent
-        binding.reviewRatingbar.rating = datas[position].ratings
+        binding.homeReviewTime.text = datas[position].reviewTime
+        binding.homeReviewStoreName.text = datas[position].storeTitle
+        binding.homeReviewStoreText.text = datas[position].reviewContent
+        binding.homeReviewRatingbar.rating = datas[position].ratings
 
         binding.root.setOnClickListener {
             itemClickListener.onItemClick(review)

@@ -23,12 +23,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.topAppBar)
+        setSupportActionBar(binding.homeTopAppBar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
         fragmentManager.beginTransaction().replace(R.id.menu_frame_layout, fragmentHome).commitAllowingStateLoss()
 
-        val bottomNavigationView: BottomNavigationView = findViewById(R.id.menu_bottom_navigation)
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.home_menu_bottom_navigation)
         bottomNavigationView.setOnNavigationItemSelectedListener(ItemSelectedListener())
     }
 

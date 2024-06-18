@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/top_app_bar"
+        android:id="@+id/home_top_app_bar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,11 +28,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="?attr/actionBarSize"
-        app:layout_constraintTop_toBottomOf="@id/top_app_bar"
-        app:layout_constraintBottom_toTopOf="@id/menu_bottom_navigation"/>
+        app:layout_constraintTop_toBottomOf="@id/home_top_app_bar"
+        app:layout_constraintBottom_toTopOf="@id/home_menu_bottom_navigation"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/menu_bottom_navigation"
+        android:id="@+id/home_menu_bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
