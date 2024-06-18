@@ -1,15 +1,12 @@
 package com.example.front
 
-import android.content.Context
-import android.graphics.Canvas
-import android.graphics.drawable.Drawable
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.front.databinding.FragmentHomeBinding
@@ -23,7 +20,13 @@ data class ReviewObject(
 )
 class ReviewViewHolder(val binding: ReviewRecyclerviewBinding) : RecyclerView.ViewHolder(binding.root)
 
-class ReviewAdapter(val datas: MutableList<ReviewObject>) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+
+class ReviewAdapter(val datas: MutableList<ReviewObject>, val itemClickListener: OnItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+
+    interface OnItemClickListener {
+        fun onItemClick(review: ReviewObject)
+    }
+
     override fun getItemCount(): Int {
         return datas.size
     }
@@ -33,10 +36,17 @@ class ReviewAdapter(val datas: MutableList<ReviewObject>) : RecyclerView.Adapter
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val binding = (holder as ReviewViewHolder).binding
+        val review = datas[position]
         binding.reviewTime.text = datas[position].reviewTime
         binding.reviewStoreName.text = datas[position].storeTitle
         binding.reviewStoreText.text = datas[position].reviewContent
         binding.reviewRatingbar.rating = datas[position].ratings
+
+        binding.root.setOnClickListener {
+            itemClickListener.onItemClick(review)
+        }
+
+
     }
 }
 
@@ -53,7 +63,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [fragment_home.newInstance] factory method to
  * create an instance of this fragment.
  */
-class fragment_home : Fragment() {
+class FragmentHome : Fragment(), ReviewAdapter.OnItemClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -77,18 +87,29 @@ class fragment_home : Fragment() {
         for(i in 0..10){
             val data = ReviewObject(
                 ratings = (i.toFloat() / 2),
-                storeTitle = "무슨 무슨 가게",
-                reviewContent = "리뷰 내용",
+                storeTitle = "몇번째가게 $i",
+                reviewContent = "몇번째리뷰 $i",
                 reviewTime = "2024-06-18"
             )
             datas.add(data)
         }
-        val adapter = ReviewAdapter(datas)
+        val adapter = ReviewAdapter(datas, this)
         val layoutManager = LinearLayoutManager(activity)
         binding.fragmenthome.layoutManager = layoutManager
         binding.fragmenthome.adapter = adapter
 
         return binding.root // 바인딩된 레이아웃 반환
+    }
+
+    override fun onItemClick(review: ReviewObject) {
+        Log.d("ReviewClick", "클릭된 리뷰: ${review.storeTitle}, ${review.reviewContent}, ${review.ratings}, ${review.reviewTime}")
+        val intent :Intent = Intent(requireContext(),StoreDetailActivity::class.java).apply {
+            putExtra("storeTitle", review.storeTitle)
+            putExtra("reviewContent", review.reviewContent)
+            putExtra("ratings", review.ratings.toString())
+            putExtra("reviewTime", review.reviewTime)
+        }
+        startActivity(intent)
     }
 
     companion object {
@@ -103,7 +124,7 @@ class fragment_home : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            fragment_home().apply {
+            FragmentHome().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

@@ -13,7 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val fragmentManager: FragmentManager = supportFragmentManager
-    private val fragmentHome = fragment_home()
+    private val fragmentHome = FragmentHome()
     private val fragmentReservationList = fragment_reservation_list()
     private val fragmentFollowingList = fragment_following_list()
     private val fragmentChatList = fragment_chat_list()
