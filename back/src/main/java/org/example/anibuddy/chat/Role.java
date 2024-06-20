@@ -1,2 +1,7 @@
-package org.example.anibuddy.chat;public class Role {
+package org.example.anibuddy.chat;
+
+
+enum Role {
+    USER,
+    OWNER
 }

@@ -1,4 +1,4 @@
-package org.example.anibuddy.global.websocket;
+package org.example.anibuddy.chat;
 
 import jakarta.persistence.*;
 import org.example.anibuddy.owner.OwnerEntity;

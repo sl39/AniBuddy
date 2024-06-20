@@ -1,7 +1,8 @@
-package org.example.anibuddy.global.websocket;
+package org.example.anibuddy.chat;
 
 import jakarta.persistence.*;
-import org.example.anibuddy.owner.OwnerEntity;
+
+import java.time.LocalDateTime;
 
 @Entity
 public class MessageEntity {
@@ -18,11 +19,11 @@ public class MessageEntity {
     private String content;
 
     @Column(nullable = false)
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private String status;
+    private Status status;
 
     @Column(nullable = false)
-    private String role;
+    private Role role;
 }

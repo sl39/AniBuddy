@@ -1,2 +1,6 @@
-package org.example.anibuddy.chat;public class Status {
+package org.example.anibuddy.chat;
+
+enum Status {
+    READ,
+    UNREAD
 }
