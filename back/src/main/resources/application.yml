@@ -6,6 +6,6 @@ spring:
     password: 1122
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
 
 
