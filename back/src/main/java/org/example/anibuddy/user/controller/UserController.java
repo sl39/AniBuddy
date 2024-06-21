@@ -1,4 +1,4 @@
-package org.example.anibuddy.user;
+package org.example.anibuddy.user.controller;
 
 
 import org.springframework.web.bind.annotation.GetMapping;
