@@ -1,11 +1,11 @@
-package org.example.anibuddy.user;
+package org.example.anibuddy.auth;
 
-import org.apache.catalina.User;
+import org.example.anibuddy.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<UserEntity,Integer> {
+public interface AuthRepository extends JpaRepository<UserEntity,Integer> {
     Optional<UserEntity> findByEmail(String email);
 
     Optional<UserEntity> findByRefreshToken(String refreshToken);

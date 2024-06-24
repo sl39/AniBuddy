@@ -1,13 +1,12 @@
-package org.example.anibuddy.user.UserDto;
+package org.example.anibuddy.auth.Dto;
 
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
-public class UserSignUpRequestDto {
+public class AuthSignUpRequestDto {
     private String userName;
 
     private String email;

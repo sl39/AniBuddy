@@ -1,14 +1,13 @@
 package org.example.anibuddy.user;
 
 import jakarta.persistence.*;
-import jakarta.servlet.http.PushBuilder;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
+@Entity(name="user_entity")
 @Builder
 @AllArgsConstructor
 public class UserEntity {

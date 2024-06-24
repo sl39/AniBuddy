@@ -1,12 +1,13 @@
-package org.example.anibuddy.global.jwt.filter;
+package org.example.anibuddy.global.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.anibuddy.user.UserRepository;
+import org.example.anibuddy.auth.AuthRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,7 @@ public class JwtService {
     private static final String EMAIL_CLAIM = "email";
     private static final String BEARER = "Bearer ";
 
-    private final UserRepository userRepository;
+    private final AuthRepository userRepository;
 
     // AccessToken 생성 메소드
     public String createAccessToken(String email) {
@@ -88,7 +89,7 @@ public class JwtService {
     // 헤더에 RefreshToken 추출
     // 토큰 형식 : Bearer XXX에서 Bearer를 제외하고 순수 토큰만 가져오기 위해서
     // 헤더를 가져온 후 "Bearer"를 삭제(""로 replace)
-    public Optional<String> extractRefreshToken(HttpServletResponse request){
+    public Optional<String> extractRefreshToken(HttpServletRequest request){
         return Optional.ofNullable(request.getHeader(refreshHeader))
                 .filter(refreshToken -> refreshToken.startsWith(BEARER))
                 .map(refreshToken -> refreshToken.replace(BEARER, ""));
@@ -97,7 +98,7 @@ public class JwtService {
     // 헤더에서 AccessToken 추출
     // 토큰 형식 : Bearer XXX에서 Bearer을 제외하고 순수 토큰만 가져오기 위해서
     // 헤더를 가져온 후 "Bearer"를 삭제 (""로 replace)
-    public Optional<String> extractAccessToken(HttpServletResponse request){
+    public Optional<String> extractAccessToken(HttpServletRequest request){
         return Optional.ofNullable(request.getHeader(accessHeader))
                 .filter(accessToken -> accessToken.startsWith(BEARER))
                 .map(accessToken -> accessToken.replace(BEARER,""));
@@ -141,9 +142,13 @@ public class JwtService {
                 );
     }
 
-
-
-
-
-
+    public boolean isTokenValid(String token){
+        try {
+            JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token);
+            return true;
+        } catch (Exception e){
+            log.error("유효하지 않은 토큰입니다. {}", e.getMessage());
+            return false;
+        }
+    }
 }

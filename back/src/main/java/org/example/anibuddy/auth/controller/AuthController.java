@@ -1,8 +1,8 @@
-package org.example.anibuddy.user.controller;
+package org.example.anibuddy.auth.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.anibuddy.user.UserDto.UserSignUpRequestDto;
-import org.example.anibuddy.user.UserService;
+import org.example.anibuddy.auth.Dto.AuthSignUpRequestDto;
+import org.example.anibuddy.auth.service.SignupService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final UserService userService;
+    private final SignupService signupService;
 
     @PostMapping("/signup")
-    public String signup(@RequestBody UserSignUpRequestDto userSignUpRequestDto) throws Exception {
-        userService.signup(userSignUpRequestDto);
+    public String signup(@RequestBody AuthSignUpRequestDto authSignUpRequestDto) throws Exception {
+        signupService.signup(authSignUpRequestDto);
         return "회원가입 성공!";
     }
+
 
 
 
