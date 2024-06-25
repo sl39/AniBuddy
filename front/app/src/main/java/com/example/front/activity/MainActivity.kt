@@ -1,13 +1,20 @@
-package com.example.front
+package com.example.front.activity
 
 import android.os.Bundle
+import android.preference.PreferenceDataStore
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentManager
+import com.example.front.FragmentHome
+import com.example.front.R
 import com.example.front.databinding.ActivityMainBinding
+import com.example.front.fragment_chat_list
+import com.example.front.fragment_following_list
+import com.example.front.fragment_profile
+import com.example.front.fragment_reservation_list
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -21,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.homeTopAppBar)

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.front.activity.StoreDetailActivity
 import com.example.front.databinding.FragmentHomeBinding
 import com.example.front.databinding.HomeReviewRecyclerviewBinding
 
@@ -104,7 +105,7 @@ class FragmentHome : Fragment(), ReviewAdapter.OnItemClickListener {
 
     override fun onItemClick(review: ReviewObject) {
         Log.d("ReviewClick", "클릭된 리뷰: ${review.storeTitle}, ${review.reviewContent}, ${review.ratings}, ${review.reviewTime}")
-        val intent :Intent = Intent(requireContext(),StoreDetailActivity::class.java).apply {
+        val intent :Intent = Intent(requireContext(), StoreDetailActivity::class.java).apply {
             putExtra("storeTitle", review.storeTitle)
             putExtra("reviewContent", review.reviewContent)
             putExtra("ratings", review.ratings.toString())
