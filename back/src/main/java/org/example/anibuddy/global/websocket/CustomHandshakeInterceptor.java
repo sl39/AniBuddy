@@ -36,6 +36,5 @@ public class CustomHandshakeInterceptor implements HandshakeInterceptor {
             ServerHttpResponse response,
             WebSocketHandler wsHandler,
             Exception exception) {
-
     }
 }
