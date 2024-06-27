@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private val fragmentHome = FragmentHome()
     private val fragmentReservationList = fragment_reservation_list()
     private val fragmentFollowingList = fragment_following_list()
-    private val fragmentChatList = fragment_chat_list()
+    private val fragmentChatRoomList = fragment_chatroom_list()
     private val fragmentProfile = fragment_profile()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.home -> transaction.replace(R.id.menu_frame_layout, fragmentHome).commitAllowingStateLoss()
                 R.id.reservationList -> transaction.replace(R.id.menu_frame_layout, fragmentReservationList).commitAllowingStateLoss()
                 R.id.follwingList -> transaction.replace(R.id.menu_frame_layout, fragmentFollowingList).commitAllowingStateLoss()
-                R.id.chatList -> transaction.replace(R.id.menu_frame_layout, fragmentChatList).commitAllowingStateLoss()
+                R.id.chatList -> transaction.replace(R.id.menu_frame_layout, fragmentChatRoomList).commitAllowingStateLoss()
                 R.id.profile -> transaction.replace(R.id.menu_frame_layout, fragmentProfile).commitAllowingStateLoss()
             }
 

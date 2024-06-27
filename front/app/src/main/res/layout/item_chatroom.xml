@@ -6,15 +6,35 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="16dp"
-    android:layout_margin="8dp" >
+    android:layout_marginVertical="10dp"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="10dp" >
 
-    <TextView
-        android:id="@+id/item_data"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:textSize="16sp" />
+    <ImageView
+        android:src="@mipmap/ic_launcher"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:id="@+id/item_store_name"
+            android:text="store name"
+            android:textStyle="bold"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/item_latest_chat"
+            android:text="latest chat"
+            android:textSize="13sp" />
+
+    </LinearLayout>
 </LinearLayout>

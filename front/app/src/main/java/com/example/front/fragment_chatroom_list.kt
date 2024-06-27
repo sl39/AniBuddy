@@ -27,12 +27,10 @@ class ChatRoomAdapter(val datas: MutableList<String>) : RecyclerView.Adapter<Rec
     }
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val binding = (holder as ChatRoomViewHolder).binding
-        binding.itemData.text = datas[position]
+        binding.itemStoreName.text = datas[position]
+        binding.itemLatestChat.text = datas[position]
     }
 }
-
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 class fragment_chatroom_list : Fragment() {
 
@@ -41,10 +39,12 @@ class fragment_chatroom_list : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentChatroomListBinding.inflate(inflater, container, false)
 
         val datas = mutableListOf<String>()
+
+        for(i in 1..10) datas.add("store $i")
 
         val adapter = ChatRoomAdapter(datas)
         val layoutManager = LinearLayoutManager(activity)
@@ -53,16 +53,5 @@ class fragment_chatroom_list : Fragment() {
         binding.recyclerview.layoutManager = layoutManager
 
         return binding.root //화면에 출력
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            fragment_chatroom_list().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }
