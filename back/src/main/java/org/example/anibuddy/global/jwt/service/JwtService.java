@@ -2,6 +2,7 @@ package org.example.anibuddy.global.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
@@ -11,7 +12,10 @@ import org.example.anibuddy.auth.AuthRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -79,10 +83,19 @@ public class JwtService {
 
 
     // AccessToken + RefreshToken 헤더에 실어서 보내기
-    public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken){
+    public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken) throws IOException {
         response.setStatus(HttpServletResponse.SC_OK);
         setAccessTokenHeader(response, accessToken);
         setRefreshTokenHeader(response, refreshToken);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/plain;charset=UTF-8");
+        Map<String, String> tokenResponse = new HashMap<>();
+        tokenResponse.put("message", "accessToken & refreshToken 발급!");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(tokenResponse);
+
+        response.getWriter().write(jsonResponse);
         log.info("Access Token, Refresh Token 헤더 설정 완료");
     }
 
