@@ -3,10 +3,7 @@ package org.example.anibuddy.auth.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.auth.Dto.AuthSignUpRequestDto;
 import org.example.anibuddy.auth.service.SignupService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -20,6 +17,10 @@ public class AuthController {
         signupService.signup(authSignUpRequestDto);
         return "회원가입 성공!";
     }
+
+    @GetMapping("/autoLogin")
+    public void autoLogin(){}
+
 
 
 

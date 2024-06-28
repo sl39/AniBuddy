@@ -1,36 +1,66 @@
 package com.example.front.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.example.front.data.LoginApiService
 import com.example.front.data.UserPreferencesRepository
 import com.example.front.data.request.LoginRequest
 import com.example.front.data.response.LoginResponse
 import com.example.front.databinding.ActivityLoginBinding
-import kotlinx.coroutines.CompletableJob
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import retrofit2.Callback
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.awaitResponse
 
 class LoginActivity : AppCompatActivity() {
+    private val userPreferencesRepository by lazy {
+        UserPreferencesRepository(this@LoginActivity.dataStore)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
+        val api = LoginApiService.create()
+
+        val intent: Intent = Intent(this@LoginActivity,MainActivity::class.java)
+
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+//        GlobalScope.launch {
+//            userPreferencesRepository.getAccessToken
+//                .onEach { accessToken ->
+//                    // accessToken 값 사용
+//                    if(accessToken.toString().equals("")){
+//                        startActivity(intent)
+//                    }
+//                    else{
+//                        setContentView(binding.root)
+//
+//                    }
+//                }
+//                .launchIn(this)
+//            userPreferencesRepository.getRefreshToken
+//                .onEach { accessToken ->
+//                    // accessToken 값 사용
+//                    Log.d("RefreshToken", accessToken)
+//                }
+//                .launchIn(this)
+//        }
+
+
 
         val btn_login : Button = binding.loginBtn
         btn_login.setOnClickListener(object: View.OnClickListener{
@@ -40,22 +70,38 @@ class LoginActivity : AppCompatActivity() {
                 val password = binding.editTextPassword.text.toString().trim()
                 val data = LoginRequest(email,password)
 
-                val api = LoginApiService.create()
                 api.userLogin(data).enqueue(object : Callback<LoginResponse>{
                     override fun onResponse(
                         call: Call<LoginResponse>,
                         response: Response<LoginResponse>
                     ) {
-                        Log.d("로그인 통신 성공 accessToken", response.headers().get("Authorization").toString())
-                        Log.d("로그인 통신 성공 refreshToken", response.headers().get("Authorization-refresh").toString())
-
 
                         when(response.code()){
                             200 -> {
-                                val intent: Intent = Intent(this@LoginActivity,MainActivity::class.java)
+                                val accessToken = response.headers().get("Authorization").toString()
+                                val refreshToken =  response.headers().get("Authorization-refresh").toString()
+                                GlobalScope.launch {
+                                    userPreferencesRepository.setAccessToken(accessToken)
+                                    userPreferencesRepository.setRefreshToken(refreshToken)
+                                    userPreferencesRepository.getAccessToken
+                                        .onEach { accessToken ->
+                                            // accessToken 값 사용
+                                            Log.d("AccessToken", accessToken)
+                                        }
+                                        .launchIn(this)
+                                    userPreferencesRepository.getRefreshToken
+                                        .onEach { accessToken ->
+                                            // accessToken 값 사용
+                                            Log.d("RefreshToken", accessToken)
+                                        }
+                                        .launchIn(this)
+                                }
+
                                 startActivity(intent)
                             }
                             else ->{
+                                val show = Toast.makeText(this@LoginActivity, "아이디와 비밀번호를 확인하세요", Toast.LENGTH_SHORT)
+                                    .show();
                                 Log.d("로그인 실패", "아이디와 비밀번호를 확인하세요")
                             }
                         }
@@ -72,23 +118,5 @@ class LoginActivity : AppCompatActivity() {
     }
 }
 
-class loginViewModel(
-    private val userPreferencesRepository: UserPreferencesRepository
-) : ViewModel(){
-    private var viewModelJob : CompletableJob = Job()
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "token_preferences")
 
-    private val uiScope : CoroutineScope =
-        CoroutineScope(Dispatchers.Main + viewModelJob)
-
-    var acessToken : LiveData<String> = userPreferencesRepository.getAccessToken.asLiveData()
-    var refreshToken : LiveData<String> = userPreferencesRepository.getRefreshToken.asLiveData()
-
-    fun setTokens(){
-        uiScope.launch {
-            val accessToken = "accessToken"
-            val refreshToken = "refreshToken"
-
-            userPreferencesRepository.setAccessandRefreshToken(accessToken,refreshToken)
-        }
-    }
-}
