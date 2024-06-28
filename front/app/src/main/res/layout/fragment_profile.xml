@@ -1,14 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment_profile">
+    android:id="@+id/fragment_profile_container">
 
-    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:id="@+id/profile_interface_4"
+        android:layout_width="394dp"
+        android:layout_height="115dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/edge"
+        app:layout_constraintTop_toBottomOf="@+id/profile_interface_3" >
+
+        <Button
+            android:id="@+id/button_to_profile_add"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="반려동물 추가하기"
+            android:textColor="#000000"
+            android:textSize="36dp"
+            android:textStyle="bold"
+            tools:ignore="MissingConstraints" />
+    </RelativeLayout>
+
+    <RelativeLayout
+    android:id="@+id/profile_interface_1"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginEnd="10dp"
+    android:background="@drawable/edge"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.666"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <ImageView
+        android:id="@+id/imageView_user"
+        android:layout_width="135dp"
+        android:layout_height="85dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/pomeranian" />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="profile" />
+        android:id="@+id/textView_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="15dp"
+        android:layout_toEndOf="@+id/imageView_user"
+        android:text="이름" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/textView_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView_user"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="25dp"
+        android:text="주소" />
+
+    <TextView
+        android:id="@+id/textView_user_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView_user_name"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="25dp"
+        android:layout_toEndOf="@+id/imageView_user"
+        android:text="Id" />
+
+</RelativeLayout>
+
+<TextView
+    android:id="@+id/textView_my_pet"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="30dp"
+    android:text="내 반려동물"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/profile_interface_1" />
+
+<RelativeLayout
+    android:id="@+id/profile_interface_2"
+    android:layout_width="394dp"
+    android:layout_height="115dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginEnd="10dp"
+    android:background="@drawable/edge"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.857"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/textView_my_pet">
+
+    <ImageView
+        android:id="@+id/imageView_my_pet_1"
+        android:layout_width="109dp"
+        android:layout_height="89dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        app:srcCompat="@drawable/love" />
+
+    <TextView
+        android:id="@+id/profile_my_pet_name1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageView_my_pet_1"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/imageView_my_pet_1"
+        android:text="이름" />
+
+    <TextView
+        android:id="@+id/textView_my_pet_kind1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_my_pet_name1"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/imageView_my_pet_1"
+        android:text="품종" />
+
+    <TextView
+        android:id="@+id/textView_my_pet_age1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_my_pet_name1"
+        android:layout_marginStart="60dp"
+
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/textView_my_pet_kind1"
+        android:text="나이" />
+
+    <TextView
+        android:id="@+id/profile_my_pet_gender1"
+        android:layout_width="38dp"
+        android:layout_height="19dp"
+        android:layout_alignTop="@+id/imageView_my_pet_1"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/profile_my_pet_name1"
+        android:text="성별" />
+</RelativeLayout>
+
+
+<RelativeLayout
+    android:id="@+id/profile_interface_3"
+    android:layout_width="394dp"
+    android:layout_height="115dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="24dp"
+    android:layout_marginEnd="10dp"
+    android:background="@drawable/edge"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.857"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/profile_interface_2">
+
+    <TextView
+        android:id="@+id/profile_my_pet_age2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_my_pet_name2"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/profile_my_pet_kind2"
+        android:text="나이" />
+
+    <TextView
+        android:id="@+id/profile_my_pet_kind2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_my_pet_name2"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/imageView_my_pet_2"
+        android:text="품종" />
+
+    <TextView
+        android:id="@+id/profile_my_pet_gender2"
+        android:layout_width="38dp"
+        android:layout_height="19dp"
+        android:layout_alignTop="@+id/imageView_my_pet_2"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/profile_my_pet_name2"
+        android:text="성별" />
+
+    <TextView
+        android:id="@+id/profile_my_pet_name2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageView_my_pet_2"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/imageView_my_pet_2"
+        android:text="이름" />
+
+    <ImageView
+        android:id="@+id/imageView_my_pet_2"
+        android:layout_width="109dp"
+        android:layout_height="89dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        app:srcCompat="@drawable/love" />
+</RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

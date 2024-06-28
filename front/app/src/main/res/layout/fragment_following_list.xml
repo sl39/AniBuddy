@@ -1,14 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragment_following_list">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="following List" />
+        android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/followingListName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="좋아요 한 가게"
+        android:textColor="@color/black"
+        android:layout_marginLeft="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="30dp"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_gravity="center_vertical"
+        android:background="#40000000"
+        app:layout_constraintTop_toBottomOf="@+id/followingListName"
+        android:layout_marginTop="5dp"/>
+
+    <RelativeLayout
+        android:layout_width="396dp"
+        android:layout_height="78dp"
+        android:background="@drawable/edge"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        android:layout_marginTop="40dp"
+        tools:layout_editor_absoluteX="5dp"
+        android:id="@+id/rectangle1">
+
+        <ImageView
+            android:id="@+id/followList1"
+            android:layout_width="74dp"
+            android:layout_height="74dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@drawable/chat" />
+
+        <TextView
+            android:id="@+id/followingList1Name"
+            android:layout_width="75dp"
+            android:layout_height="27dp"
+            android:layout_alignTop="@+id/followList1"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/followList1"
+            android:text="이름1" />
+
+        <TextView
+            android:id="@+id/followingList1Address"
+            android:layout_width="75dp"
+            android:layout_height="27dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="35dp"
+            android:layout_toEndOf="@+id/followList1"
+            android:text="주소1" />
+
+        <TextView
+            android:id="@+id/followingList1Cateogry"
+            android:layout_width="75dp"
+            android:layout_height="27dp"
+            android:layout_alignTop="@+id/followingList1Name"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/followingList1Name"
+            android:text="카테고리1"
+            tools:layout_editor_absoluteX="238dp"
+            tools:layout_editor_absoluteY="143dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="396dp"
+        android:layout_height="78dp"
+        android:background="@drawable/edge"
+        app:layout_constraintTop_toBottomOf="@+id/rectangle1"
+        android:layout_marginTop="40dp"
+        tools:layout_editor_absoluteX="5dp"
+        android:id="@+id/rectangle2" >
+
+        <ImageView
+            android:id="@+id/followList2"
+            android:layout_width="74dp"
+            android:layout_height="74dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@drawable/chat" />
+
+        <TextView
+            android:id="@+id/followingList2Name"
+            android:layout_width="75dp"
+            android:layout_height="27dp"
+            android:layout_alignTop="@+id/followList2"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/followList2"
+            android:text="이름2" />
+
+        <TextView
+            android:id="@+id/followingList2Address"
+            android:layout_width="75dp"
+            android:layout_height="27dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="35dp"
+            android:layout_toEndOf="@+id/followList2"
+            android:text="주소2" />
+
+        <TextView
+            android:id="@+id/followingList2Cateogry"
+            android:layout_width="75dp"
+            android:layout_height="27dp"
+            android:layout_alignTop="@+id/followingList2Name"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/followingList2Name"
+            android:text="카테고리2"
+            tools:layout_editor_absoluteX="238dp"
+            tools:layout_editor_absoluteY="143dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="396dp"
+        android:layout_height="78dp"
+        android:background="@drawable/edge"
+        app:layout_constraintTop_toBottomOf="@+id/rectangle2"
+        android:layout_marginTop="40dp"
+        tools:layout_editor_absoluteX="5dp"
+        android:id="@+id/rectangle3" >
+
+        <ImageView
+            android:id="@+id/followList3"
+            android:layout_width="74dp"
+            android:layout_height="74dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@drawable/chat" />
+
+        <TextView
+            android:id="@+id/followingList3Name"
+            android:layout_width="75dp"
+            android:layout_height="27dp"
+            android:layout_alignTop="@+id/followList3"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/followList3"
+            android:text="이름3" />
+
+        <TextView
+            android:id="@+id/followingList3Address"
+            android:layout_width="75dp"
+            android:layout_height="27dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="35dp"
+            android:layout_toEndOf="@+id/followList3"
+            android:text="주소3" />
+
+        <TextView
+            android:id="@+id/followingList3Cateogry"
+            android:layout_width="75dp"
+            android:layout_height="27dp"
+            android:layout_alignTop="@+id/followingList3Name"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/followingList3Name"
+            android:text="카테고리3"
+            tools:layout_editor_absoluteX="238dp"
+            tools:layout_editor_absoluteY="143dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="396dp"
+        android:layout_height="78dp"
+        android:background="@drawable/edge"
+        app:layout_constraintTop_toBottomOf="@+id/rectangle3"
+        android:layout_marginTop="40dp"
+        tools:layout_editor_absoluteX="5dp"
+        android:id="@+id/rectangle4" >
+
+        <ImageView
+            android:id="@+id/followList4"
+            android:layout_width="74dp"
+            android:layout_height="74dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:srcCompat="@drawable/chat" />
+
+        <TextView
+            android:id="@+id/followingList4Name"
+            android:layout_width="75dp"
+            android:layout_height="27dp"
+            android:layout_alignTop="@+id/followList4"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/followList4"
+            android:text="이름4" />
+
+        <TextView
+            android:id="@+id/followingList4Address"
+            android:layout_width="75dp"
+            android:layout_height="27dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="35dp"
+            android:layout_toEndOf="@+id/followList4"
+            android:text="주소4" />
+
+        <TextView
+            android:id="@+id/followingList4Cateogry"
+            android:layout_width="75dp"
+            android:layout_height="27dp"
+            android:layout_alignTop="@+id/followingList4Name"
+            android:layout_marginStart="80dp"
+            android:layout_marginTop="0dp"
+            android:layout_toEndOf="@+id/followingList4Name"
+            android:text="카테고리4"
+            tools:layout_editor_absoluteX="238dp"
+            tools:layout_editor_absoluteY="143dp" />
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
