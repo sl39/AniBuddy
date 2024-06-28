@@ -1,7 +1,9 @@
 package org.example.anibuddy.user;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class UserEntity {
 

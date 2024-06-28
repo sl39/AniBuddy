@@ -1,29 +1,21 @@
 package org.example.anibuddy.chat.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Entity
+@Getter
+@NoArgsConstructor
 public class ChatMessageEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @ManyToOne
-    @JoinColumn(name = "chatroom_id")
-    private ChatRoomEntity chatRoom;
-
-    @Column(nullable = false)
-    private String content;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private Status status;
-
-    @Column(nullable = false)
+    private int chatRoomId;
     private Role role;
+    private int chatterId;
+
+    private String content;
+    private LocalDateTime createdAt;
+    private Status status;
 }

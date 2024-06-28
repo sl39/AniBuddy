@@ -1,7 +1,7 @@
 package org.example.anibuddy.chat.model;
 
 
-enum Role {
+public enum Role {
     USER,
     OWNER
 }
