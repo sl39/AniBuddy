@@ -2,7 +2,9 @@ package org.example.anibuddy.owner;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class OwnerEntity {
 

@@ -1,10 +1,17 @@
-package org.example.anibuddy.chat;
+package org.example.anibuddy.chat.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.owner.OwnerEntity;
 import org.example.anibuddy.user.UserEntity;
 
+@NoArgsConstructor
+@Getter
 @Entity
+@Table(name="chatroom")
 public class ChatRoomEntity {
 
     @Id
@@ -18,4 +25,10 @@ public class ChatRoomEntity {
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private OwnerEntity owner;
+
+    @Builder
+    public ChatRoomEntity(UserEntity user, OwnerEntity owner) {
+        this.user=user;
+        this.owner=owner;
+    }
 }

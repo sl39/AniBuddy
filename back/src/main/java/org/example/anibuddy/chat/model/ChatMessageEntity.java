@@ -1,11 +1,11 @@
-package org.example.anibuddy.chat;
+package org.example.anibuddy.chat.model;
 
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-public class MessageEntity {
+public class ChatMessageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
