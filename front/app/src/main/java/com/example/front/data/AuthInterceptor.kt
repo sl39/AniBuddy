@@ -5,93 +5,88 @@ import android.util.Log
 import com.example.front.activity.dataStore
 import com.example.front.data.request.TokenReqeust
 import com.example.front.data.response.TokenResponse
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
-import retrofit2.Callback
-import retrofit2.Call
 import okhttp3.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class AuthInterceptor(private val context: Context) : Interceptor {
     private val userPreferencesRepository by lazy {
         UserPreferencesRepository(context.dataStore)
     }
-    val api = LoginApiService.create()
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("http://10.0.2.2:8080")  // 실제 API 베이스 URL로 교체하세요.
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val api = retrofit.create(ApiService::class.java)
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val accessToken = userPreferencesRepository.getAccessToken.toString()
-        val request = chain.request().newBuilder()
+        val accessToken = runBlocking {
+            userPreferencesRepository.getAccessToken.first()
+        }
 
-        if (accessToken.isNotEmpty()) {
+        var request = chain.request().newBuilder()
+
+        if (!accessToken.equals("")) {
             request.addHeader("Authorization", "Bearer $accessToken")
         }
 
-        val response = chain.proceed(request.build())
+        var response = chain.proceed(request.build())
 
-        if (response.code == 403) {
-            val refreshToken = userPreferencesRepository.getRefreshToken.toString()
-            if (refreshToken.isNotEmpty()) {
-                val newAccessToken = refreshAccessToken(refreshToken)
-                request.addHeader("Authorization", "Bearer $newAccessToken")
-                return chain.proceed(request.build())
-            } else {
-                // Handle the case where the refresh token is not available
-                return response
+        if (response.code != 200) {
+            var refreshToken = runBlocking {
+                userPreferencesRepository.getRefreshToken.first()
+            }
+
+            if (!refreshToken.equals("")) {
+                val newAccessToken = runBlocking { refreshAccessToken(refreshToken) }
+                if (!newAccessToken.equals("")) {
+                    request = chain.request().newBuilder()
+                    request.removeHeader("Authorization")
+                    request.addHeader("Authorization", "Bearer $newAccessToken")
+                    response = chain.proceed(request.build())
+                }
             }
         }
 
         return response
     }
 
-    private fun refreshAccessToken(refreshToken: String): String {
-        // Make an API call to get a new access token using the refresh token
-        // and return the new access token
-        // ...
-        val message = "토큰 요청"
-        val data = TokenReqeust(message)
+    private suspend fun refreshAccessToken(refreshToken: String): String {
+        val data = TokenReqeust("토큰 요청")
         var newAccessToken = ""
-
         val headers = HashMap<String, String>()
-        headers["Authorization-refresh"] = refreshToken
-        api.autoLogin(data,headers).enqueue(object : Callback<TokenResponse> {
-            override fun onResponse(
-                call: Call<TokenResponse>,
-                response: retrofit2.Response<TokenResponse>
-            ) {
-                when (response.code()) {
-                    200 -> {
-                        newAccessToken = response.headers().get("Authorization").toString()
-                        val refreshToken = response.headers().get("Authorization-refresh").toString()
-                        GlobalScope.launch {
-                            userPreferencesRepository.setAccessToken(newAccessToken)
-                            userPreferencesRepository.setRefreshToken(refreshToken)
-                            userPreferencesRepository.getAccessToken
-                                .onEach { accessToken ->
-                                    // accessToken 값 사용
-                                    Log.d("AccessToken", accessToken)
-                                }
-                                .launchIn(this)
-                            userPreferencesRepository.getRefreshToken
-                                .onEach { refreshToken ->
-                                    // refreshToken 값 사용
-                                    Log.d("RefreshToken", refreshToken)
-                                }
-                                .launchIn(this)
-                        }
-                    }
-                    else -> {
-                        throw Exception("Failed to refresh access token")
-                    }
-                }
-            }
+        headers["Authorization-refresh"] = "Bearer $refreshToken"
+        Log.d("리프레쉬 토큰",refreshToken)
 
-            override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                Log.d("로그인 통신 실패!", t.message.toString())
+
+        try {
+            val response = api.autoLogin(data, headers).execute()
+            if (response.code() == 200) {
+                val body = response.body()
+                if (body != null) {
+                    newAccessToken = response.headers()["Authorization"].orEmpty()
+                    val newRefreshToken = response.headers()["Authorization-refresh"].orEmpty()
+                    userPreferencesRepository.setAccessToken(newAccessToken)
+                    userPreferencesRepository.setRefreshToken(newRefreshToken)
+                    Log.d("엑세스 토큰", newAccessToken)
+                    Log.d("리프레쉬 토큰", newRefreshToken)
+                }
+            } else {
+                userPreferencesRepository.setAccessToken("")
+                userPreferencesRepository.setRefreshToken("")
             }
-        })
+        } catch (e: Exception) {
+            userPreferencesRepository.setAccessToken("")
+            userPreferencesRepository.setRefreshToken("")
+        }
+
         return newAccessToken
     }
-
 }

@@ -47,7 +47,11 @@ class LoginActivity : AppCompatActivity() {
                 call: Call<UserTesetResponse>,
                 response: Response<UserTesetResponse>
             ) {
-                startActivity(intent)
+                if (response.isSuccessful) {
+                    startActivity(intent)
+                } else {
+                    onFailure(call, Throwable("Unsuccessful response"))
+                }
             }
 
             override fun onFailure(call: Call<UserTesetResponse>, t: Throwable) {
@@ -80,18 +84,6 @@ class LoginActivity : AppCompatActivity() {
                                 GlobalScope.launch {
                                     userPreferencesRepository.setAccessToken(accessToken)
                                     userPreferencesRepository.setRefreshToken(refreshToken)
-                                    userPreferencesRepository.getAccessToken
-                                        .onEach { accessToken ->
-                                            // accessToken 값 사용
-                                            Log.d("AccessToken", accessToken)
-                                        }
-                                        .launchIn(this)
-                                    userPreferencesRepository.getRefreshToken
-                                        .onEach { accessToken ->
-                                            // accessToken 값 사용
-                                            Log.d("RefreshToken", accessToken)
-                                        }
-                                        .launchIn(this)
                                 }
 
                                 startActivity(intent)

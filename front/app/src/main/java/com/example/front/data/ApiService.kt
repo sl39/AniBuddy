@@ -13,6 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.HeaderMap
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -24,7 +25,7 @@ interface ApiService{
     )
     fun autoLogin(
         @Body jsonParams: TokenReqeust,
-        headers: HashMap<String, String>,
+        @HeaderMap headers: HashMap<String, String>,
     ): Call<TokenResponse>
 
 

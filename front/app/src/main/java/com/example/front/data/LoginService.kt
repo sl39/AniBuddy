@@ -15,6 +15,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.HeaderMap
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -27,12 +28,6 @@ interface LoginApiService{
         @Body jsonParams : LoginRequest,
         ): Call<LoginResponse>
 
-
-    @POST("/api/auth/autoLogin")
-    fun autoLogin(
-        @Body jsonParams: TokenReqeust,
-        headers: HashMap<String, String>,
-    ): Call<TokenResponse>
     companion object{
         private const val BASE_URL = "http://10.0.2.2:8080"
         val gson : Gson = GsonBuilder().setLenient().create();
