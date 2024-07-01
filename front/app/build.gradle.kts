@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")
 
 }
 
@@ -66,5 +67,9 @@ dependencies {
 
     //Prefrence DataStore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    //Dagger
+    implementation("com.google.dagger:dagger:2.0")
+    kapt("com.google.dagger:dagger-compiler:2.0")
 
 }

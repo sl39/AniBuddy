@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -23,12 +26,14 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public String getUserList() {
+    public Map<String,String> getUserList() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String email = userDetails.getUsername();
         String userName = userService.getUser(email);
-        return userName;
+        Map<String,String> map = new HashMap<>();
+        map.put("userName",userName);
+        return map;
     }
 }

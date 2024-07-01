@@ -15,7 +15,6 @@ class UserPreferencesRepository(private val dataStore:DataStore<Preferences>){
         val accessToken : Preferences.Key<String> = stringPreferencesKey("accessToken")
         val refreshToken : Preferences.Key<String> = stringPreferencesKey("refreshToken")
     }
-
     val getAccessToken: Flow<String> = dataStore.data
         .catch { exception ->
             if (exception is IOException){

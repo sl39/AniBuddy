@@ -11,12 +11,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.front.data.ApiService
 import com.example.front.data.LoginApiService
 import com.example.front.data.UserPreferencesRepository
 import com.example.front.data.request.LoginRequest
 import com.example.front.data.response.LoginResponse
+import com.example.front.data.response.UserTesetResponse
 import com.example.front.databinding.ActivityLoginBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -24,41 +28,34 @@ import retrofit2.Callback
 import retrofit2.Call
 import retrofit2.Response
 
+
 class LoginActivity : AppCompatActivity() {
     private val userPreferencesRepository by lazy {
-        UserPreferencesRepository(this@LoginActivity.dataStore)
+        UserPreferencesRepository(dataStore)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val api = LoginApiService.create()
-
+        val loginApi = LoginApiService.create()
+        val api = ApiService.create(this@LoginActivity)
         val intent: Intent = Intent(this@LoginActivity,MainActivity::class.java)
 
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        api.getUserTest().enqueue(object : Callback<UserTesetResponse>{
+            override fun onResponse(
+                call: Call<UserTesetResponse>,
+                response: Response<UserTesetResponse>
+            ) {
+                startActivity(intent)
+            }
 
+            override fun onFailure(call: Call<UserTesetResponse>, t: Throwable) {
+                val show = Toast.makeText(this@LoginActivity, "로그인 하쇼", Toast.LENGTH_SHORT)
+                    .show();
+            }
+        })
 
-//        GlobalScope.launch {
-//            userPreferencesRepository.getAccessToken
-//                .onEach { accessToken ->
-//                    // accessToken 값 사용
-//                    if(accessToken.toString().equals("")){
-//                        startActivity(intent)
-//                    }
-//                    else{
-//                        setContentView(binding.root)
-//
-//                    }
-//                }
-//                .launchIn(this)
-//            userPreferencesRepository.getRefreshToken
-//                .onEach { accessToken ->
-//                    // accessToken 값 사용
-//                    Log.d("RefreshToken", accessToken)
-//                }
-//                .launchIn(this)
-//        }
 
 
 
@@ -70,7 +67,7 @@ class LoginActivity : AppCompatActivity() {
                 val password = binding.editTextPassword.text.toString().trim()
                 val data = LoginRequest(email,password)
 
-                api.userLogin(data).enqueue(object : Callback<LoginResponse>{
+                loginApi.userLogin(data).enqueue(object : Callback<LoginResponse>{
                     override fun onResponse(
                         call: Call<LoginResponse>,
                         response: Response<LoginResponse>
