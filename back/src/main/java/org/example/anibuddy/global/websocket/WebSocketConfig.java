@@ -19,8 +19,16 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(socketHandler, "/chat")
+        registry.addHandler(socketHandler, "/wss/chat")
                 .addInterceptors(new HttpSessionHandshakeInterceptor(), new CustomHandshakeInterceptor())
                 .setAllowedOrigins("*");
+    }
+
+    @Bean
+    public ServletServerContainerFactoryBean createWebSocketContainer() {
+        ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
+        container.setMaxBinaryMessageBufferSize(500000);
+        container.setMaxTextMessageBufferSize(1500); //한글 500자
+        return container;
     }
 }
