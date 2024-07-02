@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.anibuddy.global.CustomUserDetails;
 import org.example.anibuddy.global.jwt.service.JwtService;
 import org.example.anibuddy.auth.AuthRepository;
 import org.example.anibuddy.user.UserEntity;
@@ -86,7 +87,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                 .ifPresent(authEntity -> {
                     String reIssuedRefreshToken = reIssueRefreshToken(authEntity);
                     try {
-                        jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(authEntity.getEmail()),
+                        jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(authEntity.getEmail(),authEntity.getId()),
                                 reIssuedRefreshToken);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -151,8 +152,9 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 //                .password(password)
 //                .roles(myUser.getRole().name())
 //                .build();
-        UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
+        CustomUserDetails userDetailsUser = CustomUserDetails.builder()
                 .username(myUser.getEmail())
+                .userId(myUser.getId())
                 .password(password)
                 .build();
 

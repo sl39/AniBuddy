@@ -2,7 +2,9 @@ package org.example.anibuddy.user.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import org.example.anibuddy.global.CustomUserDetails;
 import org.example.anibuddy.user.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,10 +29,11 @@ public class UserController {
 
     @GetMapping("/user")
     public Map<String,String> getUserList() {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String email = userDetails.getUsername();
+        Integer id = userDetails.getUserId();
+        System.out.println(id.toString());
         String userName = userService.getUser(email);
         Map<String,String> map = new HashMap<>();
         map.put("userName",userName);

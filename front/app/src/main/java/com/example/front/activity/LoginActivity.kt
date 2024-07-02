@@ -48,6 +48,7 @@ class LoginActivity : AppCompatActivity() {
                 response: Response<UserTesetResponse>
             ) {
                 if (response.isSuccessful) {
+                    response.body()?.let { Log.d("이게 userId 로 받아와야 됨 userName", it.userName) }
                     startActivity(intent)
                 } else {
                     onFailure(call, Throwable("Unsuccessful response"))
