@@ -19,13 +19,13 @@ public class CustomHandshakeInterceptor implements HandshakeInterceptor {
             WebSocketHandler wsHandler,
             Map<String, Object> attributes
     ) {
-        ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
-        HttpServletRequest req = servletRequest.getServletRequest();
-        HttpSession httpSession = req.getSession();
-        String sessionID = httpSession.getId();
-        String userName = req.getParameter("userName");
-        attributes.put("sessionID", sessionID);
-        attributes.put("userName", userName);
+//        ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
+//        HttpServletRequest req = servletRequest.getServletRequest();
+//        HttpSession httpSession = req.getSession();
+//        String sessionID = httpSession.getId();
+//        String userName = req.getParameter("userName");
+//        attributes.put("sessionID", sessionID);
+//        attributes.put("userName", userName);
         return true;
     }
 

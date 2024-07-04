@@ -1,10 +1,11 @@
 package org.example.anibuddy.global.websocket;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.json.JSONParser;
-import org.apache.tomcat.util.json.ParseException;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -27,13 +28,8 @@ public class SocketHandler extends TextWebSocketHandler {
 
         String msg = message.getPayload();
         JSONObject obj = jsonToObjectParser(msg);
-        int reqRoomId = 0;
 
-        try {
-            reqRoomId = obj.getInt("roomId");
-        }catch (JSONException e) {
-            log.error(e.getMessage());
-        }
+        Integer reqRoomId = Integer.parseInt((String)obj.get("roomId"));
 
         HashMap<String, Object> tempSessions = new HashMap<String, Object>();
         if(!chatRoomList.isEmpty()) {
@@ -106,10 +102,10 @@ public class SocketHandler extends TextWebSocketHandler {
     }
 
     private static JSONObject jsonToObjectParser(String jsonStr) {
-        JSONParser parser = new JSONParser(jsonStr);
+        JSONParser parser = new JSONParser();
         JSONObject obj = null;
         try {
-            obj = (JSONObject) parser.parse();
+            obj = (JSONObject) parser.parse(jsonStr);
         } catch (ParseException e) {
             log.error(e.getMessage());
         }

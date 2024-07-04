@@ -35,6 +35,9 @@ dependencies {
 
     //websocket
     implementation("org.springframework.boot:spring-boot-starter-websocket")
+
+    //json <-> str
+    implementation("com.googlecode.json-simple:json-simple:1.1")
 }
 
 tasks.withType<Test> {
