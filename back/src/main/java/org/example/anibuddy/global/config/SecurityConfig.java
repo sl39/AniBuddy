@@ -61,7 +61,10 @@ public class SecurityConfig {
 
                                 .anyRequest().authenticated())// 나머지는 안됨
                 // 소셜 로그인 설정
-
+                .oauth2Login()
+                .successHandler(oAuth2LoginSuccessHandler)
+                .failureHandler(oAuth2LoginFailureHandler)
+                .userInfoEndpoint().userService(customOAuth2UserService)
                 ;
 
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);

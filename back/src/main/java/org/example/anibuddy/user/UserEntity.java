@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import org.example.anibuddy.user.Role;
+
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,6 +21,9 @@ public class UserEntity {
     @Column(nullable = false)
     private String userName;
 
+    private String nickname; // 닉네임
+    private String socialId;
+
     @Column(nullable = false)
     private String email;
 
@@ -33,7 +38,21 @@ public class UserEntity {
 
     private String refreshToken; // 리프레시 토큰
 
+    private String imagUrl; // 프로필 이미지
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private SocialType socialType;
+
+
+
+
+
+    private void authorizeUser() {
+        this.role = Role.USER;
+    }
 
     // 비밀번호 암호화 메소드
     public void passwordEncode(PasswordEncoder passwordEncoder){
