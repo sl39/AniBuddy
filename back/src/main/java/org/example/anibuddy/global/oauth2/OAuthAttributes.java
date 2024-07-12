@@ -16,12 +16,12 @@ public class OAuthAttributes {
     private OAuth2UserInfo oAuth2UserInfo;
 
     @Builder
-    private OAuthAttributes(final String nameAttributeKey, final OAuth2UserInfo oAuth2UserInfo) {
+    private OAuthAttributes(String nameAttributeKey, OAuth2UserInfo oAuth2UserInfo) {
         this.nameAttributeKey = nameAttributeKey;
         this.oAuth2UserInfo = oAuth2UserInfo;
     }
 
-    public static OAuthAttributes of(String userNameAttributeName, SocialType socialType, Map<String, Object> attributes) {
+    public static OAuthAttributes of(SocialType  socialType, String  userNameAttributeName, Map<String, Object> attributes) {
         return ofKakao(userNameAttributeName,attributes);
     }
 

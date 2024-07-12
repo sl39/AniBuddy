@@ -38,7 +38,7 @@ public class UserEntity {
 
     private String refreshToken; // 리프레시 토큰
 
-    private String imagUrl; // 프로필 이미지
+    private String imageUrl; // 프로필 이미지
 
     @Enumerated(EnumType.STRING)
     private Role role;

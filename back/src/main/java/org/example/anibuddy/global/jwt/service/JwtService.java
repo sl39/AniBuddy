@@ -46,23 +46,21 @@ public class JwtService {
     private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
     private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
     private static final String EMAIL_CLAIM = "email";
-    private static final String ID_CLAIM = "id";
     private static final String BEARER = "Bearer ";
 
     private final AuthRepository userRepository;
 
     // AccessToken 생성 메소드
-    public String createAccessToken(String email,Integer id) {
+    public String createAccessToken(String email) {
         Date now = new Date();
         return JWT.create() // JWT 토큰을 생성하는 빌더 반환
                 .withSubject(ACCESS_TOKEN_SUBJECT) // JWT의 subject 지정 -> AccessToken 이므로 AccessToken
                 .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod)) // 토큰 만료 시간 설정
-
                 // 클레임으로는 email만 사용
                 // 추가적으로 식별자나, 이름 등의 정보를 더 추가해도 됨
                 // .withClaim으로 추가 가능
                 .withClaim(EMAIL_CLAIM, email)
-                .withClaim(ID_CLAIM, id)
+
                 .sign(Algorithm.HMAC512(secretKey)); // HMAC512 알고리즘 사용, application-jwt.yml에서 지정한 secret 키로 암호화
     }
 

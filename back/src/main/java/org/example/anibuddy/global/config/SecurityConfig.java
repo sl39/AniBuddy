@@ -9,6 +9,9 @@ import org.example.anibuddy.auth.handler.LoginSuccessHandler;
 import org.example.anibuddy.auth.service.LoginService;
 import org.example.anibuddy.global.jwt.filter.JwtAuthenticationProcessingFilter;
 import org.example.anibuddy.global.jwt.service.JwtService;
+import org.example.anibuddy.global.oauth2.handler.OAuth2LoginFailureHandler;
+import org.example.anibuddy.global.oauth2.handler.OAuth2LoginSuccessHandler;
+import org.example.anibuddy.global.oauth2.service.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,6 +37,9 @@ public class SecurityConfig {
     private final JwtService jwtService;
     private final AuthRepository authRepository;
     private final ObjectMapper objectMapper;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -61,11 +67,14 @@ public class SecurityConfig {
 
                                 .anyRequest().authenticated())// 나머지는 안됨
                 // 소셜 로그인 설정
-                .oauth2Login()
-                .successHandler(oAuth2LoginSuccessHandler)
-                .failureHandler(oAuth2LoginFailureHandler)
-                .userInfoEndpoint().userService(customOAuth2UserService)
-                ;
+
+                .oauth2Login((oauth2) -> oauth2
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .failureHandler(oAuth2LoginFailureHandler)
+                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
+                                .userService(customOAuth2UserService)
+                        )
+                );
 
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
         http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
