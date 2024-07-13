@@ -52,7 +52,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // okhttp3
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.3"))
-    implementation("com.squareup.okhttp3:okhttp:4.9.3")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    implementation(libs.okhttp)
 }

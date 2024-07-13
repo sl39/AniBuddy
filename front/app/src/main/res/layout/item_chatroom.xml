@@ -14,27 +14,35 @@
         android:src="@mipmap/ic_launcher"
         android:layout_width="50dp"
         android:layout_height="50dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingHorizontal="10dp" >
-
-        <TextView
+        android:paddingHorizontal="7dp" >
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:id="@+id/item_store_name"
-            android:text="store name"
-            android:textStyle="bold"
-            android:textSize="15sp" />
-
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:id="@+id/store_name"
+                android:text="store name"
+                android:layout_marginRight="5dp"
+                android:textStyle="bold"
+                android:textSize="15sp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/latest_date"
+                android:text="2024-10-23"
+                android:textSize="8sp" />
+        </LinearLayout>
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/latest_chat"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/item_latest_chat"
             android:text="latest chat"
-            android:textSize="13sp" />
-
+            android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>
