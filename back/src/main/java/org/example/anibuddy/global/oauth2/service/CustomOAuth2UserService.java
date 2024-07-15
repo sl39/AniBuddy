@@ -2,6 +2,7 @@ package org.example.anibuddy.global.oauth2.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.anibuddy.global.jwt.util.PasswordUtil;
 import org.example.anibuddy.global.oauth2.CustomOAuth2User;
 import org.example.anibuddy.global.oauth2.OAuthAttributes;
 import org.example.anibuddy.user.SocialType;
@@ -54,7 +55,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // socialType에 따라 유저 정보를 통해 OAuthAttributes 객체 생성
         OAuthAttributes extractAttriubtes = OAuthAttributes.of(socialType,userNameAttributeName,attributes);
-
         UserEntity createdUser = getUser(extractAttriubtes, socialType);
 
         return new CustomOAuth2User(
@@ -73,6 +73,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     private UserEntity getUser(OAuthAttributes attributes, SocialType socialType) {
         UserEntity findUser = userRepository.findBySocialTypeAndSocialId(socialType,
                 attributes.getOAuth2UserInfo().getId()).orElse(null);
+
         if(findUser == null) {
             return saveUser(attributes,socialType);
         }
@@ -80,7 +81,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
     }
 
     private UserEntity saveUser(OAuthAttributes attributes, SocialType socialType) {
-        UserEntity createdUser = attributes.toEntity(socialType, attributes.getOAuth2UserInfo());
+        String password = null;
+        password = PasswordUtil.generateRandomPassword();
+        UserEntity createdUser = attributes.toEntity(socialType, attributes.getOAuth2UserInfo(),password);
+
         return userRepository.save(createdUser);
     }
 }

@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.auth.Dto.AuthSignUpRequestDto;
 import org.example.anibuddy.auth.AuthRepository;
+import org.example.anibuddy.user.Role;
 import org.example.anibuddy.user.UserEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class SignupService {
                 .userAddress(authSignUpRequestDto.getUserAddress())
                 .userPhone(authSignUpRequestDto.getUserPhone())
                 .userName(authSignUpRequestDto.getUserName())
+                .role(Role.USER)
                 .build();
 
         user.passwordEncode(passwordEncoder);

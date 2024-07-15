@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.anibuddy.global.CustomUserDetails;
 import org.example.anibuddy.global.jwt.service.JwtService;
 import org.example.anibuddy.auth.AuthRepository;
+import org.example.anibuddy.global.jwt.util.PasswordUtil;
 import org.example.anibuddy.user.UserEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -117,9 +118,9 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         log.info("checkAccessToeknAndAuthentication() 호출");
         jwtService.extractAccessToken(request)
                 .filter(jwtService::isTokenValid)
-                .flatMap(jwtService::extractEmail)
-                .ifPresent(email -> userRepository.findByEmail(email)
-                        .ifPresent(this::saveAuthentication));
+                .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
+                        .ifPresent(email -> userRepository.findByEmail(email)
+                                .ifPresent(this::saveAuthentication)));
         filterChain.doFilter(request,response);
 
 
@@ -142,21 +143,22 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
      */
     public void saveAuthentication(UserEntity myUser) {
         String password = myUser.getPassword();
-//        if (password == null) { // 소셜 로그인 유저의 비밀번호 임의로 설정 하여 소셜 로그인 유저도 인증 되도록 설정
-//            password = PasswordUtil.generateRandomPassword();
-//        }
+        if (password == null) { // 소셜 로그인 유저의 비밀번호 임의로 설정 하여 소셜 로그인 유저도 인증 되도록 설정
+            password = PasswordUtil.generateRandomPassword();
+            System.out.println(password);
+        }
 
-        // 유저의 역할, 즉 관리자인지, 게스트인지등등
-//        UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
-//                .username(myUser.getEmail())
-//                .password(password)
-//                .roles(myUser.getRole().name())
-//                .build();
-        CustomUserDetails userDetailsUser = CustomUserDetails.builder()
+//         유저의 역할, 즉 관리자인지, 게스트인지등등
+        UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
                 .username(myUser.getEmail())
-                .userId(myUser.getId())
                 .password(password)
+                .roles(myUser.getRole().name())
                 .build();
+//        CustomUserDetails userDetailsUser = CustomUserDetails.builder()
+//                .username(myUser.getEmail())
+//                .userId(myUser.getId())
+//                .password(password)
+//                .build();
 
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(userDetailsUser, null,

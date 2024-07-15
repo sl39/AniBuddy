@@ -50,7 +50,7 @@ public class UserEntity {
 
 
 
-    private void authorizeUser() {
+    public void authorizeUser() {
         this.role = Role.USER;
     }
 

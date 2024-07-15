@@ -1,8 +1,13 @@
 package org.example.anibuddy.global.oauth2.userinfo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Map;
 
 public class KakoOAuth2UserInfo extends OAuth2UserInfo{
+
+    private static final Logger log = LoggerFactory.getLogger(KakoOAuth2UserInfo.class);
 
     public KakoOAuth2UserInfo(Map<String, Object> attributes) {
         super(attributes);
@@ -15,8 +20,11 @@ public class KakoOAuth2UserInfo extends OAuth2UserInfo{
 
     @Override
     public String getNickname() {
-        Map<String, Object> account = (Map<String, Object>) attributes.get("Kakao_account");
+        Map<String, Object> account = (Map<String, Object>) attributes.get("kakao_account");
+        
         if (account == null) {
+            
+
             return null;
         }
 
@@ -26,7 +34,7 @@ public class KakoOAuth2UserInfo extends OAuth2UserInfo{
             return null;
         }
 
-        return (String) profile.get("nuickname");
+        return (String) profile.get("nickname");
     }
 
     @Override
