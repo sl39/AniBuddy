@@ -2,9 +2,12 @@ package org.example.anibuddy.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.anibuddy.Review.ReviewEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import org.example.anibuddy.user.Role;
+
+import java.util.List;
 
 
 @Getter
@@ -16,7 +19,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int storeId;
 
     @Column(nullable = false)
     private String userName;
@@ -46,9 +49,8 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
-
-
-
+    @OneToMany(mappedBy = "UserEntity", cascade = CascadeType.REMOVE)
+    private List<ReviewEntity> reviewEntity;
 
     public void authorizeUser() {
         this.role = Role.USER;
