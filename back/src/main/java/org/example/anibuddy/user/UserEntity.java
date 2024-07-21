@@ -19,7 +19,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int storeId;
+    private int id;
 
     @Column(nullable = false)
     private String userName;
@@ -49,7 +49,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
-    @OneToMany(mappedBy = "UserEntity", cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.REMOVE)
     private List<ReviewEntity> reviewEntity;
 
     public void authorizeUser() {

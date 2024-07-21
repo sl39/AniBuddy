@@ -59,13 +59,19 @@ public class SecurityConfig {
                         s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 // url 별 권한 관리 옵션
+//                .authorizeHttpRequests(authorizeRequest ->
+//                        authorizeRequest
+//                                .requestMatchers(
+//                                        AntPathRequestMatcher.antMatcher("/api/auth/signup") // 회원가입 접근 가능
+//                                ).permitAll()
+//
+//                                .anyRequest().authenticated())// 나머지는 안됨
+                //모든 요청 허용
+
+
                 .authorizeHttpRequests(authorizeRequest ->
                         authorizeRequest
-                                .requestMatchers(
-                                        AntPathRequestMatcher.antMatcher("/api/auth/signup") // 회원가입 접근 가능
-                                ).permitAll()
-
-                                .anyRequest().authenticated())// 나머지는 안됨
+                                .anyRequest().permitAll())// 나머지는 안됨
                 // 소셜 로그인 설정
 
                 .oauth2Login((oauth2) -> oauth2

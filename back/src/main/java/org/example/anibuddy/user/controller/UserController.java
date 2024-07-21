@@ -39,4 +39,8 @@ public class UserController {
         map.put("userName",userName);
         return map;
     }
+    @GetMapping("/test")
+    public String test() {
+        return "test";
+    }
 }

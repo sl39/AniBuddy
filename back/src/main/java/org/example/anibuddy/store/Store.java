@@ -14,7 +14,7 @@ import java.util.List;
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int storeId;
 
     @Column(nullable = true)
     private String storeName;
@@ -32,6 +32,6 @@ public class Store {
     @Column(nullable = true)
     private Long mapy;
 
-    @OneToMany(mappedBy = "Store", cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.REMOVE)
     private List<ReviewEntity> reviewList;
 }

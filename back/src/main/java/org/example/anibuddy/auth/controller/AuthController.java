@@ -5,6 +5,7 @@ import org.example.anibuddy.auth.Dto.AuthSignUpRequestDto;
 import org.example.anibuddy.auth.service.SignupService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -15,9 +16,11 @@ public class AuthController {
     private final SignupService signupService;
 
     @PostMapping("/signup")
-    public String signup(@RequestBody AuthSignUpRequestDto authSignUpRequestDto) throws Exception {
+    public Map signup(@RequestBody AuthSignUpRequestDto authSignUpRequestDto) throws Exception {
         signupService.signup(authSignUpRequestDto);
-        return "회원가입 성공!";
+        Map<String, String> map = new HashMap<>();
+        map.put("status", "success");
+        return map;
     }
 
     @PostMapping("/autoLogin")
