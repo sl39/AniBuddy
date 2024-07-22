@@ -3,6 +3,7 @@ package org.example.anibuddy.store;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.anibuddy.Review.ReviewEntity;
+import org.hibernate.annotations.CollectionId;
 
 import java.util.List;
 
@@ -20,18 +21,11 @@ public class Store {
     private String storeName;
 
     @Column(nullable = true)
-    private String storeAddress;
-
-    private String info;
-
-    private String phoneNumber;
-
-    @Column(nullable = true)
     private Long mapx;
 
     @Column(nullable = true)
     private Long mapy;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<ReviewEntity> reviewList;
 }

@@ -49,7 +49,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<ReviewEntity> reviewEntity;
 
     public void authorizeUser() {

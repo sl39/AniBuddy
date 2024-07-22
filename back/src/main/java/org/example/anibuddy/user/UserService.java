@@ -7,15 +7,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
 @Getter
+@RequiredArgsConstructor
+@Service
 public class UserService {
 
-    UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     public String getUser(String email) {
         Optional<UserEntity> user = Optional.ofNullable(userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("email not found")));

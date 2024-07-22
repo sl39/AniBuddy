@@ -23,7 +23,6 @@ public class ReviewEntity {
     private int reviewId;
 
     private String review;
-    private String author;
 
     @CreatedDate
     private LocalDateTime createDate;
