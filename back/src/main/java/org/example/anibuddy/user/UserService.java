@@ -19,4 +19,9 @@ public class UserService {
         Optional<UserEntity> user = Optional.ofNullable(userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("email not found")));
         return user.get().getUserName();
     }
+    public UserEntity getUserByNickname(String nickname) {
+        Optional<UserEntity> user = Optional.ofNullable(userRepository.findByNickname(nickname).orElseThrow(() -> new UsernameNotFoundException("email not found")));
+        return user.get();
+    }
+
 }

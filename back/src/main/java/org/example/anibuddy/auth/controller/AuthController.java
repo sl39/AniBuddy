@@ -16,7 +16,7 @@ public class AuthController {
     private final SignupService signupService;
 
     @PostMapping("/signup")
-    public Map signup(@RequestBody AuthSignUpRequestDto authSignUpRequestDto) throws Exception {
+    public Map<String,String> signup(@RequestBody AuthSignUpRequestDto authSignUpRequestDto) throws Exception {
         signupService.signup(authSignUpRequestDto);
         Map<String, String> map = new HashMap<>();
         map.put("status", "success");
@@ -29,10 +29,5 @@ public class AuthController {
         String message = "토큰이 재발급 되었습니다";
         return Map.of("message", message);
     }
-
-
-
-
-
 
 }

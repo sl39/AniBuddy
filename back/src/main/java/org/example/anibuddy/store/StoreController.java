@@ -20,9 +20,9 @@ public class StoreController {
     }
 
     @PostMapping("/store/test")
-    public String setStore(@RequestBody StoreMongoEntity store){
-        storeMongoService.setStores(store);
-        return "success";
+    public Integer setStore(@RequestBody StoreMongoEntity store){
+        Integer id = storeMongoService.setMongoStore(store);
+        return id;
 
     }
 

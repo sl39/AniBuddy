@@ -34,6 +34,7 @@ public class SignupService {
                 .userAddress(authSignUpRequestDto.getUserAddress())
                 .userPhone(authSignUpRequestDto.getUserPhone())
                 .userName(authSignUpRequestDto.getUserName())
+                .nickname(authSignUpRequestDto.getNickname())
                 .role(Role.USER)
                 .build();
 

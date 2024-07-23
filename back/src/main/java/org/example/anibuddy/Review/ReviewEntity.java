@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class ReviewEntity {
@@ -22,13 +23,12 @@ public class ReviewEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reviewId;
 
+    @Column(length = 500)
     private String review;
 
-    @CreatedDate
-    private LocalDateTime createDate;
+    private String createDate;
 
-    @LastModifiedDate
-    private LocalDateTime modifyDate;
+    private String modifyDate;
 
     @ManyToOne
     private UserEntity userEntity;
@@ -36,7 +36,7 @@ public class ReviewEntity {
     @ManyToOne
     private Store storeEntity;
 
-    @OneToMany
+    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ReviewImage> reviewImages;
 
 }

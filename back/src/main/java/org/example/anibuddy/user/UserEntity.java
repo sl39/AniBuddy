@@ -24,10 +24,11 @@ public class UserEntity {
     @Column(nullable = false)
     private String userName;
 
+    @Column(nullable = false, unique = true)
     private String nickname; // 닉네임
     private String socialId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
