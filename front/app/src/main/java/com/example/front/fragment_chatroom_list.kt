@@ -11,16 +11,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.front.databinding.FragmentChatroomListBinding
 import com.example.front.databinding.ItemChatroomBinding
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
-class ChatRoom(var storeName: String?, var lastChat: String?, var lastChatDate: LocalDateTime?) {
-
-}
+class ChatRoomItem(var storeName: String, val lastChat: String?, val lastChatDate: LocalDateTime?) {}
 
 class ChatRoomViewHolder(val binding: ItemChatroomBinding) : RecyclerView.ViewHolder(binding.root)
 
-class ChatRoomAdapter(val datas: List<ChatRoom>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class ChatRoomAdapter(val datas: List<ChatRoomItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //전체 아이템 개수
     override fun getItemCount() = datas.size
@@ -31,14 +31,13 @@ class ChatRoomAdapter(val datas: List<ChatRoom>) : RecyclerView.Adapter<Recycler
     }
 
     //ViewHolder 객체에 데이터 바인딩
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val binding = (holder as ChatRoomViewHolder).binding
 
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         binding.storeName.text = datas[position].storeName
         binding.lastChat.text = datas[position].lastChat
-        binding.lastDate.text = datas[position].lastChatDate?.format(formatter)
+        binding.lastDate.text = formatter.format(datas[position].lastChatDate)
     }
 }
 
@@ -54,15 +53,15 @@ class fragment_chatroom_list : Fragment() {
         binding = FragmentChatroomListBinding.inflate(inflater, container, false)
 
         //todo: 백에서 채팅방 정보 가져와서 넣어주기
-        var testList = mutableListOf<ChatRoom>()
+        var testList = mutableListOf<ChatRoomItem>()
 
         for(i in 1..10){
-            val testChatRoom = ChatRoom(
+            val testChatRoomItem = ChatRoomItem(
                 storeName = "test store $i",
                 lastChat = "test chat $i",
                 lastChatDate = LocalDateTime.now()
             )
-            testList.add(testChatRoom)
+            testList.add(testChatRoomItem)
         }
 
         binding.recyclerview.adapter = ChatRoomAdapter(testList)
