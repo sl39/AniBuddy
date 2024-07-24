@@ -1,23 +1,20 @@
 package com.example.front
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.front.databinding.ActivityMessageListBinding
 import com.example.front.databinding.ItemMyChatBinding
 import com.example.front.databinding.ItemOtherChatBinding
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Date
-import java.util.Locale
 
-class MessageItem(var name: String, val role: String, val content: String, val createdAt: LocalDateTime) {}
+class MessageItem(var name: String, val role: String, val content: String, val createdAt: LocalDateTime)
 
 class MyChatItemViewHolder(val binding: ItemMyChatBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -36,16 +33,16 @@ class MessageItemAdapter(val datas: List<MessageItem>, val role: String) : Recyc
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
 
         if(getItemViewType(position) == MY_CHAT) {
             val binding = (holder as MyChatItemViewHolder).binding
-            binding.chatDate.text = formatter.format(datas[position].createdAt)
+            binding.chatDate.text = datas[position].createdAt.format(formatter)
             binding.chatContent.text = datas[position].content
         } else {
             val binding = (holder as OtherChatItemViewHolder).binding
             binding.otherName.text = datas[position].name
-            binding.chatDate.text = formatter.format(datas[position].createdAt)
+            binding.chatDate.text = datas[position].createdAt.format(formatter)
             binding.chatContent.text = datas[position].content
         }
     }
@@ -65,10 +62,50 @@ class MessageListActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMessageListBinding
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMessageListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.title = "Store Name"
 
-        setContentView(R.layout.activity_message_list)
+        //todo: 백에서 채팅 내역 정보 가져와서 넣어주기
+        val testList = mutableListOf<MessageItem>()
 
+        for(i in 1..10){
+            val myMessageItem = MessageItem(
+                name = "user",
+                role = "USER",
+                content = "test chat $i",
+                createdAt = LocalDateTime.now()
+            )
+            val otherMessageItem = MessageItem(
+                name = "owner",
+                role = "OWNER",
+                content = "test chat $i",
+                createdAt = LocalDateTime.now()
+            )
+            testList.add(myMessageItem)
+            testList.add(otherMessageItem)
+        }
+
+        val myMessageItem = MessageItem(
+            name = "user",
+            role = "USER",
+            content = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            createdAt = LocalDateTime.now()
+        )
+        val otherMessageItem = MessageItem(
+            name = "owner",
+            role = "OWNER",
+            content = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            createdAt = LocalDateTime.now()
+        )
+        testList.add(myMessageItem)
+        testList.add(otherMessageItem)
+
+        binding.recyclerview.adapter = MessageItemAdapter(testList, "USER")
+        binding.recyclerview.layoutManager = LinearLayoutManager(this)
     }
 }

@@ -3,7 +3,6 @@ package org.example.anibuddy.chat.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.chat.dto.ChatRoomRequest;
 import org.example.anibuddy.chat.dto.ChatRoomResponse;
-import org.example.anibuddy.chat.dto.MessageResponse;
 import org.example.anibuddy.chat.service.ChatRoomService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
