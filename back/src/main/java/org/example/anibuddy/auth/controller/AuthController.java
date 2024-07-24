@@ -3,6 +3,7 @@ package org.example.anibuddy.auth.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.auth.Dto.AuthSignUpRequestDto;
 import org.example.anibuddy.auth.service.SignupService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -16,11 +17,9 @@ public class AuthController {
     private final SignupService signupService;
 
     @PostMapping("/signup")
-    public Map<String,String> signup(@RequestBody AuthSignUpRequestDto authSignUpRequestDto) throws Exception {
-        signupService.signup(authSignUpRequestDto);
-        Map<String, String> map = new HashMap<>();
-        map.put("status", "success");
-        return map;
+    public ResponseEntity<?> signup(@RequestBody AuthSignUpRequestDto authSignUpRequestDto) throws Exception {
+        ResponseEntity response = signupService.signup(authSignUpRequestDto);
+        return response;
     }
 
     @PostMapping("/autoLogin")

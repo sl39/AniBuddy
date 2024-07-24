@@ -1,18 +1,17 @@
 package org.example.anibuddy.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.anibuddy.Review.ReviewEntity;
+import org.example.anibuddy.Review.entity.ReviewEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import org.example.anibuddy.user.Role;
 
 import java.util.List;
 
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity(name="user_entity")
+@Entity
 @Builder
 @AllArgsConstructor
 public class UserEntity {
@@ -44,14 +43,15 @@ public class UserEntity {
 
     private String imageUrl; // 프로필 이미지
 
+    @JsonBackReference
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<ReviewEntity> reviewEntityList;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<ReviewEntity> reviewEntity;
 
     public void authorizeUser() {
         this.role = Role.USER;

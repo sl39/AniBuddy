@@ -1,25 +1,30 @@
-package org.example.anibuddy.Review;
+package org.example.anibuddy.Review.entity;
+
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@NoArgsConstructor
-@Data
-@Setter
-@Getter
 @Entity
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewImage {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewImageId;
+    private int id;
 
+    @Column(nullable = false)
     private String imageUrl;
 
-    @ManyToOne
     @JsonBackReference
+    @ManyToOne
+    @JoinColumn(nullable = false)
     private ReviewEntity reviewEntity;
+
 }
