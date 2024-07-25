@@ -69,6 +69,7 @@ class MessageListActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = "Store Name"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         //todo: 백에서 채팅 내역 정보 가져와서 넣어주기
         val testList = mutableListOf<MessageItem>()
@@ -107,5 +108,10 @@ class MessageListActivity : AppCompatActivity() {
 
         binding.recyclerview.adapter = MessageItemAdapter(testList, "USER")
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 }
