@@ -19,10 +19,12 @@ public class StoreCreateDto {
 
     private String openDay;
 
-    private int mapx;
+    private double mapx;
 
-    private int mapy;
+    private double mapy;
 
     private List<String>  storeImageList;
+
+    private List<String> category;
 
 }

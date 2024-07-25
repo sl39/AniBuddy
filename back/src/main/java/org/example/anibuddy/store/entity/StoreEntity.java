@@ -43,13 +43,14 @@ public class StoreEntity {
 
     private String phoneNumber;
 
+    @Column(columnDefinition = "TEXT")
     private String openday;
 
     @Column(nullable = false)
-    private int mapx;
+    private double mapx;
 
     @Column(nullable = false)
-    private int mapy;
+    private double mapy;
 
     @JsonBackReference
     @OneToMany(mappedBy = "storeEntity", cascade = CascadeType.ALL,orphanRemoval = true)
@@ -66,6 +67,7 @@ public class StoreEntity {
     )
     private List<StoreCategory> storeCategoryList;
 
-
-
+    @JsonBackReference
+    @OneToOne(mappedBy = "storeEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private StoreSummary storeSummary;
 }
