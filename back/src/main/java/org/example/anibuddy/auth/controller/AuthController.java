@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -27,6 +28,12 @@ public class AuthController {
         System.out.println(map.toString());
         String message = "토큰이 재발급 되었습니다";
         return Map.of("message", message);
+    }
+
+    @PostMapping("/signupAll")
+    public ResponseEntity<?> signupAll(@RequestBody List<AuthSignUpRequestDto> authSignUpRequestDto) throws Exception {
+        ResponseEntity response = signupService.signupAll(authSignUpRequestDto);
+        return response;
     }
 
 }

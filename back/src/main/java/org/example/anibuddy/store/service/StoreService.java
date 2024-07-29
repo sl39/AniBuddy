@@ -113,6 +113,7 @@ public class StoreService {
                         .build();
                 storeImagesList.add(storeImage);
             }
+            storeImageRepository.saveAll(storeImagesList);
 
 
 

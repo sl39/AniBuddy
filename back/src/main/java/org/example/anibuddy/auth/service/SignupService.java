@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -48,6 +50,38 @@ public class SignupService {
         user.passwordEncode(passwordEncoder);
         userRepository.save(user);
         ResponseEntity response = new ResponseEntity<>(user.getEmail(),HttpStatus.OK);
+        return response;
+    }
+
+    public ResponseEntity signupAll(List<AuthSignUpRequestDto> authSignUpRequestDtoList) throws Exception {
+        List<UserEntity> users = new ArrayList<>();
+        for(AuthSignUpRequestDto authSignUpRequestDto : authSignUpRequestDtoList){
+            if(!authSignUpRequestDto.getPassword().equals(authSignUpRequestDto.getPassword2())){
+                throw new Exception("비밀번호가 맞지 않습니다");
+            }
+
+            if(userRepository.findByEmail(authSignUpRequestDto.getEmail()).isPresent()){
+                log.info("이메일 중복입니다");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            UserEntity user = UserEntity.builder()
+                    .email(authSignUpRequestDto.getEmail())
+                    .password(authSignUpRequestDto.getPassword())
+                    .userAddress(authSignUpRequestDto.getUserAddress())
+                    .userPhone(authSignUpRequestDto.getUserPhone())
+                    .userName(authSignUpRequestDto.getUserName())
+                    .nickname(authSignUpRequestDto.getNickname())
+                    .role(Role.USER)
+                    .build();
+
+            user.passwordEncode(passwordEncoder);
+            users.add(user);
+
+        }
+
+        userRepository.saveAll(users);
+        ResponseEntity response = new ResponseEntity<>(HttpStatus.OK);
         return response;
     }
 }

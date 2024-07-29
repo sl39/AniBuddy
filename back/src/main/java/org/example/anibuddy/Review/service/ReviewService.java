@@ -5,8 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.Review.dto.ReviewCreateDto;
 import org.example.anibuddy.Review.entity.ReviewEntity;
 import org.example.anibuddy.Review.entity.ReviewImage;
+import org.example.anibuddy.Review.entity.ReviewTag;
 import org.example.anibuddy.Review.repository.ReviewImageRepository;
 import org.example.anibuddy.Review.repository.ReviewRepository;
+import org.example.anibuddy.Review.repository.ReviewTagRepository;
 import org.example.anibuddy.store.entity.StoreEntity;
 import org.example.anibuddy.store.service.StoreService;
 import org.example.anibuddy.user.UserEntity;
@@ -28,6 +30,7 @@ public class ReviewService {
     private final ReviewImageRepository reviewImageRepository;
     private final StoreService storeService;
     private final UserService userService;
+    private final ReviewTagRepository reviewTagRepository;
 
 
     public List<ReviewEntity> getAll() {
@@ -47,11 +50,23 @@ public class ReviewService {
             throw new Exception("유저가 존재하지 않습니다");
         }
 
+        List<ReviewTag> tags = new ArrayList<>();
+
+        for(String tag : reviewCreateDto.getTags()) {
+            Optional<ReviewTag> getTag = reviewTagRepository.findByTag(tag);
+            if (!getTag.isPresent()) {
+                continue;
+            }
+            tags.add(getTag.get());
+        }
+
+
         ReviewEntity reviewEntity = new ReviewEntity().builder()
                 .review(reviewCreateDto.getReview())
                 .userEntity(userEntity.get())
                 .storeEntity(storeEntity.get())
                 .createDate(parseDate(reviewCreateDto.getVisitedTime()))
+                .reviewTagList(tags)
                 .build();
 
         reviewRepository.save(reviewEntity);
@@ -71,5 +86,23 @@ public class ReviewService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 M월 d일 E요일", Locale.KOREAN);
         return LocalDate.parse(dateString, formatter);
 
+    }
+
+    @Transactional
+    public void createReviewAll(List<ReviewCreateDto> reviewCreateDtoList) throws Exception {
+        for (ReviewCreateDto reviewCreateDto : reviewCreateDtoList) {
+            createReview(reviewCreateDto);
+        }
+    }
+    @Transactional
+    public void saveTags(List<String> tags) {
+        List<ReviewTag> reviewTagList = new ArrayList<>();
+        for(String tag : tags) {
+            ReviewTag reviewTag = new ReviewTag().builder()
+                    .tag(tag)
+                    .build();
+            reviewTagRepository.save(reviewTag);
+
+        }
     }
 }

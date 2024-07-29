@@ -12,4 +12,5 @@ public class ReviewCreateDto {
     private List<String> reviewImageList;
     private String storeName;
     private String storeAddress;
+    private List<String> tags;
 }
