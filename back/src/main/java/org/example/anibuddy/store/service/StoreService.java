@@ -3,7 +3,9 @@ package org.example.anibuddy.store.service;
 import jakarta.transaction.Transactional;
 import jdk.jfr.Category;
 import lombok.RequiredArgsConstructor;
+import org.example.anibuddy.store.dto.MainReviewSimpleResponseDto;
 import org.example.anibuddy.store.dto.StoreCreateDto;
+import org.example.anibuddy.store.dto.StoreSearchLocationCategoryResponse;
 import org.example.anibuddy.store.dto.StoreWithDistanceDTO;
 import org.example.anibuddy.store.entity.StoreCategory;
 import org.example.anibuddy.store.entity.StoreEntity;
@@ -16,7 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.net.http.HttpResponse;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +36,7 @@ public class StoreService {
     private final StoreCategoryRepository storeCategoryRepository;
 
     public List<StoreEntity> findAll(){
-        return storeRepository.findAll();
+        return storeRepository.findTop10ByOrderByIdDesc();
     }
 
     public ResponseEntity<?> createStore(StoreCreateDto storeCreateDto){
@@ -114,16 +118,9 @@ public class StoreService {
                 storeImagesList.add(storeImage);
             }
             storeImageRepository.saveAll(storeImagesList);
-
-
-
         }
-
-
         return "success";
     }
-
-
 
 
     public Optional<StoreEntity> getStore(String storeName, String address){
@@ -131,31 +128,105 @@ public class StoreService {
         return storeEntity;
     }
 
-
-
-
-
-
-    public List<StoreWithDistanceDTO> getMainStore(double mapx, double mapy) {
-        List<Map<String, Object>> storeWithDistanceDTOList = storeSummaryRepository.findStoresWithinDistance(mapx,mapy);
-        System.out.println(storeWithDistanceDTOList.size());
-        List<StoreWithDistanceDTO> dtos = new ArrayList<>();
-        for(Map<String,Object> result : storeWithDistanceDTOList){
-            StoreWithDistanceDTO storeWithDistanceDTO = StoreWithDistanceDTO
+    public List<MainReviewSimpleResponseDto> getMainStore(double mapx, double mapy, String category) {
+        int categoryId = 0;
+        if (category.equals("beauty")){
+            categoryId = 1;
+        } else if (category.equals("hospital")){
+            categoryId = 2;
+        } else if (category.equals("training")) {
+            categoryId = 3;
+        }
+        
+        List<Map<String, Object>> mainReviewSimpleResponseDto = storeRepository.findStoresWithinDistance(mapx,mapy, categoryId);
+        List<MainReviewSimpleResponseDto> dtos = new ArrayList<>();
+        for(Map<String,Object> result : mainReviewSimpleResponseDto){
+            LocalDate createdDate = ((Date) result.get("createdDate")).toLocalDate();
+            LocalDate modifiedDate = result.get("modifiedDate") != null ? ((Date) result.get("modifiedDate")).toLocalDate() : null;
+            MainReviewSimpleResponseDto storeWithDistanceDTO = MainReviewSimpleResponseDto
                     .builder()
-                    .id((Integer) result.get("id"))
-                    .storeName((String) result.get("storeName"))
-                    .address((String) result.get("address"))
-                    .roadaddress((String) result.get("roadaddress"))
-                    .storeInfo((String) result.get("storeInfo"))
-                    .phoneNumber((String) result.get("phoneNumber"))
-                    .openday((String) result.get("openday"))
-                    .mapx((Double) result.get("mapx"))
-                    .mapy((Double) result.get("mapy"))
+                    .storeId((Integer) result.get("storeId"))
                     .distance((Double) result.get("distance"))
+                    .createdDate(createdDate)
+                    .review((String) result.get("review"))
+                    .modifiedDate(modifiedDate)
+                    .imageUrl((String) result.get("imageUrl"))
+                    .category(category)
                     .build();
             dtos.add(storeWithDistanceDTO);
         }
         return dtos;
+    }
+
+
+
+
+    public void setCategory(List<StoreCreateDto> storeCreateDtoList) {
+        List<StoreEntity> storeEntities = new ArrayList<>();
+        for(StoreCreateDto storeCreateDto: storeCreateDtoList){
+
+            Optional<StoreEntity> storeEntity = storeRepository.findByStoreNameAndAddress(storeCreateDto.getName(), storeCreateDto.getAddress());
+            if (storeEntity.isPresent()) {
+                StoreEntity storeEntity1 = storeEntity.get();
+                List<StoreCategory> storeCategories = new ArrayList<>();
+                for(String cate: storeCreateDto.getCategory()){
+                    int id = 0;
+                    if (cate.equals("beauty")){
+                        id = 1;
+                    } else if (cate.equals("hospital")){
+                        id = 2;
+                    } else if (cate.equals("training")) {
+                        id = 3;
+                    }
+                    StoreCategory category = new StoreCategory().builder()
+                            .id(id)
+                            .category(cate)
+                            .build();
+                    storeCategories.add(category);
+                }
+                storeEntity1.setStoreCategoryList(storeCategories);
+                storeEntity1.setDistrict(storeCreateDto.getDistrict());
+                storeEntities.add(storeEntity1);
+            }
+        }
+        storeRepository.saveAll(storeEntities);
+    }
+
+    public List<StoreSearchLocationCategoryResponse> serachLocationCategory(String district, String category, double mapx, double mapy) {
+
+        List<StoreSearchLocationCategoryResponse> storeSearchLocationCategoryResponses = new ArrayList<>();
+        int categoryId = 0;
+        if (category.equals("beauty")){
+            categoryId = 1;
+        } else if (category.equals("hospital")){
+            categoryId = 2;
+        } else if (category.equals("training")) {
+            categoryId = 3;
+        }
+        List<Map<String, Object>> storeList = storeRepository.findStoresByCategoryAndDistrictWithReview(district, categoryId, mapx ,mapy);
+        for (Map<String, Object> result : storeList) {
+            Integer reviewCount = Integer.parseInt(String.valueOf(result.get("reviewCount")));
+            Integer storeId = Integer.parseInt(String.valueOf(result.get("storeId")));
+            List<String> storeImages = getStoreImages(storeId);
+            StoreSearchLocationCategoryResponse storeSearchLocationCategoryResponse = StoreSearchLocationCategoryResponse.builder()
+                    .reviewCount(reviewCount)
+                    .category(category)
+                    .storeName((String) result.get("storeName"))
+                    .distance((double) result.get("distance"))
+                    .id(storeId)
+                    .storeImage(storeImages)
+                    .build();
+            storeSearchLocationCategoryResponses.add(storeSearchLocationCategoryResponse);
+        }
+        return storeSearchLocationCategoryResponses;
+    }
+
+    public List<String> getStoreImages(Integer storeId) {
+        List<String> storeImg = new ArrayList<>();
+        Optional<List<String>> storeImages = storeImageRepository.findAllByStoreId(storeId);
+        if (storeImages.isPresent()) {
+            return storeImages.get();
+        }
+        return storeImg;
     }
 }

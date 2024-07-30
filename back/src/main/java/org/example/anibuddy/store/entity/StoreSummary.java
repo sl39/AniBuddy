@@ -36,11 +36,12 @@ public class StoreSummary {
 
     private String phoneNumber;
 
+    @Column(columnDefinition = "TEXT")
     private String openday;
 
     @Column(nullable = false)
-    private int mapx;
+    private double mapx;
 
     @Column(nullable = false)
-    private int mapy;
+    private double mapy;
 }

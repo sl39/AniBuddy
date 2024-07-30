@@ -1,7 +1,9 @@
 package org.example.anibuddy.store.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.anibuddy.store.dto.MainReviewSimpleResponseDto;
 import org.example.anibuddy.store.dto.StoreCreateDto;
+import org.example.anibuddy.store.dto.StoreSearchLocationCategoryResponse;
 import org.example.anibuddy.store.dto.StoreWithDistanceDTO;
 import org.example.anibuddy.store.entity.StoreEntity;
 import org.example.anibuddy.store.repository.StoreRepository;
@@ -31,9 +33,10 @@ public class StoreController {
         return response;
     }
 
-    @GetMapping("/main/{mapx}/{mapy}")
-    public List<StoreWithDistanceDTO> getMainStore(@PathVariable(value = "mapx") double mapx, @PathVariable(value = "mapy") double mapy){
-        List<StoreWithDistanceDTO> storeEntityList = storeService.getMainStore(mapx,mapy);
+    @GetMapping("/main/{mapx}/{mapy}/{category}")
+    public List<MainReviewSimpleResponseDto> getMainStore(@PathVariable(value = "mapx") double mapx, @PathVariable(value = "mapy") double mapy, @PathVariable(value = "category") String category){
+        System.out.println(mapx + mapy + category);
+        List<MainReviewSimpleResponseDto> storeEntityList = storeService.getMainStore(mapx,mapy,category);
         return storeEntityList;
     }
 
@@ -41,6 +44,18 @@ public class StoreController {
     public String createStoreAll(@RequestBody List<StoreCreateDto> storeCreateDtoList){
         storeService.createStoreAll(storeCreateDtoList);
         return "success";
+    }
+
+    @PostMapping("/category")
+    public String category(@RequestBody List<StoreCreateDto> storeCreateDtoList){
+        storeService.setCategory(storeCreateDtoList);
+        return "success";
+    }
+
+    @GetMapping("/search/location/{district}/{category}/{mapx}/{mapy}")
+    public List<StoreSearchLocationCategoryResponse> serachLocationCategory(@PathVariable(value = "district") String district, @PathVariable(value = "category") String category, @PathVariable(value = "mapx") double mapx,@PathVariable(value = "mapy") double mapy){
+        return storeService.serachLocationCategory(district,category,mapx,mapy);
+
     }
 
 }

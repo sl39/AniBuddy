@@ -3,16 +3,14 @@ package org.example.anibuddy.store.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.example.anibuddy.Review.entity.ReviewEntity;
 
 import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -52,7 +50,10 @@ public class StoreEntity {
     @Column(nullable = false)
     private double mapy;
 
-    @JsonBackReference
+    @Column(nullable = true)
+    private String district;
+
+
     @OneToMany(mappedBy = "storeEntity", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<StoreImage> storeImageList;
 
@@ -67,7 +68,10 @@ public class StoreEntity {
     )
     private List<StoreCategory> storeCategoryList;
 
+
     @JsonBackReference
     @OneToOne(mappedBy = "storeEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private StoreSummary storeSummary;
+
+
 }

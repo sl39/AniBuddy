@@ -46,11 +46,15 @@ public class ReviewEntity {
     @OneToMany(mappedBy = "reviewEntity", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<ReviewImage> reviewImageList;
 
+    @Column
+    private Float reviewScore;
+
     @JsonBackReference
     @ManyToMany
     @JoinTable(
             name = "review_entity_store_tag"
     )
     private List<ReviewTag> reviewTagList;
+
 
 }

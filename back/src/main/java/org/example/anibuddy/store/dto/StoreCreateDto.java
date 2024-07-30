@@ -23,6 +23,8 @@ public class StoreCreateDto {
 
     private double mapy;
 
+    private String district;
+
     private List<String>  storeImageList;
 
     private List<String> category;
