@@ -2,6 +2,7 @@ package com.example.front.data
 
 import android.content.Context
 import com.example.front.data.request.TokenReqeust
+import com.example.front.data.response.MainReviewSimpleResponseDto
 import com.example.front.data.response.TokenResponse
 import com.example.front.data.response.UserTesetResponse
 import com.google.gson.Gson
@@ -16,6 +17,7 @@ import retrofit2.http.GET
 import retrofit2.http.HeaderMap
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 
 interface ApiService{
@@ -32,15 +34,18 @@ interface ApiService{
     @GET("/api/user")
     fun getUserTest(): Call<UserTesetResponse>
 
+    @GET("/api/store/main/{mapx}/{mapy}/{category}")
+    fun getMainStore(@Path("mapx") mapx: Double,@Path("mapy") mapy : Double,@Path("category") category: String): Call<List<MainReviewSimpleResponseDto>>
+
 
     companion object{
         private const val BASE_URL = "http://10.0.2.2:8080"
         val gson : Gson = GsonBuilder().setLenient().create();
 
         fun create(context: Context) : ApiService {
-            val authInterceptor = AuthInterceptor(context)
+//            val authInterceptor = AuthInterceptor(context)
             val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(authInterceptor)
+//                .addInterceptor(authInterceptor)
                 .build()
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)

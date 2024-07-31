@@ -15,7 +15,7 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
     List<StoreEntity> findTop10ByOrderByIdDesc();
 
     @Query(value = "SELECT s.id as storeId, " +
-            "   (6371000 * acos(cos(radians(:lat)) * cos(radians(s.mapy)) * cos(radians(s.mapx) - radians(:lon)) + sin(radians(:lat)) * sin(radians(s.mapy)))) AS distance, " +
+            "   ROUND(6371 * acos(cos(radians(:lat)) * cos(radians(s.mapy)) * cos(radians(s.mapx) - radians(:lon)) + sin(radians(:lat)) * sin(radians(s.mapy))),1) AS distance, " +
             "   r.create_date as createdDate, r.review as review, ii.image_url as imageUrl, r.update_date as modifiedDate " +
             "FROM store_entity s " +
             "INNER JOIN (" +
@@ -46,7 +46,7 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 
 
     @Query(value = "SELECT s.id as storeId, " +
-            "(6371000 * acos(cos(radians(:lat)) * cos(radians(s.mapy)) * cos(radians(s.mapx) - radians(:lon)) + sin(radians(:lat)) * sin(radians(s.mapy)))) AS distance, " +
+            "ROUND(6371 * acos(cos(radians(:lat)) * cos(radians(s.mapy)) * cos(radians(s.mapx) - radians(:lon)) + sin(radians(:lat)) * sin(radians(s.mapy))),1) AS distance, " +
             "s.store_name as storeName, COUNT(r.id) as reviewCount " +
             "FROM store_entity s " +
             "LEFT JOIN store_entity_store_category sc ON s.id = sc.store_entity_list_id " +

@@ -72,4 +72,7 @@ dependencies {
     implementation("com.google.dagger:dagger:2.0")
     kapt("com.google.dagger:dagger-compiler:2.0")
 
+    //image binding
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
 }
