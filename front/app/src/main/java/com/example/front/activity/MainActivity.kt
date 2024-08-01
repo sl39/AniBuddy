@@ -1,5 +1,6 @@
 package com.example.front.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -44,20 +45,13 @@ class MainActivity : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.search, menu)
 
-        val menuItem = menu?.findItem(R.id.menu_search_icon)
-        val searchView = menuItem?.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return true
+        val onMenuItemClickListener =
+            menu?.findItem(R.id.menu_search_icon)?.setOnMenuItemClickListener {
+                intent = Intent(this@MainActivity, SearchActivity::class.java)
+                startActivity(intent)
+                return@setOnMenuItemClickListener true
             }
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query != null) {
-                    Log.d("Query", query)
-                }
-                return true
-            }
-        })
+        onMenuItemClickListener
         return true
     }
 

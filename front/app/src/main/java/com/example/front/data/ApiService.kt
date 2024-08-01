@@ -3,6 +3,7 @@ package com.example.front.data
 import android.content.Context
 import com.example.front.data.request.TokenReqeust
 import com.example.front.data.response.MainReviewSimpleResponseDto
+import com.example.front.data.response.SerachLocationCategoryResponseDto
 import com.example.front.data.response.TokenResponse
 import com.example.front.data.response.UserTesetResponse
 import com.google.gson.Gson
@@ -18,6 +19,7 @@ import retrofit2.http.HeaderMap
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 
 interface ApiService{
@@ -34,8 +36,19 @@ interface ApiService{
     @GET("/api/user")
     fun getUserTest(): Call<UserTesetResponse>
 
-    @GET("/api/store/main/{mapx}/{mapy}/{category}")
-    fun getMainStore(@Path("mapx") mapx: Double,@Path("mapy") mapy : Double,@Path("category") category: String): Call<List<MainReviewSimpleResponseDto>>
+    @GET("/api/store/main")
+    fun getMainStore(@Query("mapx") mapx: Double,
+                     @Query("mapy") mapy: Double,
+                     @Query("category") category: String): Call<List<MainReviewSimpleResponseDto>>
+
+    @GET("/api/store/search/location")
+    fun serachLocationCategory(@Query("mapx") mapx: Double,
+                               @Query("mapy") mapy: Double,
+                               @Query("category") category: String,
+                               @Query("district") district : String,
+                               @Query("name") name : String): Call<List<SerachLocationCategoryResponseDto>>
+
+
 
 
     companion object{

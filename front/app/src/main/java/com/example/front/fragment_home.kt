@@ -8,19 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.front.databinding.FragmentHomeBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class fragment_home : Fragment() {
-    // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     private val fragmentReviewCategory = FragmentReviewCategory()
     lateinit var binding: FragmentHomeBinding
-    val bundle = Bundle()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,11 +29,12 @@ class fragment_home : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+
         // Inflate the layout for this fragment
         binding.reviewBeauty.setOnClickListener {
-            Log.d("Category", "beauty")
+            val fragmentReviewCategory = FragmentReviewCategory()
+            val bundle = Bundle()
             bundle.putString("category", "beauty")
             fragmentReviewCategory.arguments = bundle
             childFragmentManager.beginTransaction()
@@ -47,7 +43,8 @@ class fragment_home : Fragment() {
         }
 
         binding.reviewHospital.setOnClickListener {
-            Log.d("Category", "hospital")
+            val fragmentReviewCategory = FragmentReviewCategory()
+            val bundle = Bundle()
             bundle.putString("category", "hospital")
             fragmentReviewCategory.arguments = bundle
             childFragmentManager.beginTransaction()
@@ -56,26 +53,25 @@ class fragment_home : Fragment() {
         }
 
         binding.reviewTraining.setOnClickListener {
-            Log.d("Category", "training")
+            val fragmentReviewCategory = FragmentReviewCategory()
+            val bundle = Bundle()
             bundle.putString("category", "training")
             fragmentReviewCategory.arguments = bundle
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragmenthome, fragmentReviewCategory)
                 .commitAllowingStateLoss()
         }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fragmentReviewCategory.arguments = bundle
         // Now it's safe to perform fragment transactions
         childFragmentManager.beginTransaction()
             .replace(R.id.fragmenthome, fragmentReviewCategory)
             .commitAllowingStateLoss()
     }
-
-
 
     companion object {
         @JvmStatic

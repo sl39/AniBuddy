@@ -1,19 +1,20 @@
 package com.example.front
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.front.activity.StoreDetailActivity
 import com.example.front.data.ApiService
 import com.example.front.data.response.MainReviewSimpleResponseDto
-import com.example.front.databinding.FragmentHomeBinding
 import com.example.front.databinding.FragmentReviewCategoryBinding
 import com.example.front.databinding.HomeReviewRecyclerviewBinding
 import retrofit2.Call
@@ -92,6 +93,7 @@ class FragmentReviewCategory : Fragment(), ReviewAdapter.OnItemClickListener {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var adapter: ReviewAdapter
+    private lateinit var parentContext: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,6 +112,8 @@ class FragmentReviewCategory : Fragment(), ReviewAdapter.OnItemClickListener {
 
         var context : Context = requireContext()
         val api = ApiService.create(context)
+        var result = arguments?.getString("category") ?: "beauty"
+        Log.d("resultcategory",result.toString())
 
         // Inflate the layout for this fragment
 
@@ -118,9 +122,10 @@ class FragmentReviewCategory : Fragment(), ReviewAdapter.OnItemClickListener {
         val layoutManager = LinearLayoutManager(activity)
         binding.fragmentReviewCategory.layoutManager = layoutManager
 
+
         binding.fragmentReviewCategory.adapter = adapter
 
-        api.getMainStore(129.1177397,35.1560602, "beauty").enqueue(object:
+        api.getMainStore(129.1177397,35.1560602, result).enqueue(object:
             Callback<List<MainReviewSimpleResponseDto>> {
             override fun onResponse(
                 call: Call<List<MainReviewSimpleResponseDto>>,
@@ -145,8 +150,14 @@ class FragmentReviewCategory : Fragment(), ReviewAdapter.OnItemClickListener {
         return binding.root // 바인딩된 레이아웃 반환
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        parentContext = context
+    }
+
     override fun onItemClick(review: MainReviewSimpleResponseDto) {
-        Log.d("adfaafsfad", review.storeId.toString())
+//        val intent : Intent = Intent(parentContext, StoreDetailActivity::class.java)
+        Log.d("가게가 뭐가 나올까", review.storeId.toString())
     }
 
     companion object {

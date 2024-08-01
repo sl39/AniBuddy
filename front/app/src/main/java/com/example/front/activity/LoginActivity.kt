@@ -18,11 +18,7 @@ import com.example.front.data.request.LoginRequest
 import com.example.front.data.response.LoginResponse
 import com.example.front.data.response.UserTesetResponse
 import com.example.front.databinding.ActivityLoginBinding
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import retrofit2.Callback
 import retrofit2.Call

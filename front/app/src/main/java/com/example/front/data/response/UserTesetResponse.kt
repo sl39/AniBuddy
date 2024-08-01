@@ -16,3 +16,12 @@ data class MainReviewSimpleResponseDto(
     val modifiedDate : String,
     val category: String
 )
+
+data class SerachLocationCategoryResponseDto(
+    val id: Int,
+    val storeName: String,
+    val category: String,
+    val distance: Double,
+    val reviewCount: Int,
+    val storeImage: List<String>
+)
