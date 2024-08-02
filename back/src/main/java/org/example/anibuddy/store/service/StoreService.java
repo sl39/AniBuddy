@@ -21,10 +21,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Date;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -137,7 +134,7 @@ public class StoreService {
         } else if (category.equals("training")) {
             categoryId = 3;
         }
-        
+
         List<Map<String, Object>> mainReviewSimpleResponseDto = storeRepository.findStoresWithinDistance(mapx,mapy, categoryId);
         List<MainReviewSimpleResponseDto> dtos = new ArrayList<>();
         for(Map<String,Object> result : mainReviewSimpleResponseDto){
@@ -192,8 +189,11 @@ public class StoreService {
         storeRepository.saveAll(storeEntities);
     }
 
-    public List<StoreSearchLocationCategoryResponse> serachLocationCategory(String district, String category, double mapx, double mapy) {
-
+    public List<StoreSearchLocationCategoryResponse> serachLocationCategory(List<String> district, String category, double mapx, double mapy,String name) {
+        if(district == null){
+            String[] d = {"북구", "남구", "동래구", "금정구", "사상구", "부산진구", "강서구", "해운대구", "동구", "영도구", "연제구", "사하구", "중구", "수영구", "기장군", "서구"};
+            district = Arrays.asList(d);
+        }
         List<StoreSearchLocationCategoryResponse> storeSearchLocationCategoryResponses = new ArrayList<>();
         int categoryId = 0;
         if (category.equals("beauty")){
@@ -203,7 +203,7 @@ public class StoreService {
         } else if (category.equals("training")) {
             categoryId = 3;
         }
-        List<Map<String, Object>> storeList = storeRepository.findStoresByCategoryAndDistrictWithReview(district, categoryId, mapx ,mapy);
+        List<Map<String, Object>> storeList = storeRepository.findStoresByCategoryAndDistrictWithReview(district, categoryId, mapx ,mapy,name);
         for (Map<String, Object> result : storeList) {
             Integer reviewCount = Integer.parseInt(String.valueOf(result.get("reviewCount")));
             Integer storeId = Integer.parseInt(String.valueOf(result.get("storeId")));

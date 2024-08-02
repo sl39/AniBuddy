@@ -52,11 +52,12 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
             "LEFT JOIN store_entity_store_category sc ON s.id = sc.store_entity_list_id " +
             "LEFT JOIN review_entity r ON s.id = r.store_entity_id " +
             "WHERE sc.store_category_list_id = :category " +
-            "AND s.district = :district " +
+            "AND s.store_name LIKE %:name% " +
+            "AND s.district in (:district) " +
             "GROUP BY s.id " +
             "ORDER BY reviewCount DESC",
             nativeQuery = true)
-    List<Map<String, Object>> findStoresByCategoryAndDistrictWithReview(String district, Integer category, double lon, double lat);
+    List<Map<String, Object>> findStoresByCategoryAndDistrictWithReview(List<String> district, Integer category, double lon, double lat,String name);
 
 
 
