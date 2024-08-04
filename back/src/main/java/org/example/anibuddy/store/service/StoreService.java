@@ -218,6 +218,7 @@ public class StoreService {
                     .build();
             storeSearchLocationCategoryResponses.add(storeSearchLocationCategoryResponse);
         }
+        System.out.println(storeSearchLocationCategoryResponses.getFirst().getStoreName() + " " + storeSearchLocationCategoryResponses.getFirst().getReviewCount());
         return storeSearchLocationCategoryResponses;
     }
 
