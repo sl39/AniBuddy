@@ -45,7 +45,7 @@ interface ApiService{
     fun serachLocationCategory(@Query("mapx") mapx: Double,
                                @Query("mapy") mapy: Double,
                                @Query("category") category: String,
-                               @Query("district") district : String,
+                               @Query("district") district : List<String>,
                                @Query("name") name : String): Call<List<SerachLocationCategoryResponseDto>>
 
 
