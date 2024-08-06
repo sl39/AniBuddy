@@ -23,7 +23,7 @@ public class UserEntity {
     @Column(nullable = false)
     private String userName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String nickname; // 닉네임
     private String socialId;
 
@@ -33,7 +33,6 @@ public class UserEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
     private String userPhone;
 
     @Column(nullable = true)

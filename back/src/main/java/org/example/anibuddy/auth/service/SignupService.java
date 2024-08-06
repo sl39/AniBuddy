@@ -41,10 +41,9 @@ public class SignupService {
                  .email(authSignUpRequestDto.getEmail())
                 .password(authSignUpRequestDto.getPassword())
                 .userAddress(authSignUpRequestDto.getUserAddress())
-                .userPhone(authSignUpRequestDto.getUserPhone())
                 .userName(authSignUpRequestDto.getUserName())
                 .nickname(authSignUpRequestDto.getNickname())
-                .role(Role.USER)
+                .role(Role.OWNER)
                 .build();
 
         user.passwordEncode(passwordEncoder);
@@ -69,7 +68,6 @@ public class SignupService {
                     .email(authSignUpRequestDto.getEmail())
                     .password(authSignUpRequestDto.getPassword())
                     .userAddress(authSignUpRequestDto.getUserAddress())
-                    .userPhone(authSignUpRequestDto.getUserPhone())
                     .userName(authSignUpRequestDto.getUserName())
                     .nickname(authSignUpRequestDto.getNickname())
                     .role(Role.USER)

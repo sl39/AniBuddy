@@ -15,8 +15,6 @@ public class AuthSignUpRequestDto {
 
     private String password2;
 
-    private String userPhone;
-
     private String userAddress;
 
     private String nickname;
