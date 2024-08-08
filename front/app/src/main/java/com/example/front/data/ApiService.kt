@@ -56,9 +56,9 @@ interface ApiService{
         val gson : Gson = GsonBuilder().setLenient().create();
 
         fun create(context: Context) : ApiService {
-//            val authInterceptor = AuthInterceptor(context)
+            val authInterceptor = AuthInterceptor(context)
             val okHttpClient = OkHttpClient.Builder()
-//                .addInterceptor(authInterceptor)
+                .addInterceptor(authInterceptor)
                 .build()
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)

@@ -2,6 +2,7 @@ package com.example.front
 
 import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -94,7 +95,7 @@ class FragmentReviewCategory : Fragment(), ReviewAdapter.OnItemClickListener {
     private var param2: String? = null
     private lateinit var adapter: ReviewAdapter
     private lateinit var parentContext: Context
-
+    private lateinit var location: Location
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -109,11 +110,12 @@ class FragmentReviewCategory : Fragment(), ReviewAdapter.OnItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
 
-
         var context : Context = requireContext()
+        location = Location(context)
+        val permission = Permission(context)
+
         val api = ApiService.create(context)
         var result = arguments?.getString("category") ?: "beauty"
-        Log.d("resultcategory",result.toString())
 
         // Inflate the layout for this fragment
 
@@ -121,33 +123,38 @@ class FragmentReviewCategory : Fragment(), ReviewAdapter.OnItemClickListener {
         adapter = ReviewAdapter(mutableListOf(), this)
         val layoutManager = LinearLayoutManager(activity)
         binding.fragmentReviewCategory.layoutManager = layoutManager
-
-
         binding.fragmentReviewCategory.adapter = adapter
 
-        api.getMainStore(129.1177397,35.1560602, result).enqueue(object:
-            Callback<List<MainReviewSimpleResponseDto>> {
+        location.getLocation{mapx, mapy ->
+            Log.d("resultcategory",result.toString())
+            fetchReviews(api,mapx,mapy,result)
+        }
+
+        return binding.root // 바인딩된 레이아웃 반환
+    }
+
+
+
+    private fun fetchReviews(api: ApiService, longitude: Double, latitude: Double, category: String) {
+        api.getMainStore(longitude, latitude, category).enqueue(object : Callback<List<MainReviewSimpleResponseDto>> {
             override fun onResponse(
                 call: Call<List<MainReviewSimpleResponseDto>>,
                 response: Response<List<MainReviewSimpleResponseDto>>
-            ){
-                when(response.code()){
-                    200 ->{
+            ) {
+                when (response.code()) {
+                    200 -> {
                         val ds = response.body() as MutableList<MainReviewSimpleResponseDto>
                         adapter.updateData(ds)
+                        Log.d("여기여기학인 해보겠다","다시다시고고고고")
+
                     }
                 }
             }
 
             override fun onFailure(call: Call<List<MainReviewSimpleResponseDto>>, t: Throwable) {
-                Log.d("api 테스트 살퍄", t.message.toString())
-
+                Log.d("API 호출 실패", t.message.toString())
             }
         })
-
-
-
-        return binding.root // 바인딩된 레이아웃 반환
     }
 
     override fun onAttach(context: Context) {

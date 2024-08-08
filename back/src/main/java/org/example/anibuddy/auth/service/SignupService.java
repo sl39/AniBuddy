@@ -43,7 +43,7 @@ public class SignupService {
                 .userAddress(authSignUpRequestDto.getUserAddress())
                 .userName(authSignUpRequestDto.getUserName())
                 .nickname(authSignUpRequestDto.getNickname())
-                .role(Role.OWNER)
+                .role(Role.valueOf(authSignUpRequestDto.getRole()))
                 .build();
 
         user.passwordEncode(passwordEncoder);

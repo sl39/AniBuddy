@@ -33,7 +33,7 @@ public class UserController {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String email = userDetails.getUsername();
         Integer id = userDetails.getUserId();
-        System.out.println(id.toString());
+        System.out.println(email);
         String userName = userService.getUser(email);
         Map<String,String> map = new HashMap<>();
         map.put("userName",userName);

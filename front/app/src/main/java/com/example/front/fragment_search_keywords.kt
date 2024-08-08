@@ -60,7 +60,6 @@ class fragment_search_keywords : Fragment() {
     ): View? {
         binding = FragmentSearchKeywordsBinding.inflate(layoutInflater)
 
-        Log.d("adfadsfasdf", selectCategory + "          " + selectDistrict.toString())
         val categoryBtns = binding.categoryGrid
         val districtBtns = binding.districtGrid
         setInitCategory(categoryBtns,districtBtns)
@@ -127,7 +126,7 @@ class fragment_search_keywords : Fragment() {
                 view.setOnClickListener {
                     if (selectDistrict.contains(view.text.toString())) {
                         selectDistrict.remove(view.text.toString())
-                        view.backgroundTintList = ColorStateList.valueOf(android.R.drawable.btn_default)
+                        view.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
 
                     } else {
                         // Reset background for all buttons first
@@ -146,14 +145,14 @@ class fragment_search_keywords : Fragment() {
                 view.setOnClickListener {
                     if (view.text.toString() == selectCategory) {
                         selectCategory = "test"
-                        view.backgroundTintList = ColorStateList.valueOf(android.R.drawable.btn_default)
+                        view.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
 
                     } else {
                         // Reset background for all buttons first
                         for (j in 0 until districtBtns.childCount) {
                             val button = districtBtns.getChildAt(j)
                             if (button is Button) {
-                                button.backgroundTintList = ColorStateList.valueOf(android.R.drawable.btn_default)
+                                button.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
 
                             }
                         }

@@ -2,21 +2,22 @@ package com.example.front.data
 
 import android.content.Context
 import android.util.Log
-import com.example.front.activity.dataStore
 import com.example.front.data.request.TokenReqeust
-import com.example.front.data.response.TokenResponse
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.reflect.Type
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 class AuthInterceptor(private val context: Context) : Interceptor {
     private val userPreferencesRepository by lazy {
-        UserPreferencesRepository(context.dataStore)
+        preferencesRepository.getUserPreferencesRepository(context)
     }
 
     private val retrofit = Retrofit.Builder()
@@ -30,7 +31,7 @@ class AuthInterceptor(private val context: Context) : Interceptor {
         val accessToken = runBlocking {
             userPreferencesRepository.getAccessToken.first()
         }
-
+//        isTokenValid(accessToken)
         var request = chain.request().newBuilder()
 
         if (!accessToken.equals("")) {
@@ -63,7 +64,6 @@ class AuthInterceptor(private val context: Context) : Interceptor {
         var newAccessToken = ""
         val headers = HashMap<String, String>()
         headers["Authorization-refresh"] = "Bearer $refreshToken"
-        Log.d("리프레쉬 토큰",refreshToken)
 
 
         try {
@@ -89,4 +89,27 @@ class AuthInterceptor(private val context: Context) : Interceptor {
 
         return newAccessToken
     }
+
+//    @OptIn(ExperimentalEncodingApi::class)
+//    fun getBase64decode(content: String?): String {
+//        return String(Base64.decode(content!!, 0))
+//    }
+//
+//    fun isTokenValid(token: String?): Boolean {
+//        if(token == null){
+//            return false
+//        }
+//
+//        val valid = token.split(".")
+//        if (valid.size != 3) {
+//            return false // JWT는 반드시 세 부분으로 구성되어 있어야 합니다.
+//        }
+//        val gson = Gson()
+//        val mapType: Type = object : TypeToken<Map<String, Any>>() {}.type
+//        val payload = getBase64decode(valid[1])
+//        val payloadMap: Map<String, String> = gson.fromJson(payload, mapType)
+//        Log.d("토큰 토큰", payload)
+//        Log.d("Toekn 시간 시간", payloadMap.get("exp").toString())
+//        return true
+//    }
 }

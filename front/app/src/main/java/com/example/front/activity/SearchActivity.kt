@@ -29,9 +29,6 @@ class SearchActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         var context : Context = this@SearchActivity
         fragmentManager.beginTransaction().replace(R.id.search_content, fragmentSearchKeywords).commitAllowingStateLoss()
-
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

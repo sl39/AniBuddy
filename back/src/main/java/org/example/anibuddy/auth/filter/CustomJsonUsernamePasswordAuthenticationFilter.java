@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.anibuddy.auth.AuthRepository;
+import org.example.anibuddy.user.Role;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,15 +24,17 @@ public class CustomJsonUsernamePasswordAuthenticationFilter extends AbstractAuth
     private static final String CONTENT_TYPE = "application/json"; // JSON 타입의 데이터로 오는 로그인 요청만 처리
     private static final String USERNAME_KEY = "email"; // 회원 로그인 시 이메일 요청 JSON Key : "email"
     private static final String PASSWORD_KEY = "password"; // 회원 로그인 시 비밀번호 요청 JSon Key : "password"
+    private static final String ROLE_KEY = "role";
     private static final AntPathRequestMatcher DEFAULT_LOGIN_PATH_REQUEST_MATCHER =
             new AntPathRequestMatcher(DEFAULT_LOGIN_REQUEST_URL, HTTP_METHOD); // "/api/auth/login" + POST로 온 요청에 매칭된다.
 
     private final ObjectMapper objectMapper;
+    private final AuthRepository authRepository;
 
-    public CustomJsonUsernamePasswordAuthenticationFilter(ObjectMapper objectMapper) {
+    public CustomJsonUsernamePasswordAuthenticationFilter(ObjectMapper objectMapper,AuthRepository authRepository) {
         super(DEFAULT_LOGIN_PATH_REQUEST_MATCHER); // 위에서 설정한 "/api/auth/login" + Post 로 온 요청을 처리하기 위해 설정
         this.objectMapper = objectMapper;
-
+        this.authRepository = authRepository;
     }
 
 
@@ -64,7 +68,10 @@ public class CustomJsonUsernamePasswordAuthenticationFilter extends AbstractAuth
         Map<String,String> usernmaePasswordMap = objectMapper.readValue(messageBody,Map.class);
         String email = usernmaePasswordMap.get(USERNAME_KEY);
         String password =  usernmaePasswordMap.get(PASSWORD_KEY);
-
+        String role = usernmaePasswordMap.get(ROLE_KEY);
+        if (authRepository.findByEmailAndRole(email, Role.valueOf(role)).isEmpty()) {
+            throw new AuthenticationServiceException("User not found");
+        }
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(email, password);
         return this.getAuthenticationManager().authenticate(authRequest);
     }

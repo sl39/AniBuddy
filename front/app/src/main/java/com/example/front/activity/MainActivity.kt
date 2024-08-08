@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentManager
+import com.example.front.Permission
 import com.example.front.fragment_home
 import com.example.front.R
 import com.example.front.databinding.ActivityMainBinding
@@ -25,6 +26,11 @@ class MainActivity : AppCompatActivity() {
     private val fragmentFollowingList = fragment_following_list()
     private val fragmentChatList = fragment_chat_list()
     private val fragmentProfile = fragment_profile()
+    override fun onStart() {
+        super.onStart()
+        Permission(this).requestLocation() // 위치 권한 요청
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

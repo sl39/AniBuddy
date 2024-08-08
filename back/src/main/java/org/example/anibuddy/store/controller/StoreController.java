@@ -31,6 +31,7 @@ public class StoreController {
     public List<MainReviewSimpleResponseDto> getMainStore(MainReviewSimpleRequestDto resqeust){
         System.out.println(resqeust.getMapx());
         List<MainReviewSimpleResponseDto> storeEntityList = storeService.getMainStore(resqeust.getMapx(), resqeust.getMapy(), resqeust.getCategory());
+        System.out.println(storeEntityList.size());
         return storeEntityList;
     }
 

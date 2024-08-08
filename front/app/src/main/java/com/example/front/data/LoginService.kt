@@ -24,9 +24,12 @@ interface LoginApiService{
     @Headers(
         "content-type: application/json"
     )
-    fun userLogin(
+    fun ownerLogin(
         @Body jsonParams : LoginRequest,
         ): Call<LoginResponse>
+
+    @GET("/oauth2/authorization/kakao")
+    fun userLogin() : Call<LoginResponse>
 
     companion object{
         private const val BASE_URL = "http://10.0.2.2:8080"

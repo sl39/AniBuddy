@@ -18,4 +18,6 @@ public class AuthSignUpRequestDto {
     private String userAddress;
 
     private String nickname;
+
+    private String role;
 }

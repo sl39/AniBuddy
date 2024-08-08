@@ -119,6 +119,8 @@ class FragmentSearchResult : Fragment(), SearchAdapter.OnItemClickListener {
     private var param2: String? = null
     var bundle = Bundle()
     private lateinit var adapter: SearchAdapter
+    private lateinit var location: Location
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,6 +146,7 @@ class FragmentSearchResult : Fragment(), SearchAdapter.OnItemClickListener {
         val layoutManager = LinearLayoutManager(activity)
         binding.searchResultContainer.layoutManager = layoutManager
         binding.searchResultContainer.adapter = adapter
+        location = Location(context)
         if(category.equals("beauty")){
             binding.searchCategory.text = "미용"
         } else if(category.equals("hospital")){
@@ -152,31 +155,9 @@ class FragmentSearchResult : Fragment(), SearchAdapter.OnItemClickListener {
             binding.searchCategory.text = "훈련"
         }
         if ((category != null) && (district != null ) ) {
-            api.serachLocationCategory(129.1177397,35.1560602,category,district,keyword).enqueue(object:
-            Callback<List<SerachLocationCategoryResponseDto>>{
-                override fun onResponse(
-                    call: Call<List<SerachLocationCategoryResponseDto>>,
-                    response: Response<List<SerachLocationCategoryResponseDto>>
-                ) {
-                    when(response.code()){
-                        200 ->{
-                            val ds = response.body() as MutableList<SerachLocationCategoryResponseDto>
-                            adapter.updateData(ds)
-                        }
-                    }
-                }
-
-                override fun onFailure(
-                    call: Call<List<SerachLocationCategoryResponseDto>>,
-                    t: Throwable
-                ) {
-                    Log.d("api 테스트 살퍄 여기는 search 결과", t.message.toString())
-                }
-            })
-        } else {
-            Log.d("뭔가", "ㄷ이터가 ㅁㄴ아러ㅣ마너라ㅣㅁㅇ널ㄴ아ㅣ런아ㅣ렁나")
-            return binding.root
-
+            location.getLocation{mapx, mapy ->
+                fetchApi(api,mapx,mapy,category,district,keyword)
+            }
         }
 
         return binding.root
@@ -184,6 +165,29 @@ class FragmentSearchResult : Fragment(), SearchAdapter.OnItemClickListener {
 
     override fun onItemClick(search: SerachLocationCategoryResponseDto) {
         Log.d("가게가 뭐가 나올까List", "Store 이름: "+ search.storeName + " Store category: " +  search.category + " id " + search.id)
+    }
+    private fun fetchApi(api: ApiService, longitude: Double, latitude: Double, category: String,district:List<String>,keyword: String){
+        api.serachLocationCategory(longitude,latitude,category,district,keyword).enqueue(object:
+            Callback<List<SerachLocationCategoryResponseDto>>{
+            override fun onResponse(
+                call: Call<List<SerachLocationCategoryResponseDto>>,
+                response: Response<List<SerachLocationCategoryResponseDto>>
+            ) {
+                when(response.code()){
+                    200 ->{
+                        val ds = response.body() as MutableList<SerachLocationCategoryResponseDto>
+                        adapter.updateData(ds)
+                    }
+                }
+            }
+
+            override fun onFailure(
+                call: Call<List<SerachLocationCategoryResponseDto>>,
+                t: Throwable
+            ) {
+                Log.d("api 테스트 살퍄 여기는 search 결과", t.message.toString())
+            }
+        })
     }
 
 
