@@ -27,23 +27,12 @@ public class ChatController {
         return ResponseEntity.ok(chatRoomService.makeChatRoom(userId, chatRoomRequest));
     }
 
-    @GetMapping("/user/chatrooms")
-    public ResponseEntity<List<ChatRoomResponse>> getChatRoomListForUser()
-    {
-        //TODO: Spring security의 @Authentication으로 요청한 user의 id값 받아오기
-        int userId = 1;
-        Role role = Role.USER;
-
-        return ResponseEntity.ok(chatRoomService.getChatRoomList(role, userId));
-    }
-
-    @GetMapping("/owner/chatrooms")
-    public ResponseEntity<List<ChatRoomResponse>> getChatRoomListForOwner()
-    {
-        //TODO: Spring security의 @Authentication으로 요청한 owner의 id값 받아오기
-        int ownerId = 2;
-        Role role = Role.OWNER;
-
-        return ResponseEntity.ok(chatRoomService.getChatRoomList(role, ownerId));
+    @GetMapping("/chatrooms")
+    public ResponseEntity<List<ChatRoomResponse>> getChatRoomList(
+            @RequestParam("myId") int id,
+            @RequestParam("role") String role
+    ) {
+        Role roleEnum = Role.valueOf(role);
+        return ResponseEntity.ok(chatRoomService.getChatRoomList(roleEnum, id));
     }
 }

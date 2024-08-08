@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ChatRoomRequest {
+public class ChatRoomRequest { //가게 상세에서 문의 버튼 누를 시
     private int ownerId;
 
     @Builder

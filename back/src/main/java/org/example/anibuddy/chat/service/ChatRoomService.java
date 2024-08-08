@@ -2,6 +2,7 @@ package org.example.anibuddy.chat.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.anibuddy.chat.dto.ChatRoomRequest;
 import org.example.anibuddy.chat.dto.ChatRoomResponse;
 import org.example.anibuddy.chat.model.ChatRoomEntity;
@@ -13,6 +14,7 @@ import org.example.anibuddy.user.UserEntity;
 import org.example.anibuddy.user.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +41,8 @@ public class ChatRoomService {
         ChatRoomEntity chatRoom = optionalChatRoom.orElseGet(() ->
                 chatRoomRepository.save(ChatRoomEntity.builder().user(user).owner(owner).build()));
 
-        return new ChatRoomResponse(chatRoom);
+        //TODO: Auth로 판변해서 상대방 정보만 넘겨주기
+        return new ChatRoomResponse(1, "test name", "test Url");
     }
 
     public List<ChatRoomResponse> getChatRoomList(Role role, int id) {
@@ -60,9 +63,13 @@ public class ChatRoomService {
         }
 
         List<ChatRoomResponse> responses = new ArrayList<>();
+        String otherName;
         for(ChatRoomEntity chatRoom : entities) {
-            responses.add(new ChatRoomResponse(chatRoom));
+            if(role == Role.USER) otherName = chatRoom.getOwner().getName();
+            else otherName = chatRoom.getUser().getUserName();
+            responses.add(new ChatRoomResponse(chatRoom.getId(), otherName, "https://avc.com"));
         }
+
         return responses;
     }
 }

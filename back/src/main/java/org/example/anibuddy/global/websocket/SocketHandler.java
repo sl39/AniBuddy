@@ -50,7 +50,6 @@ public class SocketHandler extends TextWebSocketHandler {
                     try {
                         TextMessage textMessage = new TextMessage(msg);
                         wsSession.sendMessage(textMessage);
-
                     } catch (IOException e) {
                         log.error(e.getMessage());
                     }

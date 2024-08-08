@@ -2,17 +2,26 @@ package com.example.front
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.front.common.HttpWebSocket
+import com.example.front.data.ChatMessage
 import com.example.front.databinding.ActivityMessageListBinding
 import com.example.front.databinding.ItemMyChatBinding
 import com.example.front.databinding.ItemOtherChatBinding
+import io.realm.Realm
+import io.realm.RealmResults
+import io.realm.kotlin.where
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+
 
 class MessageItem(var name: String, val role: String, val content: String, val createdAt: LocalDateTime)
 
@@ -32,6 +41,7 @@ class MessageItemAdapter(val datas: List<MessageItem>, val role: String) : Recyc
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val formatter = DateTimeFormatter.ofPattern("HH:mm")
 
@@ -58,6 +68,7 @@ class MessageItemAdapter(val datas: List<MessageItem>, val role: String) : Recyc
     }
 }
 
+//TODO: Activity로 전환될때 RoomId, 본인 Role 필요
 class MessageListActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMessageListBinding
@@ -68,50 +79,52 @@ class MessageListActivity : AppCompatActivity() {
         binding = ActivityMessageListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        supportActionBar?.title = "Store Name"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        //todo: 백에서 채팅 내역 정보 가져와서 넣어주기
-        val testList = mutableListOf<MessageItem>()
+        val intent = intent
+        val roomId = intent.getStringExtra("roomId")
+        val otherName = intent.getStringExtra("otherName")
+        val otherImageUrl = intent.getStringExtra("otherImageUrl")
 
-        for(i in 1..10){
-            val myMessageItem = MessageItem(
-                name = "user",
-                role = "USER",
-                content = "test chat $i",
-                createdAt = LocalDateTime.now()
+        supportActionBar?.title = otherName
+
+        //todo: 1. Realm에서 채팅 내역 정보를 가져온다.
+        //todo: 2. .map이라든가 써서 myMessageItem/otherMessageItem로 변환한다.
+
+        val messageList = mutableListOf<MessageItem>()
+        val db = Realm.getDefaultInstance()
+        val chatMessage: RealmResults<ChatMessage> = db.where<ChatMessage>()
+            .equalTo("roomId", roomId)
+            .sort("createdAt")
+            .findAll()
+
+        chatMessage.forEach{ chatMsg ->
+            val messageItem = MessageItem(
+                name = chatMsg.senderName,
+                role = chatMsg.senderRole,
+                content = chatMsg.message,
+                createdAt = LocalDateTime.parse(chatMsg.createdAt)
             )
-            val otherMessageItem = MessageItem(
-                name = "owner",
-                role = "OWNER",
-                content = "test chat $i",
-                createdAt = LocalDateTime.now()
-            )
-            testList.add(myMessageItem)
-            testList.add(otherMessageItem)
+            messageList.add(messageItem)
         }
 
-        val myMessageItem = MessageItem(
-            name = "user",
-            role = "USER",
-            content = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-            createdAt = LocalDateTime.now()
-        )
-        val otherMessageItem = MessageItem(
-            name = "owner",
-            role = "OWNER",
-            content = "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-            createdAt = LocalDateTime.now()
-        )
-        testList.add(myMessageItem)
-        testList.add(otherMessageItem)
-
-        binding.recyclerview.adapter = MessageItemAdapter(testList, "USER")
+        binding.recyclerview.adapter = MessageItemAdapter(messageList, "USER") //TODO: my role
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
+    }
+
+    fun sendWebSocket(roomId:Int, message:String) {
+        try {
+            val client = OkHttpClient()
+            val request: Request = Request.Builder().url("ws://localhost:8080/chat/${roomId}").build()
+            val websocketListener = HttpWebSocket()
+            client.newWebSocket(request, websocketListener).send(message)
+        } catch (e: Exception) {
+            Log.e("CHATTING", "WebSocket 통신 오류 : $e")
+        }
     }
 }

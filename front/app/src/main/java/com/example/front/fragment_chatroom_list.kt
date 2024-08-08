@@ -3,19 +3,26 @@ package com.example.front
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.front.data.ChatApiService
+import com.example.front.data.response.ChatRoomResponse
 import com.example.front.databinding.FragmentChatroomListBinding
 import com.example.front.databinding.ItemChatroomBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class ChatRoomItem(var storeName: String, val lastChat: String?, val lastChatDate: LocalDateTime)
+class ChatRoomItem(val roomId: Int, var otherName: String, var otherProfileImageUrl: String, var lastChatText: String?, var lastChatDate: LocalDateTime)
 
 class ChatRoomViewHolder(val binding: ItemChatroomBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -30,17 +37,22 @@ class ChatRoomAdapter(val datas: List<ChatRoomItem>) : RecyclerView.Adapter<Recy
     }
 
     //ViewHolder 객체에 데이터 바인딩
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         val binding = (holder as ChatRoomViewHolder).binding
 
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        binding.storeName.text = datas[position].storeName
-        binding.lastChat.text = datas[position].lastChat
-        binding.lastDate.text = datas[position].lastChatDate.format(formatter)
+        binding.otherName.text = datas[position].otherName
+        //binding.otherProfileImage.setImageURI(datas[position].otherProfileImageUrl.toUri())
+        binding.lastChatText.text = datas[position].lastChatText
+        binding.lastChatDate.text = datas[position].lastChatDate.format(formatter)
 
         binding.root.setOnClickListener {
             val intent = Intent(it.context, MessageListActivity::class.java)
+            intent.putExtra("roomId", datas[position].roomId)
+            intent.putExtra("otherName", datas[position].otherName)
+            intent.putExtra("otherImageUrl", datas[position].otherProfileImageUrl)
             it.context.startActivity(intent)
         }
     }
@@ -49,6 +61,7 @@ class ChatRoomAdapter(val datas: List<ChatRoomItem>) : RecyclerView.Adapter<Recy
 class fragment_chatroom_list : Fragment() {
 
     lateinit var binding: FragmentChatroomListBinding
+    var chatRoomResponseList: List<ChatRoomResponse> = mutableListOf()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -57,22 +70,45 @@ class fragment_chatroom_list : Fragment() {
     ): View {
         binding = FragmentChatroomListBinding.inflate(inflater, container, false)
 
-        //todo: 백에서 채팅방 정보 가져와서 넣어주기
-        val testList = mutableListOf<ChatRoomItem>()
+        val chatRoomItemList: MutableList<ChatRoomItem> = mutableListOf()
+        val chatApi = ChatApiService.create()
 
-        for(i in 1..10){
-            val testChatRoomItem = ChatRoomItem(
-                storeName = "test store $i",
-                lastChat = "test chat $i",
+        chatApi.getChatRoomList(1, "USER").enqueue(object: Callback<List<ChatRoomResponse>>{
+            override fun onResponse(
+                call: Call<List<ChatRoomResponse>>,
+                response: Response<List<ChatRoomResponse>>
+            ) {
+                if(response.isSuccessful) {
+                    Log.d("getChatRoomList()", "onResponse")
+
+                    val responseList = response.body()!!
+                    Log.d("list count", "list 개수 : ${responseList.size}")
+                    setChatRoomList(responseList)
+                }
+            }
+            override fun onFailure(call: Call<List<ChatRoomResponse>>, t: Throwable) {
+                Log.d("getChatRoomList()", "onFailure")
+            }
+        })
+
+        for(i in chatRoomResponseList){
+            val chatRoomItem = ChatRoomItem(
+                roomId = i.roomId,
+                otherName = i.otherName,
+                otherProfileImageUrl = i.otherProfileImageUrl,
+                lastChatText = "last chat!!!",
                 lastChatDate = LocalDateTime.now()
             )
-            testList.add(testChatRoomItem)
+            chatRoomItemList.add(chatRoomItem)
         }
 
-        binding.recyclerview.adapter = ChatRoomAdapter(testList)
+        binding.recyclerview.adapter = ChatRoomAdapter(chatRoomItemList)
         binding.recyclerview.layoutManager = LinearLayoutManager(activity)
 
         return binding.root
     }
 
+    private fun setChatRoomList(chatRoomList: List<ChatRoomResponse>) {
+        this.chatRoomResponseList = chatRoomList
+    }
 }

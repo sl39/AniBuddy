@@ -11,6 +11,7 @@
     android:paddingVertical="10dp" >
 
     <ImageView
+        android:id="@+id/other_profile_image"
         android:src="@mipmap/ic_launcher"
         android:layout_width="50dp"
         android:layout_height="50dp" />
@@ -24,27 +25,25 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:id="@+id/store_name"
-                android:text="store name"
-                android:layout_marginRight="5dp"
-                android:textStyle="bold"
-                android:textSize="18sp" />
-            <TextView
+                android:id="@+id/other_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/last_date"
+                android:textAlignment="center"
+                android:text="store name"
+                android:layout_marginRight="5dp"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/last_chat_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="2024-10-23"
                 android:textSize="11sp" />
         </LinearLayout>
         <TextView
-            android:id="@+id/last_chat"
+            android:id="@+id/last_chat_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="5dp"
-            android:paddingLeft="5dp"
             android:text="latest chat"
-            android:textSize="12sp" />
+            android:textSize="13sp" />
     </LinearLayout>
 </LinearLayout>

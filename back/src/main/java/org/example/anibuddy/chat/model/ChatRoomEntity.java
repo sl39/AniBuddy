@@ -11,7 +11,7 @@ import org.example.anibuddy.user.UserEntity;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name="chatroom")
+@Table(name="chat_room_entity")
 public class ChatRoomEntity {
 
     @Id
