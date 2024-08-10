@@ -1,6 +1,7 @@
 package org.example.anibuddy.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.DispatcherType;
 import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.auth.AuthRepository;
 import org.example.anibuddy.auth.filter.CustomJsonUsernamePasswordAuthenticationFilter;
@@ -43,9 +44,8 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        http
-                .formLogin(AbstractHttpConfigurer::disable) // FormLogin 사용X
+                http
+                        .formLogin(AbstractHttpConfigurer::disable) // FormLogin 사용X
                 .httpBasic(AbstractHttpConfigurer::disable)// httpBasic 사용X
                 .csrf(AbstractHttpConfigurer::disable) // csrf 보안 사용 X
                 .headers(
@@ -57,34 +57,17 @@ public class SecurityConfig {
                 // 세션 사용하지 않으므로 STATELESS 로 설정
                 .sessionManagement(s ->
                         s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
                 // url 별 권한 관리 옵션
                 .authorizeHttpRequests(authorizeRequest ->
                         authorizeRequest
-                                .requestMatchers(
-                                        AntPathRequestMatcher.antMatcher("/api/auth/signup") // 회원가입 접근 가능
-                                ).permitAll()
-
+                                .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+                                .requestMatchers("/api/auth/signup").permitAll()
                                 .anyRequest().authenticated())// 나머지는 안됨
-                //모든 요청 허용
 
-//
-//                .authorizeHttpRequests(authorizeRequest ->
-//                        authorizeRequest
-//                                .anyRequest().permitAll())// 나머지는 안됨
-                // 소셜 로그인 설정
-
-                .oauth2Login((oauth2) -> oauth2
-                        .successHandler(oAuth2LoginSuccessHandler)
-                        .failureHandler(oAuth2LoginFailureHandler)
-                        .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
-                                .userService(customOAuth2UserService)
-                        )
-                );
+        ;
 
         http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
         http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 
@@ -139,7 +122,4 @@ public class SecurityConfig {
         JwtAuthenticationProcessingFilter jwtAuthenticationFilter = new JwtAuthenticationProcessingFilter(jwtService, authRepository);
         return jwtAuthenticationFilter;
     }
-
-
-
 }

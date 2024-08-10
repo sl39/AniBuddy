@@ -26,6 +26,14 @@ public class SignupService {
     private final AuthRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    public Boolean checkEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
+    public Boolean checkNickname(String nickname) {
+        return userRepository.findByNickname(nickname).isPresent();
+    }
+
 
     public ResponseEntity<?> signup(AuthSignUpRequestDto authSignUpRequestDto) throws Exception {
         if(!authSignUpRequestDto.getPassword().equals(authSignUpRequestDto.getPassword2())){
@@ -34,6 +42,11 @@ public class SignupService {
 
         if(userRepository.findByEmail(authSignUpRequestDto.getEmail()).isPresent()){
             log.info("이메일 중복입니다");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if(userRepository.findByNickname(authSignUpRequestDto.getNickname()).isPresent()){
+            log.info("닉네임 중복입니다");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 

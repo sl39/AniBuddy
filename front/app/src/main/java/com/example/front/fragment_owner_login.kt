@@ -16,6 +16,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.front.activity.MainActivity
+import com.example.front.activity.SignUpActivity
 import com.example.front.data.LoginApiService
 import com.example.front.data.UserPreferencesRepository
 import com.example.front.data.preferencesRepository
@@ -64,29 +65,40 @@ class fragment_owner_login : Fragment() {
 
         val loginApi = LoginApiService.create()
         val intent: Intent = Intent(context, MainActivity::class.java)
+        val signupIntent :Intent  = Intent(context, SignUpActivity::class.java)
+        var tag = "USER"
 
+        binding.userLoginBth.setOnClickListener {
+            binding.userLoginBth.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
+            binding.ownerLoginBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
+            binding.userLoginBth.isEnabled = false
+            binding.ownerLoginBtn.isEnabled = true
+            tag = "USER"
+        }
 
+        binding.ownerLoginBtn.setOnClickListener {
+            binding.ownerLoginBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
+            binding.userLoginBth.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
+            binding.userLoginBth.isEnabled = true
+            binding.ownerLoginBtn.isEnabled = false
+            tag = "OWNER"
+        }
+        binding.signin.setOnClickListener{
+            startActivity(signupIntent)
+        }
 
-        val btn_login : Button = binding.loginBtn
+        val btn_login : Button = binding.loginbutton
         btn_login.setOnClickListener(object: View.OnClickListener{
             override fun onClick(v: View?) {
                 // 로그인 함수 부분
-                val email = binding.editTextUsername.text.toString().trim()
-                val password = binding.editTextPassword.text.toString().trim()
-                val data = LoginRequest(email,password,"USER")
-                binding.userLoginBth.setOnClickListener {
-                    binding.userLoginBth.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
-                    binding.ownerLoginBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
-                    binding.userLoginBth.isEnabled = false
-                    binding.ownerLoginBtn.isEnabled = true
-                }
+                val email = binding.editID.text.toString().trim()
+                val password = binding.ediPassword.text.toString().trim()
+                val data = LoginRequest(email,password,tag)
+                Log.d("로그인", email + ": " + password + ": " + data)
 
-                binding.ownerLoginBtn.setOnClickListener {
-                    binding.ownerLoginBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
-                    binding.userLoginBth.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
-                    binding.userLoginBth.isEnabled = true
-                    binding.ownerLoginBtn.isEnabled = false
-                }
+
+
+
                 loginApi.ownerLogin(data).enqueue(object : Callback<LoginResponse> {
                     override fun onResponse(
                         call: Call<LoginResponse>,
@@ -124,6 +136,10 @@ class fragment_owner_login : Fragment() {
 
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
     companion object {

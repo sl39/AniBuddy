@@ -49,7 +49,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
         // RefreshToken이 없거나 유효하지 않다면, AccessToken을 검사하고 인증을 처리하는 로직 수행
         if (refreshToken == null) {
-            checkAccessTokenAndAuthentication(request, response, filterChain);
+            checkAccessToeknAndAuthentication(request, response, filterChain);
         }
     }
 
@@ -76,25 +76,14 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
         return reIssuedRefreshToken;
     }
 
-    private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("checkAccessTokenAndAuthentication() 호출");
-        boolean validAccessToken = jwtService.extractAccessToken(request)
+    private void checkAccessToeknAndAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        log.info("checkAccessToeknAndAuthentication() 호출");
+        jwtService.extractAccessToken(request)
                 .filter(jwtService::isTokenValid)
-                .flatMap(jwtService::extractEmail)
-                .flatMap(userRepository::findByEmail)
-                .map(user -> {
-                    saveAuthentication(user);
-                    return true;
-                })
-                .orElse(false);
-
-        if (!validAccessToken) {
-            // AccessToken is invalid
-            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-            return;
-        }
-
-        filterChain.doFilter(request, response);
+                .ifPresent(accessToken -> jwtService.extractEmail(accessToken)
+                        .ifPresent(email -> userRepository.findByEmail(email)
+                                .ifPresent(this::saveAuthentication)));
+        filterChain.doFilter(request,response);
     }
 
     public void saveAuthentication(UserEntity myUser) {

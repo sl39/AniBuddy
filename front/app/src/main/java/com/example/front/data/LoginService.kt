@@ -3,6 +3,8 @@ package com.example.front.data
 import androidx.datastore.preferences.protobuf.Api
 import com.example.front.data.request.LoginRequest
 import com.example.front.data.request.TokenReqeust
+import com.example.front.data.request.checkEmail
+import com.example.front.data.request.checknickname
 import com.example.front.data.response.LoginResponse
 import com.example.front.data.response.TokenResponse
 import com.example.front.data.response.UserTesetResponse
@@ -28,8 +30,27 @@ interface LoginApiService{
         @Body jsonParams : LoginRequest,
         ): Call<LoginResponse>
 
-    @GET("/oauth2/authorization/kakao")
-    fun userLogin() : Call<LoginResponse>
+    @POST("/api/auth/signup/check/email")
+    @Headers(
+        "content-type: application/json"
+    )
+    fun     checkEmail(
+        @Body jsonParams : checkEmail,
+        ): Call<Boolean>
+
+    @POST("/api/auth/signup/check/nickname")
+    @Headers(
+        "content-type: application/json"
+    )
+    fun checkNickname(
+        @Body jsonParams : checknickname,
+    ): Call<Boolean>
+
+//    @POST("/api/auth/signup")
+//    @Headers(
+//        "content-type: application/json"
+//    )
+
 
     companion object{
         private const val BASE_URL = "http://10.0.2.2:8080"

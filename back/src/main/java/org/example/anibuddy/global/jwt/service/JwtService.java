@@ -96,7 +96,7 @@ public class JwtService {
         String jsonResponse = objectMapper.writeValueAsString(tokenResponse);
 
         response.getWriter().write(jsonResponse);
-        log.info("Access Token, Refresh Token 헤더 설정 완료");
+        log.info("Access Token, Refresh Token 헤더 설정 완료 : "+ accessToken);
     }
 
     // 헤더에 RefreshToken 추출

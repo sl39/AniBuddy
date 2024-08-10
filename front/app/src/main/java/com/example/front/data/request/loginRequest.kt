@@ -5,3 +5,11 @@ data class LoginRequest(
     val password: String,
     val role: String
 )
+
+data class checkEmail(
+    val email: String
+)
+
+data class checknickname(
+    val nickname: String
+)

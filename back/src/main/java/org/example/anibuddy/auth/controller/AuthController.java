@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/auth/signup")
 @RequiredArgsConstructor
 public class AuthController {
 
     private final SignupService signupService;
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody AuthSignUpRequestDto authSignUpRequestDto) throws Exception {
+    @PostMapping("")
+    public ResponseEntity signup(@RequestBody AuthSignUpRequestDto authSignUpRequestDto) throws Exception {
         ResponseEntity response = signupService.signup(authSignUpRequestDto);
         return response;
     }
@@ -34,6 +34,16 @@ public class AuthController {
     public ResponseEntity<?> signupAll(@RequestBody List<AuthSignUpRequestDto> authSignUpRequestDto) throws Exception {
         ResponseEntity response = signupService.signupAll(authSignUpRequestDto);
         return response;
+    }
+
+    @PostMapping("/check/email")
+    public Boolean checkEmail(@RequestBody String email) throws Exception {
+        return signupService.checkEmail(email);
+    }
+
+    @PostMapping("check/nickname")
+    public Boolean checkNickname(@RequestBody String nickname) throws Exception {
+        return signupService.checkNickname(nickname);
     }
 
 }

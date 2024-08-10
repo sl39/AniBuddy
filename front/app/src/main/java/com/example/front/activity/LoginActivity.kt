@@ -35,7 +35,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-
+        fragmentManager.beginTransaction().replace(R.id.login_activity,fragmentOwnerLogin).commitAllowingStateLoss()
         api.getUserTest().enqueue(object : Callback<UserTesetResponse>{
             override fun onResponse(
                 call: Call<UserTesetResponse>,
@@ -44,9 +44,6 @@ class LoginActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body()?.let { Log.d("이게 userId 로 받아와야 됨 userName", it.userName) }
                     startActivity(intent)
-
-
-//                    startActivity(intent)
                 } else {
                     onFailure(call, Throwable("Unsuccessful response"))
                     fragmentManager.beginTransaction().replace(R.id.login_activity,fragmentOwnerLogin).commitAllowingStateLoss()
@@ -59,6 +56,7 @@ class LoginActivity : AppCompatActivity() {
                     .show();
             }
         })
+
     }
 }
 
