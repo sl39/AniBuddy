@@ -61,7 +61,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequest ->
                         authorizeRequest
                                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                                .requestMatchers("/api/auth/signup").permitAll()
+                                .requestMatchers("/**").permitAll()
                                 .anyRequest().authenticated())// 나머지는 안됨
 
         ;

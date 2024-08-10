@@ -1,6 +1,5 @@
 package org.example.anibuddy.store.repository;
 
-import org.example.anibuddy.store.dto.StoreWithDistanceDTO;
 import org.example.anibuddy.store.entity.StoreEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

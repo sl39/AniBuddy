@@ -1,11 +1,8 @@
 package com.example.front.activity
 
 import android.content.Intent
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
@@ -28,7 +25,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val api = ApiService.create(this@LoginActivity)
-        val intent: Intent = Intent(this@LoginActivity,MainActivity::class.java)
+        val intent: Intent = Intent(this@LoginActivity, MainActivity::class.java)
 
 
         val binding = ActivityLoginBinding.inflate(layoutInflater)

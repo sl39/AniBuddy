@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.anibuddy.Review.entity.ReviewEntity;
+import org.example.anibuddy.pet.PetEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Setter
 @Builder
 @AllArgsConstructor
 public class UserEntity {
@@ -65,5 +67,9 @@ public class UserEntity {
         this.refreshToken = updatedRefreshToken;
     }
 
+
+
+	@OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
+	private List<PetEntity> petEntity;
 
 }

@@ -33,7 +33,7 @@ interface ApiService{
     ): Call<TokenResponse>
 
 
-    @GET("/api/user")
+    @GET("/api/users")
     fun getUserTest(): Call<UserTesetResponse>
 
     @GET("/api/store/main")
