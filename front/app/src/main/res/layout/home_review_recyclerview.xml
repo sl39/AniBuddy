@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/home_review_recyclerview"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:layout_margin="8dp"
+    android:background="@drawable/review_layout_border"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:id="@+id/review_image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:adjustViewBounds="true"
+        android:clipToOutline="true"
+        android:src="@drawable/anibuddy_logo" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:padding="10dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        >
+        <TextView
+            android:id="@+id/review_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1km"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
+        <TextView
+            android:id="@+id/home_review_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="20시간전"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/home_review_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="normal"
+            android:textSize="16sp"
+            android:text="첫 sssssssssssssssssssssssssssssssssssssssssssssssss !!!"
+            app:layout_constraintTop_toBottomOf="@id/review_distance"
+            app:layout_constraintLeft_toLeftOf="parent"
+            />
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

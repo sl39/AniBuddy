@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    tools:context=".fragment_search_keywords"
+    android:id="@+id/fragment_search_keywords">
+
+    <LinearLayout
+        android:id="@+id/searchId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="카테고리"
+            android:textSize="30dp" />
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:id="@+id/category_grid"
+            android:columnCount="3"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/search_beauty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:background="@drawable/review_category_btn"
+                android:text="미용"
+                android:textColor="@color/black"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/search_hospital"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="병원"
+                android:textColor="@color/black"
+                android:background="@drawable/review_category_btn"
+                android:gravity="center" />
+
+            <Button
+                android:id="@+id/search_training"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="훈련"
+                android:textColor="@color/black"
+                android:background="@drawable/review_category_btn"
+                android:gravity="center" />
+        </GridLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="지역"
+            android:textSize="30dp" />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:columnCount="3"
+            android:id="@+id/district_grid"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/district1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:layout_margin="1dp"
+                android:text="강서구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="1dp"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="금정구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district3"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="기장군"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district4"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="남구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district5"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="동구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district6"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="동래구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district7"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="부산진구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district8"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="북구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district9"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="사상구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district10"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="사하구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district11"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="서구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district12"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="수영구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district13"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="연제구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district14"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="영도구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district15"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="중구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+            <Button
+                android:id="@+id/district16"
+                android:layout_margin="1dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/review_category_btn"
+                android:text="해운대구"
+                android:textColor="@color/black"
+                android:gravity="center" />
+
+        </GridLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FF8A00"
+            android:id="@+id/search_btn"
+            android:text="검색" />
+
+
+    </LinearLayout>
+
+</FrameLayout>
