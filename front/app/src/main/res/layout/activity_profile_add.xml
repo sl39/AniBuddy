@@ -39,8 +39,8 @@
         android:hint="나이를 입력해주세요"
         android:text=""
         android:textSize="10dp"
-        app:layout_constraintStart_toStartOf="@+id/profile_add_kind"
-        app:layout_constraintTop_toBottomOf="@+id/profile_add_kind" />
+        app:layout_constraintStart_toStartOf="@+id/mainCategorySpinner"
+        app:layout_constraintTop_toBottomOf="@+id/mainCategorySpinner" />
 
     <EditText
         android:id="@+id/profile_add_neutering"
@@ -50,7 +50,7 @@
         android:text=""
         android:textSize="10dp"
         app:layout_constraintStart_toStartOf="@+id/profile_add_gender"
-        app:layout_constraintTop_toTopOf="@+id/profile_add_kind" />
+        app:layout_constraintTop_toTopOf="@+id/mainCategorySpinner" />
 
     <TextView
         android:id="@+id/profile_add_explanation"
@@ -62,16 +62,34 @@
         app:layout_constraintStart_toStartOf="@+id/profile_add_age"
         app:layout_constraintTop_toBottomOf="@+id/profile_add_age" />
 
-    <EditText
-        android:id="@+id/profile_add_kind"
+    <Spinner
+            android:id="@+id/mainCategorySpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="@+id/profile_add_name"
+            app:layout_constraintTop_toBottomOf="@+id/profile_add_name"
+            android:prompt="@string/select_category" />
+
+    <Spinner
+        android:id="@+id/subCategorySpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:hint="품종을 입력해주세요"
-        android:text=""
-        android:textSize="10dp"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="@+id/profile_add_name"
         app:layout_constraintTop_toBottomOf="@+id/profile_add_name" />
+
+    <!--    <EditText     -->
+<!--        android:id="@+id/profile_add_kind"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:hint="품종을 입력해주세요"-->
+<!--        android:text=""-->
+<!--        android:textSize="10dp"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/profile_add_name"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/profile_add_name" />-->
 
     <EditText
         android:id="@+id/profile_add_chipNumber"
@@ -104,19 +122,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/home_top_app_bar">
 
-        <Button
-            android:id="@+id/profile_add_button"
+        <ImageView
+            android:id="@+id/profile_add_image"
             android:layout_width="103dp"
             android:layout_height="96dp"
             android:background="@drawable/edge"
             android:text="+(반려동물 사진등록)"
             android:textColor="@color/black"
-            android:textSize="15dp" />
+            android:textSize="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="centerCrop"/>
 
     </RelativeLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/home_menu_bottom_navigation"
+        android:id="@+id/home_menu_bottom_navigation_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

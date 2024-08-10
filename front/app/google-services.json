@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "17441690080",
+    "project_id": "anibuddy-test",
+    "storage_bucket": "anibuddy-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17441690080:android:660906853efafe41a75b85",
+        "android_client_info": {
+          "package_name": "com.example.front"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-GSWPowVu4HCOakt4NT9rW2IJY1npjZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
