@@ -28,15 +28,14 @@ class ChatRoomViewHolder(val binding: ItemChatroomBinding) : RecyclerView.ViewHo
 
 class ChatRoomAdapter(val datas: List<ChatRoomItem>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    //전체 아이템 개수
     override fun getItemCount() = datas.size
 
-    //ViewHolder 객체 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        Log.d("CRList", "onCreateViewHolder")
+
         return ChatRoomViewHolder(ItemChatroomBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
-    //ViewHolder 객체에 데이터 바인딩
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
@@ -55,6 +54,8 @@ class ChatRoomAdapter(val datas: List<ChatRoomItem>) : RecyclerView.Adapter<Recy
             intent.putExtra("otherImageUrl", datas[position].otherProfileImageUrl)
             it.context.startActivity(intent)
         }
+
+        Log.d("CRList", "onBindViewHolder")
     }
 }
 
@@ -62,34 +63,41 @@ class fragment_chatroom_list : Fragment() {
 
     lateinit var binding: FragmentChatroomListBinding
     var chatRoomResponseList: List<ChatRoomResponse> = mutableListOf()
+    val chatRoomItemList: MutableList<ChatRoomItem> = mutableListOf()
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d("CRList", "onCreateView")
+
         binding = FragmentChatroomListBinding.inflate(inflater, container, false)
 
-        val chatRoomItemList: MutableList<ChatRoomItem> = mutableListOf()
         val chatApi = ChatApiService.create()
 
+        //TODO : 본인 id, role 넣기
         chatApi.getChatRoomList(1, "USER").enqueue(object: Callback<List<ChatRoomResponse>>{
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(
                 call: Call<List<ChatRoomResponse>>,
                 response: Response<List<ChatRoomResponse>>
             ) {
                 if(response.isSuccessful) {
-                    Log.d("getChatRoomList()", "onResponse")
-
                     val responseList = response.body()!!
-                    Log.d("list count", "list 개수 : ${responseList.size}")
                     setChatRoomList(responseList)
                 }
             }
             override fun onFailure(call: Call<List<ChatRoomResponse>>, t: Throwable) {
-                Log.d("getChatRoomList()", "onFailure")
             }
         })
+        binding.recyclerview.layoutManager = LinearLayoutManager(activity)
+
+        return binding.root
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setChatRoomList(chatRoomList: List<ChatRoomResponse>) {
+        this.chatRoomResponseList = chatRoomList
 
         for(i in chatRoomResponseList){
             val chatRoomItem = ChatRoomItem(
@@ -101,14 +109,6 @@ class fragment_chatroom_list : Fragment() {
             )
             chatRoomItemList.add(chatRoomItem)
         }
-
         binding.recyclerview.adapter = ChatRoomAdapter(chatRoomItemList)
-        binding.recyclerview.layoutManager = LinearLayoutManager(activity)
-
-        return binding.root
-    }
-
-    private fun setChatRoomList(chatRoomList: List<ChatRoomResponse>) {
-        this.chatRoomResponseList = chatRoomList
     }
 }

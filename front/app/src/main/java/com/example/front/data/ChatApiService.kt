@@ -17,9 +17,6 @@ interface ChatApiService {
     @GET("/api/chatrooms")
     fun getChatRoomList(@Query("myId") id:Int, @Query("role") role:String): Call<List<ChatRoomResponse>>
 
-    //채팅 내역 불러오기
-    //실시간 채팅(웹소켓)
-
     companion object {
         private const val BASE_URL = "http://10.0.2.2:8080" //localhost
         val gson : Gson = GsonBuilder().setLenient().create();
