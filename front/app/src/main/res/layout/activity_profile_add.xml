@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/home_top_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/toolbar_background"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/anibuddy_logo" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <EditText
+        android:id="@+id/profile_add_gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:hint="성별을 입력해주세요"
+        android:text=""
+        android:textSize="10dp"
+        app:layout_constraintStart_toEndOf="@+id/profile_add_name"
+        app:layout_constraintTop_toTopOf="@+id/profile_add_name" />
+
+    <EditText
+        android:id="@+id/profile_add_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:hint="나이를 입력해주세요"
+        android:text=""
+        android:textSize="10dp"
+        app:layout_constraintStart_toStartOf="@+id/mainCategorySpinner"
+        app:layout_constraintTop_toBottomOf="@+id/mainCategorySpinner" />
+
+    <EditText
+        android:id="@+id/profile_add_neutering"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="중성화 여부를 입력해주세요"
+        android:text=""
+        android:textSize="10dp"
+        app:layout_constraintStart_toStartOf="@+id/profile_add_gender"
+        app:layout_constraintTop_toTopOf="@+id/mainCategorySpinner" />
+
+    <TextView
+        android:id="@+id/profile_add_explanation"
+        android:layout_width="wrap_content"
+        android:layout_height="18dp"
+        android:layout_marginTop="10dp"
+        android:text="*칩넘버를 작성하시면 향후 만일의 사태에 도움을 받으실 수 있습니다"
+        android:textSize="12dp"
+        app:layout_constraintStart_toStartOf="@+id/profile_add_age"
+        app:layout_constraintTop_toBottomOf="@+id/profile_add_age" />
+
+    <Spinner
+            android:id="@+id/mainCategorySpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            app:layout_constraintStart_toStartOf="@+id/profile_add_name"
+            app:layout_constraintTop_toBottomOf="@+id/profile_add_name"
+            android:prompt="@string/select_category" />
+
+    <Spinner
+        android:id="@+id/subCategorySpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="@+id/profile_add_name"
+        app:layout_constraintTop_toBottomOf="@+id/profile_add_name" />
+
+    <!--    <EditText     -->
+<!--        android:id="@+id/profile_add_kind"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:hint="품종을 입력해주세요"-->
+<!--        android:text=""-->
+<!--        android:textSize="10dp"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/profile_add_name"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/profile_add_name" />-->
+
+    <EditText
+        android:id="@+id/profile_add_chipNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="칩넘버를 입력해주세요"
+        android:text=""
+        android:textSize="10dp"
+        app:layout_constraintStart_toStartOf="@+id/profile_add_neutering"
+        app:layout_constraintTop_toTopOf="@+id/profile_add_age" />
+
+    <EditText
+        android:id="@+id/profile_add_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:hint="이름을 입력해주세요"
+        android:text=""
+        android:textSize="10dp"
+        app:layout_constraintStart_toStartOf="@+id/profile_add_my_pet_pickture_add"
+        app:layout_constraintTop_toBottomOf="@+id/profile_add_my_pet_pickture_add" />
+
+    <RelativeLayout
+        android:id="@+id/profile_add_my_pet_pickture_add"
+        android:layout_width="113dp"
+        android:layout_height="106dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/edge"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/home_top_app_bar">
+
+        <ImageView
+            android:id="@+id/profile_add_image"
+            android:layout_width="103dp"
+            android:layout_height="96dp"
+            android:background="@drawable/edge"
+            android:text="+(반려동물 사진등록)"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="centerCrop"/>
+
+    </RelativeLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/home_menu_bottom_navigation_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:itemIconTint="@drawable/menu_item_color"
+        app:itemTextColor="@drawable/menu_item_color"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/toolbar_background"
+        app:menu="@menu/bottom_menu">
+
+    </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+    <EditText
+        android:id="@+id/profile_add_significant"
+        android:layout_width="285dp"
+        android:layout_height="135dp"
+        android:layout_marginTop="30dp"
+        android:hint="그 외 특이사항은 이곳에 입력해주세요(예방접종여부, 성격, 습관 등)"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_add_explanation" />
+
+    <RelativeLayout
+        android:id="@+id/profile_add_my_pet_add"
+        android:layout_width="350dp"
+        android:layout_height="106dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/edge"
+        app:layout_constraintEnd_toEndOf="@+id/profile_add_significant"
+        app:layout_constraintStart_toStartOf="@+id/profile_add_significant"
+        app:layout_constraintTop_toBottomOf="@+id/profile_add_significant">
+
+        <Button
+            android:id="@+id/profile_add_registration"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/edge"
+            android:gravity="center"
+            android:text="등록"
+            android:textSize="50dp"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

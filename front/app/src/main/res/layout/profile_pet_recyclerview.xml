@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/profile_pet_recyclerview"
+    android:layout_width="394dp"
+    android:layout_height="115dp"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="20dp"
+    android:layout_marginEnd="10dp"
+    android:background="@drawable/edge"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.857"
+    app:layout_constraintStart_toStartOf="parent" >
+
+        <ImageView
+            android:id="@+id/imageView_my_pet_1"
+            android:layout_width="109dp"
+            android:layout_height="89dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            app:srcCompat="@drawable/love" />
+
+        <TextView
+            android:id="@+id/profile_my_pet_name1"
+            android:layout_width="100dp"
+            android:layout_height="25dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_alignTop="@+id/imageView_my_pet_1"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/imageView_my_pet_1"
+            android:text="이름" />
+
+        <TextView
+            android:id="@+id/textView_my_pet_kind1"
+            android:layout_width="100dp"
+            android:layout_height="25dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_below="@+id/profile_my_pet_name1"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_toEndOf="@+id/imageView_my_pet_1"
+            android:text="품종" />
+
+        <TextView
+            android:id="@+id/textView_my_pet_age1"
+            android:layout_width="100dp"
+            android:layout_height="25dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_below="@+id/profile_my_pet_name1"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_toEndOf="@+id/textView_my_pet_kind1"
+            android:text="나이" />
+
+        <TextView
+            android:id="@+id/profile_my_pet_gender1"
+            android:layout_width="100dp"
+            android:layout_height="25dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_alignTop="@+id/imageView_my_pet_1"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/profile_my_pet_name1"
+            android:text="성별" />
+    </RelativeLayout>

@@ -69,6 +69,7 @@ public class ChatRoomService {
             else otherName = chatRoom.getUser().getUserName();
             responses.add(new ChatRoomResponse(chatRoom.getId(), otherName, "https://avc.com"));
         }
+        System.out.println(responses.size());
 
         return responses;
     }

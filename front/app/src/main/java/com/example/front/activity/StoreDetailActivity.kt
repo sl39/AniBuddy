@@ -1,4 +1,4 @@
-package com.example.front
+package com.example.front.activity
 
 import android.os.Bundle
 import android.util.Log
