@@ -73,7 +73,7 @@ class fragment_chatroom_list : Fragment() {
 
         binding = FragmentChatroomListBinding.inflate(inflater, container, false)
 
-        val chatApi = ChatApiService.create()
+        val chatApi = ChatApiService.create(requireContext())
 
         //TODO : 본인 id, role 넣기
         chatApi.getChatRoomList(1, "USER").enqueue(object: Callback<List<ChatRoomResponse>>{

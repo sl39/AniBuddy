@@ -15,7 +15,7 @@ import com.example.front.R
 import com.example.front.RetrofitClient
 import com.example.front.activity.SearchActivity
 import com.example.front.databinding.ActivityMainBinding
-import com.example.front.fragment_chat_list
+import com.example.front.fragment_chatroom_list
 import com.example.front.fragment_following_list
 import com.example.front.fragment_profile
 import com.example.front.fragment_reservation_list
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
     private val fragmentHome = fragment_home()
     private val fragmentReservationList = fragment_reservation_list()
     private val fragmentFollowingList = fragment_following_list()
-    private val fragmentChatList = fragment_chat_list()
+    private val fragmentChatList = fragment_chatroom_list()
     private val fragmentProfile = fragment_profile()
     override fun onStart() {
         super.onStart()
@@ -214,7 +214,7 @@ class MainActivity : AppCompatActivity() {
             DESTINATION_HOME -> fragmentHome
             DESTINATION_RESERVATION_LIST -> fragment_reservation_list()
             DESTINATION_FOLLOWING_LIST -> fragment_following_list()
-            DESTINATION_CHAT_LIST -> fragment_chat_list()
+            DESTINATION_CHAT_LIST -> fragment_chatroom_list()
             DESTINATION_PROFILE -> fragment_profile()
             else -> fragmentHome
         }

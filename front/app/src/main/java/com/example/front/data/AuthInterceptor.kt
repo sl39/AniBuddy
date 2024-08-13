@@ -37,10 +37,11 @@ class AuthInterceptor(private val context: Context) : Interceptor {
         if (!accessToken.equals("")) {
             request.addHeader("Authorization", "Bearer $accessToken")
         }
-
+        Log.d("토큰 토큰", accessToken)
         var response = chain.proceed(request.build())
 
         if (response.code != 200) {
+            response.close()
             var refreshToken = runBlocking {
                 userPreferencesRepository.getRefreshToken.first()
             }
@@ -52,6 +53,7 @@ class AuthInterceptor(private val context: Context) : Interceptor {
                     request.removeHeader("Authorization")
                     request.addHeader("Authorization", "Bearer $newAccessToken")
                     response = chain.proceed(request.build())
+
                 }
             }
         }

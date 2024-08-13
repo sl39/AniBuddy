@@ -6,12 +6,18 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.front.common.HttpWebSocket
+import com.example.front.data.ApiService
+import com.example.front.data.AuthInterceptor
 import com.example.front.data.ChatMessage
+import com.example.front.data.UserPreferencesRepository
+import com.example.front.data.preferencesRepository
+import com.example.front.data.response.UserTesetResponse
 import com.example.front.databinding.ActivityMessageListBinding
 import com.example.front.databinding.ItemMyChatBinding
 import com.example.front.databinding.ItemOtherChatBinding
@@ -20,9 +26,14 @@ import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmResults
 import io.realm.kotlin.where
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -75,6 +86,8 @@ class MessageItemAdapter(val datas: List<MessageItem>, val role: String) : Recyc
 class MessageListActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMessageListBinding
+    private lateinit var userPreferencesRepository: UserPreferencesRepository
+
 
     @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -84,6 +97,8 @@ class MessageListActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        userPreferencesRepository = preferencesRepository.getUserPreferencesRepository(this@MessageListActivity)
+
 
         val intent = intent
         val roomId = intent.getIntExtra("roomId", 0)
@@ -130,27 +145,68 @@ class MessageListActivity : AppCompatActivity() {
             messageList.add(messageItem)
         }
 
+        val api = ApiService.create(this)
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
+        api.getUserTest().enqueue(object : Callback<UserTesetResponse> {
+            override fun onResponse(
+                call: Call<UserTesetResponse>,
+                response: Response<UserTesetResponse>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let { Log.d("이게 userId 로 받아와야 됨 userName", it.role)}
+                    val accessToken = runBlocking {
+                        userPreferencesRepository.getAccessToken.first()
+                    }
 
-        val client = OkHttpClient()
-        val request: Request =  Request.Builder().url("ws://10.0.2.2:8080/chat/$roomId").build()
-        val websocketListener = HttpWebSocket()
-        val webSocket = client.newWebSocket(request, websocketListener)
+                    val client = OkHttpClient()
+                    val request: Request =  Request.Builder()
+                        .addHeader("Authorization", "Bearer $accessToken")
+                        .url("ws://10.0.2.2:8080/chat/$roomId").build()
+
+                    val websocketListener = HttpWebSocket()
+                    val webSocket = client.newWebSocket(request, websocketListener)
+                    binding.sendBtn.setOnClickListener {
+                        val chatMessageInfo = JSONObject()
+                        chatMessageInfo.put("roomId", roomId.toString())
+                        chatMessageInfo.put("message", binding.msgEditText.text.toString())
+                        chatMessageInfo.put("senderRole", "USER")
+                        chatMessageInfo.put("senderId", "1")
+                        chatMessageInfo.put("senderName", "test user")
+                        webSocket.send(chatMessageInfo.toString())
+                        Log.d("Realm", "sendBtn - setOnClickListener")
+
+                        binding.msgEditText.setText("")
+                    }
+
+                } else {
+                    onFailure(call, Throwable("Unsuccessful response"))
+                }
+            }
+
+            override fun onFailure(call: Call<UserTesetResponse>, t: Throwable) {
+            }
+        })
+
+//
+//        val client = OkHttpClient()
+//        val request: Request =  Request.Builder().url("ws://10.0.2.2:8080/chat/$roomId").build()
+//        val websocketListener = HttpWebSocket()
+//        val webSocket = client.newWebSocket(request, websocketListener)
 
         //TODO: input my data
-        binding.sendBtn.setOnClickListener {
-            val chatMessageInfo = JSONObject()
-            chatMessageInfo.put("roomId", roomId.toString())
-            chatMessageInfo.put("message", binding.msgEditText.text.toString())
-            chatMessageInfo.put("senderRole", "USER")
-            chatMessageInfo.put("senderId", "1")
-            chatMessageInfo.put("senderName", "test user")
-            webSocket.send(chatMessageInfo.toString())
-            Log.d("Realm", "sendBtn - setOnClickListener")
-
-            binding.msgEditText.setText("")
-        }
+//        binding.sendBtn.setOnClickListener {
+//            val chatMessageInfo = JSONObject()
+//            chatMessageInfo.put("roomId", roomId.toString())
+//            chatMessageInfo.put("message", binding.msgEditText.text.toString())
+//            chatMessageInfo.put("senderRole", "USER")
+//            chatMessageInfo.put("senderId", "1")
+//            chatMessageInfo.put("senderName", "test user")
+//            webSocket.send(chatMessageInfo.toString())
+//            Log.d("Realm", "sendBtn - setOnClickListener")
+//
+//            binding.msgEditText.setText("")
+//        }
 
         binding.recyclerview.scrollToPosition(messageList.size-1)
     }
