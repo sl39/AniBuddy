@@ -2,12 +2,15 @@ package org.example.anibuddy.global.websocket;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.java.Log;
+import org.slf4j.Logger;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 
+import java.io.Console;
 import java.util.Map;
 
 public class CustomHandshakeInterceptor implements HandshakeInterceptor {
@@ -19,13 +22,6 @@ public class CustomHandshakeInterceptor implements HandshakeInterceptor {
             WebSocketHandler wsHandler,
             Map<String, Object> attributes
     ) {
-//        ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
-//        HttpServletRequest req = servletRequest.getServletRequest();
-//        HttpSession httpSession = req.getSession();
-//        String sessionID = httpSession.getId();
-//        String userName = req.getParameter("userName");
-//        attributes.put("sessionID", sessionID);
-//        attributes.put("userName", userName);
         return true;
     }
 
