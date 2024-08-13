@@ -3,7 +3,7 @@ package com.example.front.data.response
 import java.time.LocalDate
 
 data class UserTesetResponse(
-    val userName: String,
+    val role: String,
     )
 
 

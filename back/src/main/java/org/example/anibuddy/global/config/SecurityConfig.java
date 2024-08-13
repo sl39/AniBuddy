@@ -10,9 +10,7 @@ import org.example.anibuddy.auth.handler.LoginSuccessHandler;
 import org.example.anibuddy.auth.service.LoginService;
 import org.example.anibuddy.global.jwt.filter.JwtAuthenticationProcessingFilter;
 import org.example.anibuddy.global.jwt.service.JwtService;
-import org.example.anibuddy.global.oauth2.handler.OAuth2LoginFailureHandler;
-import org.example.anibuddy.global.oauth2.handler.OAuth2LoginSuccessHandler;
-import org.example.anibuddy.global.oauth2.service.CustomOAuth2UserService;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,9 +36,7 @@ public class SecurityConfig {
     private final JwtService jwtService;
     private final AuthRepository authRepository;
     private final ObjectMapper objectMapper;
-    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
-    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
-    private final CustomOAuth2UserService customOAuth2UserService;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -60,8 +56,7 @@ public class SecurityConfig {
                 // url 별 권한 관리 옵션
                 .authorizeHttpRequests(authorizeRequest ->
                         authorizeRequest
-                                .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                                .requestMatchers("/**").permitAll()
+                                .requestMatchers("/api/auth/signup/**").permitAll()
                                 .anyRequest().authenticated())// 나머지는 안됨
 
         ;

@@ -6,10 +6,19 @@ data class LoginRequest(
     val role: String
 )
 
-data class checkEmail(
+data class CheckEmail(
     val email: String
 )
 
-data class checknickname(
+data class CheckNickname(
     val nickname: String
+)
+
+data class signupRequest(
+    val userName: String,
+    val email: String,
+    val password: String,
+    val password2: String,
+    val nickname: String,
+    val role: String
 )

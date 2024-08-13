@@ -2,6 +2,7 @@ package org.example.anibuddy.following;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.store.dto.StoreDetailDTO;
 import org.example.anibuddy.store.dto.StoreFollowDTO;
 //import org.example.anibuddy.store.StoreService;
@@ -17,10 +18,10 @@ import jakarta.transaction.Transactional;
 
 @RestController
 @RequestMapping("/api/Following")
+@RequiredArgsConstructor
 public class FollowingController {
 	
-	@Autowired
-    private FollowingService followingService;
+    private final FollowingService followingService;
 	
 //	@Autowired
 //    private StoreService storeService;

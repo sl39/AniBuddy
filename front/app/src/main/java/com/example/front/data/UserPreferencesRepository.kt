@@ -14,6 +14,7 @@ class UserPreferencesRepository(private val dataStore:DataStore<Preferences>){
     private object PreferencesKeys{
         val accessToken : Preferences.Key<String> = stringPreferencesKey("accessToken")
         val refreshToken : Preferences.Key<String> = stringPreferencesKey("refreshToken")
+        val userType : Preferences.Key<String> = stringPreferencesKey("userType")
     }
     val getAccessToken: Flow<String> = dataStore.data
         .catch { exception ->
@@ -49,6 +50,24 @@ class UserPreferencesRepository(private val dataStore:DataStore<Preferences>){
         dataStore.edit {
                 preferences ->
             preferences[PreferencesKeys.refreshToken] = refreshToken
+        }
+    }
+    val getUserType: Flow<String> = dataStore.data
+        .catch { exception ->
+            if (exception is IOException){
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            preferences[PreferencesKeys.userType] ?: ""
+        }
+
+    suspend fun setUserType(userType : String){
+        dataStore.edit {
+                preferences ->
+            preferences[PreferencesKeys.userType] = userType
         }
     }
 }

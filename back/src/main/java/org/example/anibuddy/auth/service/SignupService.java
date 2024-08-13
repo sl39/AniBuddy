@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.Response;
 import org.example.anibuddy.auth.Dto.AuthSignUpRequestDto;
 import org.example.anibuddy.auth.AuthRepository;
+import org.example.anibuddy.owner.OwnerEntity;
+import org.example.anibuddy.owner.OwnerRepository;
 import org.example.anibuddy.user.Role;
 import org.example.anibuddy.user.UserEntity;
 import org.springframework.http.HttpStatus;
@@ -15,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -25,6 +29,7 @@ public class SignupService {
 
     private final AuthRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final OwnerRepository ownerRepository;
 
     public Boolean checkEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
@@ -34,10 +39,10 @@ public class SignupService {
         return userRepository.findByNickname(nickname).isPresent();
     }
 
-
+    @Transactional
     public ResponseEntity<?> signup(AuthSignUpRequestDto authSignUpRequestDto) throws Exception {
         if(!authSignUpRequestDto.getPassword().equals(authSignUpRequestDto.getPassword2())){
-            throw new Exception("비밀번호가 맞지 않습니다");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         if(userRepository.findByEmail(authSignUpRequestDto.getEmail()).isPresent()){
@@ -59,9 +64,20 @@ public class SignupService {
                 .role(Role.valueOf(authSignUpRequestDto.getRole()))
                 .build();
 
+
         user.passwordEncode(passwordEncoder);
+        Map<String,String> map = new HashMap<>();
         userRepository.save(user);
-        ResponseEntity response = new ResponseEntity<>(user.getEmail(),HttpStatus.OK);
+        if(user.getRole().getKey().equals("ROLE_OWNER")){
+            OwnerEntity ownerEntity = OwnerEntity.builder()
+                    .id(user.getId())
+                    .name(user.getUserName())
+                    .email(user.getEmail())
+                    .build();
+            ownerRepository.save(ownerEntity);
+        }
+        map.put("email", user.getEmail());
+        ResponseEntity response = new ResponseEntity<>(map,HttpStatus.OK);
         return response;
     }
 

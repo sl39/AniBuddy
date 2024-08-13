@@ -16,6 +16,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.front.activity.MainActivity
+import com.example.front.activity.OwnerActivity
 import com.example.front.activity.SignUpActivity
 import com.example.front.data.LoginApiService
 import com.example.front.data.UserPreferencesRepository
@@ -28,6 +29,8 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.security.acl.Owner
+import java.time.LocalDate
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,8 +67,10 @@ class fragment_owner_login : Fragment() {
         userPreferencesRepository = preferencesRepository.getUserPreferencesRepository(requireContext())
 
         val loginApi = LoginApiService.create()
-        val intent: Intent = Intent(context, MainActivity::class.java)
+        val userIntent: Intent = Intent(context, MainActivity::class.java)
+        val ownerIntent: Intent = Intent(context,OwnerActivity::class.java)
         val signupIntent :Intent  = Intent(context, SignUpActivity::class.java)
+
         var tag = "USER"
 
         binding.userLoginBth.setOnClickListener {
@@ -112,9 +117,14 @@ class fragment_owner_login : Fragment() {
                                 GlobalScope.launch {
                                     userPreferencesRepository.setAccessToken(accessToken)
                                     userPreferencesRepository.setRefreshToken(refreshToken)
+                                    userPreferencesRepository.setUserType(tag)
                                 }
-
-                                startActivity(intent)
+                                if(tag.equals("USER")){
+                                    startActivity(userIntent)
+                                } else{
+                                    startActivity(ownerIntent)
+                                }
+//                                startActivity(intent)
                             }
                             else ->{
                                 val show = Toast.makeText(context, "아이디와 비밀번호를 확인하세요", Toast.LENGTH_SHORT)
