@@ -2,30 +2,22 @@ package com.example.front
 
 import android.content.Context
 import android.os.Bundle
-import android.text.style.ClickableSpan
 import android.util.Log
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.annotation.Dimension
-import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.RequestOptions
+
 import com.example.front.data.ApiService
-import com.example.front.data.response.MainReviewSimpleResponseDto
 import com.example.front.data.response.SerachLocationCategoryResponseDto
-import com.example.front.databinding.FragmentSearchKeywordsBinding
 import com.example.front.databinding.FragmentSearchResultBinding
 import com.example.front.databinding.SearchListRecyclerviewBinding
-import com.google.android.material.shape.RoundedCornerTreatment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

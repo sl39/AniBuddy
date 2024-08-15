@@ -1,10 +1,20 @@
 package com.example.front
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebViewClient
+import androidx.core.os.bundleOf
+import androidx.fragment.app.replace
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
+import com.example.front.databinding.FragmentStoreAddBinding
+import java.util.ArrayList
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +30,13 @@ class StoreAddFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private lateinit var bindig : FragmentStoreAddBinding
+    private val AddressSearchFragment = AddressSearchFragment()
+    private val StoreAddTwoFragment = StoreAddTwoFragment()
+    private var lnmAdres : String? = ""
+    private var rnAdres : String? = ""
+    val bundle = Bundle()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +50,79 @@ class StoreAddFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val category = mutableListOf<String>()
+        bindig = FragmentStoreAddBinding.inflate(inflater,container,false)
+        bindig.addAddress.setOnFocusChangeListener { v, hasFocus ->
+            if(hasFocus){
+                parentFragmentManager.beginTransaction().replace(R.id.ownerActivity,AddressSearchFragment).addToBackStack(null).commitAllowingStateLoss()
+            }
+        }
+
+        bindig.addBeauty.setOnClickListener{
+            if("beauty" in category){
+                category.remove("beauty")
+                bindig.addBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
+            } else {
+                category.add("beauty")
+                bindig.addBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
+
+            }
+        }
+        bindig.addHospital.setOnClickListener{
+            if("hospital" in category){
+                category.remove("hospital")
+                bindig.addHospital.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
+            } else {
+                category.add("hospital")
+                bindig.addHospital.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
+
+            }
+        }
+        bindig.addTraining.setOnClickListener{
+            if("training" in category){
+                category.remove("training")
+                bindig.addTraining.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
+            } else {
+                category.add("training")
+                bindig.addTraining.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
+
+            }
+        }
+
+
+        checkId()
+        bindig.addStoreButton.setOnClickListener{
+            val detailAddress = bindig.addAddressDetail.text.toString()
+            val name = bindig.addStoreName.text.toString()
+            val phone_number = bindig.addPhoneNumber.text.toString()
+
+            if(name == ""){
+                return@setOnClickListener
+            }
+            if(detailAddress =="" || lnmAdres == ""){
+                return@setOnClickListener
+            }
+            if(phone_number == ""){
+                return@setOnClickListener
+            }
+            if(category.size == 0){
+                return@setOnClickListener
+            }
+            rnAdres +=detailAddress
+            lnmAdres += detailAddress
+            bundle.putString("rnAdres",rnAdres)
+            bundle.putString("lnmAdres",lnmAdres)
+            bundle.putString("name",name)
+            bundle.putString("phone_number",phone_number)
+            bundle.putStringArrayList("category",category as ArrayList<String>)
+            StoreAddTwoFragment.bundle = bundle
+            parentFragmentManager.beginTransaction().replace(R.id.ownerActivity,StoreAddTwoFragment).addToBackStack(null).commitAllowingStateLoss()
+
+        }
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_store_add, container, false)
+        return bindig.root
     }
 
     companion object {
@@ -55,5 +143,15 @@ class StoreAddFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+
+    fun checkId(){
+        setFragmentResultListener("address"){requestKey, bundle ->
+            lnmAdres = bundle.getString("lnmAdres").toString()
+            rnAdres = bundle.getString("rnAdres").toString()
+            bindig.addAddress.setText(rnAdres)
+
+        }
     }
 }

@@ -56,7 +56,7 @@ public class SecurityConfig {
                 // url 별 권한 관리 옵션
                 .authorizeHttpRequests(authorizeRequest ->
                         authorizeRequest
-                                .requestMatchers("/api/auth/signup/**").permitAll()
+                                .requestMatchers("/s@**").permitAll()
                                 .anyRequest().authenticated())// 나머지는 안됨
 
         ;

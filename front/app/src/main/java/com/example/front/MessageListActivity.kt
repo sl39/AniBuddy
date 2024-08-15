@@ -148,6 +148,7 @@ class MessageListActivity : AppCompatActivity() {
         val api = ApiService.create(this)
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
+
         api.getUserTest().enqueue(object : Callback<UserTesetResponse> {
             override fun onResponse(
                 call: Call<UserTesetResponse>,
@@ -160,7 +161,8 @@ class MessageListActivity : AppCompatActivity() {
                     }
 
                     val client = OkHttpClient()
-                    val request: Request =  Request.Builder()
+                    val request: Request =  Request
+                        .Builder()
                         .addHeader("Authorization", "Bearer $accessToken")
                         .url("ws://10.0.2.2:8080/chat/$roomId").build()
 

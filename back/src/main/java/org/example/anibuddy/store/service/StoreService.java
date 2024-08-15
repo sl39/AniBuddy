@@ -43,6 +43,26 @@ public class StoreService {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        List<StoreCategory> storeCategories = new ArrayList<>();
+        for(String cate: storeCreateDto.getCategory()){
+            int id;
+            if (cate.equals("beauty")){
+                id = 1;
+            } else if (cate.equals("hospital")){
+                id = 2;
+            } else if (cate.equals("training")) {
+                id = 3;
+            } else {
+                id = 4;
+                cate = "etc";
+            }
+            StoreCategory category = new StoreCategory().builder()
+                    .id(id)
+                    .category(cate)
+                    .build();
+            storeCategories.add(category);
+        }
+
         StoreEntity newStoreEntity = new StoreEntity().builder()
                 .mapx(storeCreateDto.getMapx())
                 .mapy(storeCreateDto.getMapy())
@@ -52,6 +72,7 @@ public class StoreService {
                 .storeInfo(storeCreateDto.getInfo())
                 .openday(storeCreateDto.getOpenDay())
                 .phoneNumber(storeCreateDto.getPhone_number())
+                .storeCategoryList(storeCategories)
                 .build();
 
 

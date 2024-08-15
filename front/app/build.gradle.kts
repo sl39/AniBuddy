@@ -100,4 +100,9 @@ dependencies {
     implementation("com.google.dagger:dagger:2.0")
     // gps
     implementation ("com.google.android.gms:play-services-location:21.0.1")
+
+    implementation ("com.tickaroo.tikxml:annotation:0.8.13")
+    implementation ("com.tickaroo.tikxml:core:0.8.13")
+    implementation ("com.tickaroo.tikxml:retrofit-converter:0.8.13")
+    kapt ("com.tickaroo.tikxml:processor:0.8.13")
 }
