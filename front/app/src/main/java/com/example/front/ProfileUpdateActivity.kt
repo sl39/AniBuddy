@@ -1,7 +1,9 @@
 package com.example.front
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -9,14 +11,21 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.front.activity.MainActivity
 import com.example.front.databinding.ActivityProfileUpdateBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.storage.FirebaseStorage
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.util.UUID
 
 class ProfileUpdateActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileUpdateBinding
@@ -29,6 +38,7 @@ class ProfileUpdateActivity : AppCompatActivity() {
     private lateinit var petSignificantEditText: EditText
     private lateinit var petAgeEditText: EditText
     private lateinit var petChipNumberEditText: EditText
+    private lateinit var petImageEdit: ImageView
 
     private var petId : Int? = null
 
@@ -44,6 +54,12 @@ class ProfileUpdateActivity : AppCompatActivity() {
         "뱅갈", "브리티쉬숏헤어", "샤미즈", "스코티시폴드", "스핑크스", "아메리칸숏헤어", "아비시니안", "코리안숏헤어",
         "터키쉬앙고라", "페르시안", "직접 입력" ) + "다시 선택"
 
+    //프로필 수정 시 이미지 및 텍스트 작성한 것들 불러오기 추가. 24.08.15.
+    private var selectedImageUri: Uri? = null
+    private val REQUEST_IMAGE_SELECT = 1
+    private val storage = FirebaseStorage.getInstance()
+    private val storageRef = storage.reference
+    private val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/testing-f501e.appspot.com/o/images%2Fe16ef3a0-7724-4847-a490-d685d22789ce.jpg?alt=media&token=4196f722-af88-4c4d-b815-94ac70aca525"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +80,6 @@ class ProfileUpdateActivity : AppCompatActivity() {
         apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
 
         val petId = getIntent().getIntExtra("petId", -1)
-        Log.d("PUA","UpdatepetId? = $petId")
     }
 
     private fun initializeViews() {
@@ -81,8 +96,67 @@ class ProfileUpdateActivity : AppCompatActivity() {
 
         val profileUpdateButton = findViewById<Button>(R.id.profile_add_update)
         profileUpdateButton.setOnClickListener {
-            petProfileUpdate()
+            if (selectedImageUri != null) {
+                uploadImage(selectedImageUri!!) { imageUrl ->
+                    petProfileUpdate(imageUrl)
+                }
+            } else {
+                petProfileUpdate(defaultImageUrl)
+            }
         }
+
+        // 이미지뷰 클릭하여 이미지가 있으면 이미지 수정, 아니면 이미지 선택해서 불러오는 동작.
+        val imageView: ImageView = findViewById(R.id.profile_add_button)
+        imageView.setOnClickListener{
+            if (selectedImageUri == null) {
+                selectImageFromGallery()
+            } else {
+                showImageOptionsDiaglog()
+            }
+        }
+    }
+
+    // 이미지 갤러리에서 가져오기
+    private fun selectImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, REQUEST_IMAGE_SELECT)
+    }
+
+    // 이미지가 있는 상태에서 이미지 뷰 클릭 시 변경/제거 옵션
+    private fun showImageOptionsDiaglog() {
+        val options = arrayOf("이미지 변경", "이미지 제거")
+        AlertDialog.Builder(this)
+            .setTitle("옵션 선택")
+            .setItems(options) { dialog, which ->
+                when(which) {
+                    0 -> selectImageFromGallery()
+                    1 -> removeImage()
+                }
+            }
+            .show()
+    }
+    private fun removeImage() {
+        selectedImageUri = null
+        val imageView: ImageView = findViewById(R.id.profile_add_button)
+        imageView.setImageResource(0)
+        imageView.setBackgroundColor(ContextCompat.getColor(this, android.R.color.darker_gray))
+    }
+
+    //이미지 firebase storage에 추가하고 추가한 이미지 url 받아오기
+    fun uploadImage(imageUri: Uri, callback: (String?) -> Unit) {
+        val fileName = "images/${UUID.randomUUID()}.jpg"
+        val imageRef = storageRef.child(fileName)
+
+        imageRef.putFile(imageUri)
+            .addOnSuccessListener {
+                imageRef.downloadUrl.addOnSuccessListener { uri ->
+                    callback(uri.toString())
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "이미지 업로드 실패", Toast.LENGTH_SHORT).show()
+                callback(null)
+            }
     }
 
     private fun setupAdapters() {
@@ -194,34 +268,37 @@ class ProfileUpdateActivity : AppCompatActivity() {
         }
     }
 
-    private fun petProfileUpdate() {
-//        val petName = petNameEditText.getText().toString().trim()
-//        val petKind = if (selectedMainCategory == "직접 입력") selectedSubCategory else selectedSubCategory
-//        val petNeutering = petNeuteringEditText.getText().toString().trim()
-//        val petGender = petGenderEditText.getText().toString().trim()
-//        val petSignificant = petSignificantEditText.getText().toString().trim()
-//        val petCategory =  if (selectedMainCategory == "직접 입력") "P" else convertCategoryToEnglish(selectedMainCategory)
-//        val petAge = petAgeEditText.getText().toString().toInt()
-//        val petChipNumber = petChipNumberEditText.getText().toString().toLong()
-//
-//        val petCreateDTO = PetCreateDTO(petName, petKind, petNeutering, petGender, petSignificant, petCategory, petAge, petChipNumber)
-//
-//        val petId = getIntent().getIntExtra("petId", -1)
-//
-//        apiService.petProfileUpdate(petCreateDTO, petId).enqueue(object :
-//            Callback<Void> {
-//            override fun onResponse(call: Call<Void>, response: Response<Void>){
-//                if(response.isSuccessful) {
-//                    Toast.makeText(this@ProfileUpdateActivity,"프로필 수정 완료", Toast.LENGTH_SHORT).show();
-//                    finish()
-//                } else {
-//                    Toast.makeText(this@ProfileUpdateActivity, "요청 실패!", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//            override fun onFailure(call: Call<Void>, t: Throwable) {
-//                Toast.makeText(this@ProfileUpdateActivity, "network error!", Toast.LENGTH_SHORT).show();
-//            }
-//        })
+    private fun petProfileUpdate(imageUrl: String?) {
+        val petName = petNameEditText.getText().toString().trim()
+        val petKind = if (selectedMainCategory == "직접 입력") selectedSubCategory else selectedSubCategory
+        val petNeutering = petNeuteringEditText.getText().toString().trim()
+        val petGender = petGenderEditText.getText().toString().trim()
+        val petSignificant = petSignificantEditText.getText().toString().trim()
+        val petCategory =  if (selectedMainCategory == "직접 입력") "P" else convertCategoryToEnglish(selectedMainCategory)
+        val petAge = petAgeEditText.getText().toString().toInt()
+        val petChipNumber = petChipNumberEditText.getText().toString().toLong()
+
+        val imageUrl = imageUrl
+        val base64Image = imageUrl
+
+        val petCreateDTO = PetCreateDTO(petName, petKind, petNeutering, petGender, petSignificant, petCategory, base64Image, petAge, petChipNumber)
+
+        val petId = getIntent().getIntExtra("petId", -1)
+
+        apiService.petProfileUpdate(petCreateDTO, petId).enqueue(object :
+            Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>){
+                if(response.isSuccessful) {
+                    Toast.makeText(this@ProfileUpdateActivity,"프로필 수정 완료", Toast.LENGTH_SHORT).show();
+                    finish()
+                } else {
+                    Toast.makeText(this@ProfileUpdateActivity, "요청 실패!", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                Toast.makeText(this@ProfileUpdateActivity, "network error!", Toast.LENGTH_SHORT).show();
+            }
+        })
     }
 
     inner class ItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener {

@@ -1,6 +1,9 @@
 plugins {
-    alias(libs.plugins.android.application)
+//    alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.android.application")
+    id("com.google.gms.google-services")
+    id("kotlin-kapt")
 }
 
 android {
@@ -50,6 +53,7 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -67,7 +71,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx:25.0.0")
     implementation("com.google.firebase:firebase-messaging-ktx:23.2.1")
     implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.gms:google-services:4.3.13")
+    implementation("com.google.gms:google-services:4.3.8")
 
     implementation("com.firebaseui:firebase-ui-storage:8.0.2")
     implementation("com.github.bumptech.glide:glide:4.16.0")
@@ -98,4 +102,7 @@ dependencies {
     implementation("com.google.dagger:dagger:2.0")
     // gps
     implementation ("com.google.android.gms:play-services-location:21.0.1")
+
+    implementation ("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable")
+
 }

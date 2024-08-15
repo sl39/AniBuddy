@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.front.activity.MainActivity
 import com.example.front.databinding.ActivityProfileDetailBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -29,7 +31,10 @@ class ProfileDetailActivity : AppCompatActivity() {
     private lateinit var profileDetailKind: TextView
     private lateinit var profileDetailChipNumber: TextView
     private lateinit var profileDetailSignificant: TextView
+    private lateinit var profileDetailImage: ImageView
     private var petId: Int? = null
+
+    //디테일 프로필에 이미지 불러오기 추가함. 24.08.15.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +60,7 @@ class ProfileDetailActivity : AppCompatActivity() {
             profileDetailAge = findViewById(R.id.profile_detail_age)
             profileDetailChipNumber = findViewById(R.id.profile_detail_chipNumber)
             profileDetailSignificant = findViewById(R.id.profile_detail_significant)
+            profileDetailImage = findViewById(R.id.profile_detail_image)
             loadPetDetail(petId)
 //            petProfileEdit(petId)
         } else {
@@ -93,6 +99,12 @@ class ProfileDetailActivity : AppCompatActivity() {
                         profileDetailAge.text = petDetail.petAge.toString()
                         profileDetailChipNumber.text = petDetail.petChipNumber.toString()
                         profileDetailSignificant.text = petDetail.petSignificant
+                        Glide.with(profileDetailImage.context)
+                            .load(petDetail.base64Image)
+                            .placeholder(R.drawable.anibuddy_logo) // 로딩 중 표시할 이미지
+                            .error(R.drawable.anibuddy_logo) // 로드 실패 시 표시할 이미지
+                            .into(profileDetailImage) // 이미지를 로드할 ImageView
+
                     } ?: run {
                         Log.d("ProfileFragment", "Response body is null")
                     }

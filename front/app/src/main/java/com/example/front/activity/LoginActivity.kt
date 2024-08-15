@@ -27,10 +27,8 @@ class LoginActivity : AppCompatActivity() {
         val api = ApiService.create(this@LoginActivity)
         val intent: Intent = Intent(this@LoginActivity, MainActivity::class.java)
 
-
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         fragmentManager.beginTransaction().replace(R.id.login_activity,fragmentOwnerLogin).commitAllowingStateLoss()
         api.getUserTest().enqueue(object : Callback<UserTesetResponse>{
@@ -53,8 +51,5 @@ class LoginActivity : AppCompatActivity() {
                     .show();
             }
         })
-
     }
 }
-
-

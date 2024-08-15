@@ -1,26 +1,25 @@
 package com.example.front;
 
 public class UserDTO {
-    private String userName, email, userAddress;
+    private String nickname, email, imageUrl;
 
     public UserDTO() {
     }
 
-    public UserDTO(String userName, String email, String userAddress) {
-        this.userName = userName;
+    public UserDTO(String nickname, String email, String imageUrl) {
+        this.nickname = nickname;
         this.email = email;
-        this.userAddress = userAddress;
     }
-    public String getUserName() { return userName; }
+    public String getNickname() { return nickname; }
 
-    public void setUserName(String userName) { this.userName = userName; }
+    public void setNickname(String nickname) { this.nickname = nickname; }
 
     public String getEmail() { return email; }
 
     public void setEmail(String email) { this.email = email; }
 
-    public String getUserAddress() { return userAddress; }
+    public String getImageUrl() { return imageUrl; }
 
-    public void setUserAddress(String userAddress) { this.userAddress = userAddress; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
 }

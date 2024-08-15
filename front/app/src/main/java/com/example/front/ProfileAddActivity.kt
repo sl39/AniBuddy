@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import com.example.front.activity.MainActivity
 import com.example.front.databinding.ActivityProfileAddBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.FirebaseApp
 import com.google.firebase.storage.FirebaseStorage
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,6 +41,8 @@ class ProfileAddActivity : AppCompatActivity() {
     private lateinit var petAgeEditText: EditText
     private lateinit var petChipNumberEditText: EditText
     private lateinit var imageView: ImageView
+
+    private val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/testing-f501e.appspot.com/o/images%2Fe16ef3a0-7724-4847-a490-d685d22789ce.jpg?alt=media&token=4196f722-af88-4c4d-b815-94ac70aca525"
 
     private var userId: Int? = null
 
@@ -72,6 +75,8 @@ class ProfileAddActivity : AppCompatActivity() {
         bottomNavigationView.selectedItemId = R.id.profile // 초기 선택된 항목 설정
         bottomNavigationView.setOnNavigationItemSelectedListener(ItemSelectedListener())
 
+//        FirebaseApp.initializeApp(this)
+
         initializeViews()
         setupAdapters()
         setupListeners()
@@ -95,12 +100,22 @@ class ProfileAddActivity : AppCompatActivity() {
 
         val profileRegistrationButton = findViewById<Button>(R.id.profile_add_registration)
         profileRegistrationButton.setOnClickListener {
-            selectedImageUri?.let {imageUri ->
-                uploadImage(imageUri) { imageUrl ->
+            if (selectedImageUri != null) {
+                uploadImage(selectedImageUri!!) { imageUrl ->
                     petProfileRegistration(imageUrl)
                 }
-            } ?: Toast.makeText(this, "이미지를 선택하세요", Toast.LENGTH_SHORT).show()
+            } else {
+                petProfileRegistration(defaultImageUrl)
+            }
         }
+
+
+//            selectedImageUri?.let {imageUri ->
+//                uploadImage(imageUri) { imageUrl ->
+//                    petProfileRegistration(imageUrl)
+//                }
+//            } ?: Toast.makeText(this, "이미지를 선택하세요", Toast.LENGTH_SHORT).show()
+//        }
 
         val imageView: ImageView = findViewById(R.id.profile_add_image)
         imageView.setOnClickListener{
@@ -193,7 +208,7 @@ class ProfileAddActivity : AppCompatActivity() {
 
 
     //이미지 업로드 메소드
-    fun uploadImage(imageUri: Uri, callback: (String) -> Unit) {
+    fun uploadImage(imageUri: Uri, callback: (String?) -> Unit) {
         val fileName = "images/${UUID.randomUUID()}.jpg"
         val imageRef = storageRef.child(fileName)
 
@@ -205,6 +220,7 @@ class ProfileAddActivity : AppCompatActivity() {
             }
             .addOnFailureListener {
                 Toast.makeText(this, "이미지 업로드 실패", Toast.LENGTH_SHORT).show()
+                callback(null)
             }
     }
 
@@ -269,7 +285,7 @@ class ProfileAddActivity : AppCompatActivity() {
         }
     }
 
-    private fun petProfileRegistration(imageUrl: String) {
+    private fun petProfileRegistration(imageUrl: String?) {
         val petName = petNameEditText.getText().toString().trim()
         val petKind =
             if (selectedMainCategory == "그 외") selectedSubCategory else selectedSubCategory
