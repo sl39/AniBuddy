@@ -30,15 +30,13 @@ public class LoginService implements UserDetailsService {
         UserEntity authEntity = authRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("email not found"));
 
-        List<SimpleGrantedAuthority> authorities = Collections.singletonList(
-                new SimpleGrantedAuthority(authEntity.getRole().name())
-        );
+
 
         return CustomUserDetails.builder()
                 .userId(authEntity.getId())
                 .username(authEntity.getEmail())
                 .password(authEntity.getPassword())
-                .authorities(authorities)
+                .role(authEntity.getRole().getKey())
                 .build();
     }
 }

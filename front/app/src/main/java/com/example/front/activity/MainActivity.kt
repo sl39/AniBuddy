@@ -34,10 +34,6 @@ class MainActivity : AppCompatActivity() {
         Permission(this).requestLocation() // 위치 권한 요청
     }
 
-
-
-
-
     private val userId : Int = 1
     private var apiService : ApiService? = null
 
@@ -70,7 +66,22 @@ class MainActivity : AppCompatActivity() {
         handleIntent(intent)
 
         apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
+    }
 
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.search, menu)
+        Log.d("menu?", menu.toString())
+
+        val onMenuItemClickListener =
+            menu?.findItem(R.id.menu_search_icon)?.setOnMenuItemClickListener {
+                intent = Intent(this@MainActivity, SearchActivity::class.java)
+                startActivity(intent)
+                return@setOnMenuItemClickListener true
+            }
+        onMenuItemClickListener
+        return true
     }
 
     private fun handleIntent(intent: Intent?) {
@@ -118,19 +129,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.search, menu)
 
-        val onMenuItemClickListener =
-            menu?.findItem(R.id.menu_search_icon)?.setOnMenuItemClickListener {
-                intent = Intent(this@MainActivity, SearchActivity::class.java)
-                startActivity(intent)
-                return@setOnMenuItemClickListener true
-            }
-        onMenuItemClickListener
-        return true
-    }
 
     inner class ItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener {
         override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {

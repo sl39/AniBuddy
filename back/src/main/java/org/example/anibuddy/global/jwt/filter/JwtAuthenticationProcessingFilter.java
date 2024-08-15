@@ -27,7 +27,6 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final AuthRepository userRepository;
-
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
@@ -58,7 +57,7 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                 .ifPresentOrElse(authEntity -> {
                     String reIssuedRefreshToken = reIssueRefreshToken(authEntity);
                     try {
-                        jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(authEntity.getEmail()),
+                        jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(authEntity.getEmail(),authEntity.getRole().getKey()),
                                 reIssuedRefreshToken);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -97,8 +96,8 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
                 .username(myUser.getEmail())
                 .password(password)
                 .userId(myUser.getId())
+                .role(myUser.getRole().getKey())
                 .build();
-
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(userDetailsUser, null,
                         authoritiesMapper.mapAuthorities(userDetailsUser.getAuthorities()));

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.anibuddy.Review.entity.ReviewEntity;
+import org.example.anibuddy.owner.OwnerEntity;
 
 import java.util.List;
 
@@ -73,5 +74,8 @@ public class StoreEntity {
     @OneToOne(mappedBy = "storeEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private StoreSummary storeSummary;
 
+    @JsonBackReference
+    @ManyToOne
+    private OwnerEntity ownerEntity;
 
 }

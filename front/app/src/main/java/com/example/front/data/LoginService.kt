@@ -1,23 +1,18 @@
 package com.example.front.data
 
-import androidx.datastore.preferences.protobuf.Api
+import com.example.front.data.request.CheckEmail
+import com.example.front.data.request.CheckNickname
 import com.example.front.data.request.LoginRequest
-import com.example.front.data.request.TokenReqeust
-import com.example.front.data.request.checkEmail
-import com.example.front.data.request.checknickname
+import com.example.front.data.request.signupRequest
 import com.example.front.data.response.LoginResponse
-import com.example.front.data.response.TokenResponse
-import com.example.front.data.response.UserTesetResponse
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.HeaderMap
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
@@ -34,8 +29,8 @@ interface LoginApiService{
     @Headers(
         "content-type: application/json"
     )
-    fun     checkEmail(
-        @Body jsonParams : checkEmail,
+    fun checkEmail(
+        @Body jsonParams: CheckEmail,
         ): Call<Boolean>
 
     @POST("/api/auth/signup/check/nickname")
@@ -43,13 +38,16 @@ interface LoginApiService{
         "content-type: application/json"
     )
     fun checkNickname(
-        @Body jsonParams : checknickname,
+        @Body jsonParams : CheckNickname,
     ): Call<Boolean>
 
-//    @POST("/api/auth/signup")
-//    @Headers(
-//        "content-type: application/json"
-//    )
+    @POST("/api/auth/signup")
+    @Headers(
+        "content-type: application/json"
+    )
+    fun signup(
+        @Body jsonParams: signupRequest
+    ): Call<CheckEmail>
 
 
     companion object{

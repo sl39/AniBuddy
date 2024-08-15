@@ -59,5 +59,11 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
     List<Map<String, Object>> findStoresByCategoryAndDistrictWithReview(List<String> district, Integer category, double lon, double lat,String name);
 
 
+    @Query(value = "SELECT s.* " +
+            " FROM store_entity s " +
+            " WHERE s.owner_entity_id = :id ", nativeQuery = true)
+    List<StoreEntity> findAllByOwnerEntity(int id);
+
+
 
 }
