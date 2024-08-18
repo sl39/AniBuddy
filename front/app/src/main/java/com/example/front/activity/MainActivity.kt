@@ -1,12 +1,18 @@
 package com.example.front.activity
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import com.example.front.ApiService
 import com.example.front.Permission
@@ -29,14 +35,15 @@ class MainActivity : AppCompatActivity() {
     private val fragmentFollowingList = fragment_following_list()
     private val fragmentChatList = fragment_chatroom_list()
     private val fragmentProfile = fragment_profile()
+
     override fun onStart() {
         super.onStart()
         Permission(this).requestLocation() // 위치 권한 요청
+        askNotificationPermission() // 알림 권한 요청
     }
 
     private val userId : Int = 1
     private var apiService : ApiService? = null
-
 
     companion object {
         const val EXTRA_DESTINATION = "extra_destination"
@@ -67,7 +74,6 @@ class MainActivity : AppCompatActivity() {
 
         apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
@@ -128,8 +134,6 @@ class MainActivity : AppCompatActivity() {
             transaction.commitAllowingStateLoss()
         }
     }
-
-
 
     inner class ItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener {
         override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
@@ -198,6 +202,7 @@ class MainActivity : AppCompatActivity() {
             DESTINATION_PROFILE -> bottomNavigationView.selectedItemId = R.id.profile
            }
         }
+
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
 
@@ -223,6 +228,43 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+    // 권한 요청 런처
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Log.d("Permission", "알림 권한이 허용되었습니다")
+        } else {
+            Log.d("Permission", "알림 권한이 거부되었습니다")
+        }
+    }
+
+    private fun askNotificationPermission() {
+        // TIRAMISU 버전 이하라면 권한 요청 필요X
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+
+        // 알림 권한이 이미 허용된 상태인지 확인
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.d("Permission", "알림 권한이 이미 허용되어 있습니다")
+        } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+            val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
+            alertDialogBuilder
+                .setTitle("알림 권한 요청")
+                .setMessage("알림을 받기 위해서는 알림 권한 설정이 필요합니다.")
+                .setNegativeButton("취소") { dialog, which ->
+                    Log.d("Permission", "알림 권한이 거부되었습니다")
+                }
+                .setPositiveButton("알림 권한 설정") { dialog, which ->
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            val dialog: AlertDialog = alertDialogBuilder.create()
+            dialog.show()
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
 }
 
 

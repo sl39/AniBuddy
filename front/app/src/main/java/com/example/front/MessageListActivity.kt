@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.WebSocket
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -87,7 +88,7 @@ class MessageListActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityMessageListBinding
     private lateinit var userPreferencesRepository: UserPreferencesRepository
-
+    lateinit var webSocket:WebSocket
 
     @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -99,7 +100,6 @@ class MessageListActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         userPreferencesRepository = preferencesRepository.getUserPreferencesRepository(this@MessageListActivity)
 
-
         val intent = intent
         val roomId = intent.getIntExtra("roomId", 0)
         val otherName = intent.getStringExtra("otherName")
@@ -110,6 +110,7 @@ class MessageListActivity : AppCompatActivity() {
         val messageList = mutableListOf<MessageItem>()
         val adapter = MessageItemAdapter(messageList, "USER") //TODO: my role
         val db = Realm.getDefaultInstance()
+
 
         val realmListener = RealmChangeListener<RealmResults<ChatMessage>> {
             Log.d("Realm", "realm changed!")
@@ -145,9 +146,10 @@ class MessageListActivity : AppCompatActivity() {
             messageList.add(messageItem)
         }
 
-        val api = ApiService.create(this)
         binding.recyclerview.adapter = adapter
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
+
+        val api = ApiService.create(this)
 
         api.getUserTest().enqueue(object : Callback<UserTesetResponse> {
             override fun onResponse(
@@ -161,25 +163,12 @@ class MessageListActivity : AppCompatActivity() {
                     }
 
                     val client = OkHttpClient()
-                    val request: Request =  Request
-                        .Builder()
+                    val request: Request = Request.Builder()
                         .addHeader("Authorization", "Bearer $accessToken")
                         .url("ws://10.0.2.2:8080/chat/$roomId").build()
 
                     val websocketListener = HttpWebSocket()
-                    val webSocket = client.newWebSocket(request, websocketListener)
-                    binding.sendBtn.setOnClickListener {
-                        val chatMessageInfo = JSONObject()
-                        chatMessageInfo.put("roomId", roomId.toString())
-                        chatMessageInfo.put("message", binding.msgEditText.text.toString())
-                        chatMessageInfo.put("senderRole", "USER")
-                        chatMessageInfo.put("senderId", "1")
-                        chatMessageInfo.put("senderName", "test user")
-                        webSocket.send(chatMessageInfo.toString())
-                        Log.d("Realm", "sendBtn - setOnClickListener")
-
-                        binding.msgEditText.setText("")
-                    }
+                    webSocket = client.newWebSocket(request, websocketListener)
 
                 } else {
                     onFailure(call, Throwable("Unsuccessful response"))
@@ -190,27 +179,26 @@ class MessageListActivity : AppCompatActivity() {
             }
         })
 
-//
-//        val client = OkHttpClient()
-//        val request: Request =  Request.Builder().url("ws://10.0.2.2:8080/chat/$roomId").build()
-//        val websocketListener = HttpWebSocket()
-//        val webSocket = client.newWebSocket(request, websocketListener)
-
         //TODO: input my data
-//        binding.sendBtn.setOnClickListener {
-//            val chatMessageInfo = JSONObject()
-//            chatMessageInfo.put("roomId", roomId.toString())
-//            chatMessageInfo.put("message", binding.msgEditText.text.toString())
-//            chatMessageInfo.put("senderRole", "USER")
-//            chatMessageInfo.put("senderId", "1")
-//            chatMessageInfo.put("senderName", "test user")
-//            webSocket.send(chatMessageInfo.toString())
-//            Log.d("Realm", "sendBtn - setOnClickListener")
-//
-//            binding.msgEditText.setText("")
-//        }
+        binding.sendBtn.setOnClickListener {
+            val chatMessageInfo = JSONObject()
+            chatMessageInfo.put("roomId", roomId.toString())
+            chatMessageInfo.put("message", binding.msgEditText.text.toString())
+            chatMessageInfo.put("senderRole", "USER")
+            chatMessageInfo.put("senderId", "1")
+            chatMessageInfo.put("senderName", "test user")
+            webSocket.send(chatMessageInfo.toString())
+            Log.d("Realm", "sendBtn - setOnClickListener")
+
+            binding.msgEditText.setText("")
+        }
 
         binding.recyclerview.scrollToPosition(messageList.size-1)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        webSocket.close(1000, "채팅방 종료로 웹소켓 소멸")
     }
 
     override fun onSupportNavigateUp(): Boolean {
