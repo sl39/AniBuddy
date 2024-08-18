@@ -93,6 +93,7 @@ public class StoreService {
                 .phoneNumber(storeCreateDto.getPhone_number())
                 .storeCategoryList(storeCategories)
                 .ownerEntity(owner.get())
+                .district(storeCreateDto.getDistrict())
                 .build();
 
 

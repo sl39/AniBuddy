@@ -1,25 +1,26 @@
 package com.example.front
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.text.InputFilter
-import android.text.Spanned
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.replace
 import com.example.front.data.LocationApiService
+import com.example.front.data.OwnerApiService
 import com.example.front.data.response.LocationResponse
+import com.example.front.data.response.LoginResponse
+import com.example.front.data.response.OwnerCreateStore
 import com.example.front.databinding.FragmentStoreAddTwoBinding
+import kotlinx.coroutines.runBlocking
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
+import java.time.LocalDate
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -37,6 +38,7 @@ class StoreAddTwoFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var binding : FragmentStoreAddTwoBinding
+
     var bundle = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +56,33 @@ class StoreAddTwoFragment : Fragment() {
     ): View? {
         val dayday = mutableListOf<String>()
         val address = bundle.getString("lnmAdres")
+
+        var mapx: Double = 0.0
+        var mapy: Double = 0.0
+        val api = LocationApiService.create()
+        val creatStoreApi = OwnerApiService.create(requireContext())
+        if (address != null) {
+            api.getLocation("KakaoAK 5ad4598a787c971bf6290233c6bcbfc0", address)
+                .enqueue(object : Callback<LocationResponse> {
+                    override fun onResponse(
+                        call: Call<LocationResponse>,
+                        response: Response<LocationResponse>
+                    ) {
+                        Log.d("값이 들어오는지 확인", response.body().toString())
+                        val data = response.body()
+                        if (data != null && data.documents.size != 0) {
+                            mapx = data.documents[0].x.toDouble()
+                            mapy = data.documents[0].y.toDouble()
+
+                        }
+                    }
+
+                    override fun onFailure(call: Call<LocationResponse>, t: Throwable) {
+                        Log.d(".테스트", "실패 실패")
+                    }
+                })
+        }
+
         val roadAddress = bundle.getString("rnAdres")
         val detailAddress = bundle.getString("detailAddress")
         val info = ""
@@ -61,6 +90,7 @@ class StoreAddTwoFragment : Fragment() {
         val name = bundle.getString("name")
         val phone_number = bundle.getString("phone_number")
         val category = bundle.getStringArrayList("category")
+
         binding = FragmentStoreAddTwoBinding.inflate(inflater,container,false)
 
 //        binding.hour.filters = arrayOf(InputFilterMinMax(0,23))
@@ -133,33 +163,52 @@ class StoreAddTwoFragment : Fragment() {
             for(dst : String in guArray){
                 if(address?.contains(dst) == true){
                     district = dst
+
                     break
                 }
             }
+            if (address != null && name != null  && phone_number != null && category != null && district != "") {
+                val ownerCreateStore = OwnerCreateStore(name,address + " ${detailAddress}",roadAddress + " ${detailAddress}",info,phone_number,openDay,mapx,mapy,district,storeImageList,category)
+                creatStoreApi.createStore(ownerCreateStore).enqueue(object : Callback<LoginResponse>{
+                    override fun onResponse(
+                        call: Call<LoginResponse>,
+                        response: Response<LoginResponse>
+                    ) {
+                        if(response.code() == 200){
+                            val context = requireContext()
+                            val intent = Intent(context, context::class.java)
+                            startActivity(intent)
 
-            val api = LocationApiService.create()
-            if(address != null){
-                Log.d("ㅂㅈㄷㄱㅂㅈㄷㄱㅂㅈㄷㄱㄷㅈ","ㅂㄷㅈㄱㅂㅈㄷㄱㅂㅈㄷㄱ")
-                api.getLocation("KakaoAK 5ad4598a787c971bf6290233c6bcbfc0",address).enqueue(object : Callback<LocationResponse> {
-                    override fun onResponse(call: Call<LocationResponse>, response: Response<LocationResponse>) {
-                        Log.d("값이 들어오는지 확인", response.body().toString())
+
+                        }
                     }
 
-                    override fun onFailure(call: Call<LocationResponse>, t: Throwable) {
-                        Log.d(".테스트" , "실패 실패")
+                    override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                        Log.d("ㄷㄱㄷㄱㄷㄱㄷㄱㄷㄱㄷ","ㄷㄱㄷㄱㄷㄱㄷㄱㄷㄱㄷㄱ")
                     }
+
                 })
-
             }
 
 
 
-            Log.d("가게 등록 요소 요소 요소"," openDay : " + openDay + " district : " + district + " address : "+ address +" ${detailAddress}"+ " roadAddress : " + roadAddress +" ${detailAddress}"+ " info : " + info  +" storeImageList :"+ storeImageList.toString() + " name : " + name + " phone_number  : " + phone_number  +  " category : " + category .toString() )
+
+
         }
 
 
         // Inflate the layout for this fragment
         return binding.root
+    }
+    fun getAddress (address: String): List<Double> {
+        var mapx : Double = 0.0
+        var mapy : Double = 0.0
+        var list: MutableList<Double> = mutableListOf()
+
+
+        list.add(mapx)
+        list.add(mapy)
+        return list
     }
 
 

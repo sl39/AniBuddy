@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,9 +23,10 @@ public class StoreController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createStore(@RequestBody StoreCreateDto storeCreateDto){
-        ResponseEntity  response = storeService.createStore(storeCreateDto);
-        return response;
+    public Map<String,String> createStore(@RequestBody StoreCreateDto storeCreateDto){
+        ResponseEntity response = storeService.createStore(storeCreateDto);
+
+        return Map.of("message", "Store created");
     }
 
     @GetMapping("/main")

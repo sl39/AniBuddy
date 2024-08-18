@@ -1,6 +1,7 @@
 package com.example.front.data
 
 import android.content.Context
+import com.example.front.data.response.LoginResponse
 import com.example.front.data.response.OwnerCreateStore
 import com.example.front.data.response.OwnerStoreListResponse
 import com.google.gson.Gson
@@ -22,7 +23,7 @@ interface OwnerApiService {
     @POST("/api/store/create")
     fun createStore(
         @Body jsonParams : OwnerCreateStore
-    )
+    ) : Call<LoginResponse>
 
 
 
