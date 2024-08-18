@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.anibuddy.store.entity.StoreEntity;
+import org.example.anibuddy.user.UserEntity;
 
 import java.util.List;
 
@@ -16,7 +17,6 @@ import java.util.List;
 @Getter
 @Entity
 public class OwnerEntity {
-
     @Id
     private int id;
 
@@ -30,4 +30,8 @@ public class OwnerEntity {
     @OneToMany(mappedBy = "ownerEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonBackReference
     private List<StoreEntity> stores;
+
+    @OneToOne
+    @JsonBackReference
+    private UserEntity userEntity;
 }

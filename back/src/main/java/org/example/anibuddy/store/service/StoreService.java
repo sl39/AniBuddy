@@ -3,6 +3,9 @@ package org.example.anibuddy.store.service;
 import jakarta.transaction.Transactional;
 import jdk.jfr.Category;
 import lombok.RequiredArgsConstructor;
+import org.example.anibuddy.global.CustomUserDetails;
+import org.example.anibuddy.owner.OwnerEntity;
+import org.example.anibuddy.owner.OwnerRepository;
 import org.example.anibuddy.store.dto.MainReviewSimpleResponseDto;
 import org.example.anibuddy.store.dto.StoreCreateDto;
 import org.example.anibuddy.store.dto.StoreSearchLocationCategoryResponse;
@@ -16,6 +19,8 @@ import org.example.anibuddy.store.repository.StoreRepository;
 import org.example.anibuddy.store.repository.StoreSummaryRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -29,8 +34,7 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
     private final StoreImageRepository storeImageRepository;
-    private final StoreSummaryRepository storeSummaryRepository;
-    private final StoreCategoryRepository storeCategoryRepository;
+    private final OwnerRepository ownerRepository;
 
     public List<StoreEntity> findAll(){
         return storeRepository.findTop10ByOrderByIdDesc();
@@ -42,6 +46,19 @@ public class StoreService {
         if(storeEntity.isPresent()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String role = userDetails.getRole();
+        Integer ownerId = userDetails.getUserId();
+        if(role.equals("ROLE_USER")){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<OwnerEntity> owner = ownerRepository.findById(ownerId);
+        if(owner.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
 
         List<StoreCategory> storeCategories = new ArrayList<>();
         for(String cate: storeCreateDto.getCategory()){
@@ -63,6 +80,8 @@ public class StoreService {
             storeCategories.add(category);
         }
 
+
+
         StoreEntity newStoreEntity = new StoreEntity().builder()
                 .mapx(storeCreateDto.getMapx())
                 .mapy(storeCreateDto.getMapy())
@@ -73,6 +92,7 @@ public class StoreService {
                 .openday(storeCreateDto.getOpenDay())
                 .phoneNumber(storeCreateDto.getPhone_number())
                 .storeCategoryList(storeCategories)
+                .ownerEntity(owner.get())
                 .build();
 
 
@@ -88,7 +108,7 @@ public class StoreService {
         }
 
         storeImageRepository.saveAll(storeImagesList);
-        return new ResponseEntity<>(newStoreEntity.getStoreName(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     @Transactional
     public String createStoreAll(List<StoreCreateDto> storeCreateDtoList){

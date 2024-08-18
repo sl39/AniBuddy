@@ -108,11 +108,11 @@ class StoreAddFragment : Fragment() {
             if(category.size == 0){
                 return@setOnClickListener
             }
-            rnAdres +=detailAddress
-            lnmAdres += detailAddress
+
             bundle.putString("rnAdres",rnAdres)
             bundle.putString("lnmAdres",lnmAdres)
             bundle.putString("name",name)
+            bundle.putString("detailAddress", detailAddress)
             bundle.putString("phone_number",phone_number)
             bundle.putStringArrayList("category",category as ArrayList<String>)
             StoreAddTwoFragment.bundle = bundle

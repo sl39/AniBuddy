@@ -11,7 +11,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import com.example.front.data.LocationApiService
+import com.example.front.data.response.LocationResponse
 import com.example.front.databinding.FragmentStoreAddTwoBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -47,6 +55,7 @@ class StoreAddTwoFragment : Fragment() {
         val dayday = mutableListOf<String>()
         val address = bundle.getString("lnmAdres")
         val roadAddress = bundle.getString("rnAdres")
+        val detailAddress = bundle.getString("detailAddress")
         val info = ""
         val storeImageList = mutableListOf<String>()
         val name = bundle.getString("name")
@@ -65,7 +74,7 @@ class StoreAddTwoFragment : Fragment() {
             if(view is androidx.appcompat.widget.AppCompatButton){
                 view.setOnClickListener{
                     val txt = view.text.toString()
-                    if(txt in dayday) {
+                        if(txt in dayday) {
                         view.backgroundTintList =
                             ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
                         dayday.remove(txt)
@@ -75,9 +84,10 @@ class StoreAddTwoFragment : Fragment() {
                         dayday.add(txt)
                     }
 
-                    }
                 }
+            }
         }
+
 
         binding.addStoreButton.setOnClickListener{
             val d = charArrayOf('일','월','화','수','목','금','토')
@@ -126,7 +136,25 @@ class StoreAddTwoFragment : Fragment() {
                     break
                 }
             }
-            Log.d("가게 등록 요소 요소 요소"," openDay : " + openDay + " district : " + district + " address : "+ address + " roadAddress : " + roadAddress + " info : " + info  +" storeImageList :"+ storeImageList.toString() + " name : " + name + " phone_number  : " + phone_number  +  " category : " + category .toString() )
+
+            val api = LocationApiService.create()
+            if(address != null){
+                Log.d("ㅂㅈㄷㄱㅂㅈㄷㄱㅂㅈㄷㄱㄷㅈ","ㅂㄷㅈㄱㅂㅈㄷㄱㅂㅈㄷㄱ")
+                api.getLocation("KakaoAK 5ad4598a787c971bf6290233c6bcbfc0",address).enqueue(object : Callback<LocationResponse> {
+                    override fun onResponse(call: Call<LocationResponse>, response: Response<LocationResponse>) {
+                        Log.d("값이 들어오는지 확인", response.body().toString())
+                    }
+
+                    override fun onFailure(call: Call<LocationResponse>, t: Throwable) {
+                        Log.d(".테스트" , "실패 실패")
+                    }
+                })
+
+            }
+
+
+
+            Log.d("가게 등록 요소 요소 요소"," openDay : " + openDay + " district : " + district + " address : "+ address +" ${detailAddress}"+ " roadAddress : " + roadAddress +" ${detailAddress}"+ " info : " + info  +" storeImageList :"+ storeImageList.toString() + " name : " + name + " phone_number  : " + phone_number  +  " category : " + category .toString() )
         }
 
 
