@@ -48,9 +48,5 @@ public class FollowingController {
     }
     
     // List 클릭하면 가게 상세 페이지로 전환
-    @GetMapping("/Listdetail")
-    public ResponseEntity<StoreDetailDTO> getStoreDetailByStoreId(@RequestParam(value = "id") Integer id) {
-    	StoreDetailDTO storeDetail = followingService.getStoreDetailDTO(id);
-    	return ResponseEntity.ok(storeDetail);
-    }   
+
 }

@@ -163,8 +163,9 @@ class FragmentReviewCategory : Fragment(), ReviewAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(review: MainReviewSimpleResponseDto) {
-//        val intent : Intent = Intent(parentContext, StoreDetailActivity::class.java)
-        Log.d("가게가 뭐가 나올까", review.storeId.toString())
+        val intent : Intent = Intent(parentContext, StoreDetailActivity::class.java)
+        intent.putExtra("STORE_ID",review.storeId)
+        startActivity(intent)
     }
 
     companion object {

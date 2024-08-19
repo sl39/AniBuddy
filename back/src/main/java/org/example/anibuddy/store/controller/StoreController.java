@@ -54,4 +54,9 @@ public class StoreController {
         return storeService.serachLocationCategory(reqeust.getDistrict(),reqeust.getCategory(),reqeust.getMapx(), reqeust.getMapy(), reqeust.getName());
     }
 
+    @GetMapping("/{storeId}")
+    public StoreDetailDTO getStoreById(@PathVariable(value = "storeId") Integer storeId){
+        return storeService.getStoreById(storeId);
+    }
+
 }

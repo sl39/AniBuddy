@@ -61,7 +61,7 @@ class ProfileUpdateActivity : AppCompatActivity() {
         setupAdapters()
         setupListeners()
 
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
+        apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService::class.java)
 
         val petId = getIntent().getIntExtra("petId", -1)
         Log.d("PUA","UpdatepetId? = $petId")

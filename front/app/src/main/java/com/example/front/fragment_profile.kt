@@ -38,7 +38,7 @@ class fragment_profile : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
+        apiService = RetrofitClient.getRetrofitInstance(requireContext()).create(ApiService::class.java)
 
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 

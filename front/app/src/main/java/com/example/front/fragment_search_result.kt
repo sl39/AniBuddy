@@ -1,6 +1,7 @@
 package com.example.front
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
@@ -13,6 +14,7 @@ import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.front.activity.StoreDetailActivity
 
 import com.example.front.data.ApiService
 import com.example.front.data.response.SerachLocationCategoryResponseDto
@@ -157,6 +159,9 @@ class FragmentSearchResult : Fragment(), SearchAdapter.OnItemClickListener {
 
     override fun onItemClick(search: SerachLocationCategoryResponseDto) {
         Log.d("가게가 뭐가 나올까List", "Store 이름: "+ search.storeName + " Store category: " +  search.category + " id " + search.id)
+        val intent = Intent(requireContext(),StoreDetailActivity::class.java)
+        intent.putExtra("STORE_ID",search.id)
+        startActivity(intent)
     }
     private fun fetchApi(api: ApiService, longitude: Double, latitude: Double, category: String,district:List<String>,keyword: String){
         api.serachLocationCategory(longitude,latitude,category,district,keyword).enqueue(object:

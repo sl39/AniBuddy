@@ -43,7 +43,7 @@ class ProfileDetailActivity : AppCompatActivity() {
         bottomNavigationView.selectedItemId = R.id.profile // 초기 선택된 항목 설정
         bottomNavigationView.setOnNavigationItemSelectedListener(ItemSelectedListener())
 
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
+        apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService::class.java)
 
         val petId = getIntent().getIntExtra("petId", -1)
         Log.d("ProfileDetailActivity", "petId from intent: $petId")

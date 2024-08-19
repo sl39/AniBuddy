@@ -24,7 +24,7 @@ class fragment_following_list : Fragment() {
         savedInstanceState: Bundle?
         ): View? {
 
-            apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
+            apiService = RetrofitClient.getRetrofitInstance(requireContext()).create(ApiService::class.java)
 
             val view = inflater.inflate(R.layout.fragment_following_list, container, false)
 

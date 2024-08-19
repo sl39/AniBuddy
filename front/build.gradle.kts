@@ -9,8 +9,17 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+
     }
     dependencies {
         classpath("io.realm:realm-gradle-plugin:10.15.1")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven("https://repository.map.naver.com/archive/maven")
     }
 }

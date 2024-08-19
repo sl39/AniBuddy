@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.global.CustomUserDetails;
 import org.example.anibuddy.owner.OwnerEntity;
 import org.example.anibuddy.owner.OwnerRepository;
-import org.example.anibuddy.store.dto.MainReviewSimpleResponseDto;
-import org.example.anibuddy.store.dto.StoreCreateDto;
-import org.example.anibuddy.store.dto.StoreSearchLocationCategoryResponse;
-import org.example.anibuddy.store.dto.StoreWithDistanceDTO;
+import org.example.anibuddy.store.dto.*;
 import org.example.anibuddy.store.entity.StoreCategory;
 import org.example.anibuddy.store.entity.StoreEntity;
 import org.example.anibuddy.store.entity.StoreImage;
@@ -21,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -166,6 +164,8 @@ public class StoreService {
         Optional<StoreEntity> storeEntity = storeRepository.findByStoreNameAndAddress(storeName, address);
         return storeEntity;
     }
+    
+    
 
     public List<MainReviewSimpleResponseDto> getMainStore(double mapx, double mapy, String category) {
         int categoryId = 0;
@@ -271,5 +271,28 @@ public class StoreService {
             return storeImages.get();
         }
         return storeImg;
+    }
+
+    public StoreDetailDTO getStoreById(Integer storeId) {
+        StoreEntity storeEntity = Optional.ofNullable(storeRepository.findById(storeId).orElseThrow(() -> new UsernameNotFoundException("email not found"))).get();
+        List<String> images = new ArrayList<String>();
+        for(StoreImage image : storeEntity.getStoreImageList()){
+            images.add(image.getImageUrl());
+
+        }
+        StoreDetailDTO storeEntity1 = StoreDetailDTO.builder()
+                .storeImageList(images)
+                .storeName(storeEntity.getStoreName())
+                .storeInfo(storeEntity.getStoreInfo())
+                .mapy(storeEntity.getMapy())
+                .mapx(storeEntity.getMapx())
+                .address(storeEntity.getAddress())
+                .roadaddress(storeEntity.getRoadaddress())
+                .district(storeEntity.getDistrict())
+                .id(storeEntity.getId())
+                .openday(storeEntity.getOpenday())
+                .phoneNumber(storeEntity.getPhoneNumber())
+                .build();
+        return storeEntity1;
     }
 }

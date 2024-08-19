@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
     Optional<StoreEntity> findByStoreNameAndAddress(String storeName, String address);
+    Optional<StoreEntity> findById(Integer id);
 
     List<StoreEntity> findTop10ByOrderByIdDesc();
 

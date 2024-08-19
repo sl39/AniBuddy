@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentManager
 import com.example.front.ApiService
+import com.example.front.FragmentReservationList
 import com.example.front.Permission
 import com.example.front.fragment_home
 import com.example.front.R
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val fragmentManager: FragmentManager = supportFragmentManager
     private val fragmentHome = fragment_home()
-    private val fragmentReservationList = fragment_reservation_list()
+    private val fragmentReservationList = FragmentReservationList()
     private val fragmentFollowingList = fragment_following_list()
     private val fragmentChatList = fragment_chatroom_list()
     private val fragmentProfile = fragment_profile()
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity() {
 
         handleIntent(intent)
 
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
+        apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService::class.java)
     }
 
 

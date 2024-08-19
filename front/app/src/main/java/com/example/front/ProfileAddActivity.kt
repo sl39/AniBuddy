@@ -76,7 +76,7 @@ class ProfileAddActivity : AppCompatActivity() {
         setupAdapters()
         setupListeners()
 
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
+        apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService::class.java)
 
     }
 

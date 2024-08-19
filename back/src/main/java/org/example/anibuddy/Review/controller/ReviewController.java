@@ -2,6 +2,7 @@ package org.example.anibuddy.Review.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.Review.dto.ReviewCreateDto;
+import org.example.anibuddy.Review.dto.ReviewDetailResponseDto;
 import org.example.anibuddy.Review.entity.ReviewEntity;
 import org.example.anibuddy.Review.entity.ReviewTag;
 import org.example.anibuddy.Review.service.ReviewService;
@@ -36,5 +37,11 @@ public class ReviewController {
     public String creatTags(@RequestBody List<String> tags) throws Exception {
         reviewService.saveTags(tags);
         return "test";
+    }
+
+    @GetMapping("/{storeId}")
+    public List<ReviewDetailResponseDto> getReview(@PathVariable Integer storeId) throws Exception {
+        List<ReviewDetailResponseDto> reviews = reviewService.getReviews(storeId);
+        return reviews;
     }
 }

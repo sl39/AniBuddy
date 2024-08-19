@@ -19,7 +19,7 @@ class ToggleTestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.toggletest)
 
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
+        apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService::class.java)
 
         userId = intent.getIntExtra("userId", -1)
         storeId = intent.getIntExtra("storeId", -1)
