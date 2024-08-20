@@ -128,7 +128,6 @@ class ReservationActivity : AppCompatActivity() {
 
             lifecycleScope.launch {
                 try {
-                    RetrofitService.init(this@ReservationActivity)
                     val response = RetrofitService.reservationService(this@ReservationActivity).createReservation(reservationRequest)
                     Log.d("API Response", response.toString())
 

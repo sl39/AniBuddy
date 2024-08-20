@@ -35,8 +35,7 @@ class StoreDetailActivity : AppCompatActivity() {
     private lateinit var apiService: ApiService
     val context = this@StoreDetailActivity
 
-    // 이거 이유 모르겠음
-    private val followedStores = mutableListOf<Int>() // 팔로우한 매장 ID 목록
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +74,7 @@ class StoreDetailActivity : AppCompatActivity() {
                 val intent = Intent(this, ReservationActivity::class.java)
                 intent.putExtra("storePhoneNumber", phoneNumber) // 전화번호를 Intent에 추가
                 intent.putExtra("storeName", storeName) // 매장 이름을 Intent에 추가
+                intent.putExtra("storeId",storeId)
                 startActivity(intent) // ReservationActivity 시작
             } ?: run {
                 Toast.makeText(this, "전화번호를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
@@ -229,7 +229,8 @@ class StoreDetailActivity : AppCompatActivity() {
     private fun fetchStoreDetails(storeId: Int) {
         lifecycleScope.launch {
             try {
-                val response = RetrofitService.storeService.getStoreInfo(storeId)
+                val api = RetrofitService.storeService(this@StoreDetailActivity)
+                val response = api.getStoreInfo(storeId)
                 if (response.isSuccessful) {
                     val store = response.body()
                     if (store != null) {

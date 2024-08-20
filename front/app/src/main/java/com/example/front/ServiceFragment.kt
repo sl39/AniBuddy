@@ -66,7 +66,7 @@ class ServiceFragment : Fragment() {
     }
 
     private fun fetchStoreInfo(storeId: Int) {
-        val storeApi = RetrofitService.storeService
+        val storeApi = RetrofitService.storeService(requireContext())
 
         viewLifecycleOwner.lifecycleScope.launch {
             try {

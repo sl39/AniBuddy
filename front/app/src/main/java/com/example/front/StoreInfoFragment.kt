@@ -78,7 +78,8 @@ class StoreInfoFragment : Fragment(), OnMapReadyCallback {
     private fun fetchStoreInfo(storeId: Int) {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                val response: Response<Store> = RetrofitService.storeService.getStoreInfo(storeId)
+                val api = RetrofitService.storeService(requireContext())
+                val response: Response<Store> = api.getStoreInfo(storeId)
                 if (response.isSuccessful) {
                     response.body()?.let { store ->
                         updateUI(store)
@@ -109,7 +110,7 @@ class StoreInfoFragment : Fragment(), OnMapReadyCallback {
         view?.findViewById<TextView>(R.id.storeOpenDayTextView)?.text = store.openday
         view?.findViewById<TextView>(R.id.storeAddressTextView)?.text = store.roadaddress
 
-        val storeLocation = LatLng(store.mapx ?: 0.0, store.mapy ?: 0.0)
+        val storeLocation = LatLng(store.mapy ?: 0.0,store.mapx ?: 0.0)
         addMarker(storeLocation)
         moveCamera(storeLocation)
     }

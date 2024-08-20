@@ -34,8 +34,10 @@ object RetrofitService {
         retrofit.create(ReviewApi::class.java)
     }
 
-    val storeService: StoreApi by lazy {
-        retrofit.create(StoreApi::class.java)
+
+    fun storeService(context: Context): StoreApi {
+        init(context)
+        return retrofit.create(StoreApi::class.java)
     }
 
     fun reservationService(context: Context): ReservationService {
