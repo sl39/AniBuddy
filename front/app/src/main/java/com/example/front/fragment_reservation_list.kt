@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.replace
+import com.example.front.databinding.FragmentReservationBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +22,9 @@ class fragment_reservation_list : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var binding : FragmentReservationBinding
+    private var fragmentReservationList =FragmentReservationList()
+    private var fragmentReservationCompleteList = FragmentReservationCompleteList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +38,17 @@ class fragment_reservation_list : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        binding = FragmentReservationBinding.inflate(inflater,container,false)
+        binding.reservationIng.setOnClickListener {
+            childFragmentManager.beginTransaction().replace(R.id.fragment_res,fragmentReservationList).commitAllowingStateLoss()
+        }
+        binding.reservationComplete.setOnClickListener {
+            childFragmentManager.beginTransaction().replace(R.id.fragment_res,fragmentReservationCompleteList).commitAllowingStateLoss()
+
+        }
+        childFragmentManager.beginTransaction().replace(R.id.fragment_res,fragmentReservationList).commitAllowingStateLoss()
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reservation_list, container, false)
+        return binding.root
     }
 
     companion object {

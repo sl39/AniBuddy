@@ -1,11 +1,14 @@
 package org.example.anibuddy.reservation.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.example.anibuddy.Review.dto.ReviewDetailResponseDto;
 import org.example.anibuddy.global.CustomUserDetails;
 import org.example.anibuddy.reservation.dto.ReservationCreateRequestDto;
+import org.example.anibuddy.reservation.dto.ReservationGetAllResponseDto;
 import org.example.anibuddy.reservation.dto.ReservationGetResponseDto;
+import org.example.anibuddy.reservation.dto.ReservationUpdateRequestDto;
 import org.example.anibuddy.reservation.entity.ReservationEntity;
 import org.example.anibuddy.reservation.repository.ReservationRepository;
 import org.example.anibuddy.store.entity.StoreEntity;
@@ -19,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,7 +39,6 @@ public class ReservationService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Integer id = userDetails.getUserId();
-        System.out.println(id);
         Optional<StoreEntity> store = storeRepository.findById(storeId);
         Optional<UserEntity> user = userRepository.findById(id);
         if(user.isEmpty()){
@@ -74,9 +78,75 @@ public class ReservationService {
                 .reservationDateTime(reservation.getReservationDate().toString())
                 .storeLocation(storeEntity.getAddress())
                 .storeName(storeEntity.getStoreName())
+                .reservationId(reservationId)
+                .storePhoneNumber(storeEntity.getPhoneNumber())
+                .storeId(storeEntity.getId())
                 .build();
 
         return responseDto;
 
+    }
+
+    @Transactional
+    public Integer updateReservation(ReservationUpdateRequestDto reservation) throws Exception {
+        Integer storeId = reservation.getStoreId();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Integer id = userDetails.getUserId();
+        System.out.println(id);
+        Optional<StoreEntity> store = storeRepository.findById(storeId);
+        Optional<UserEntity> user = userRepository.findById(id);
+        Optional<ReservationEntity> reservationEntity = reservationRepository.findById(reservation.getReservationId());
+        if(user.isEmpty()){
+            throw new UsernameNotFoundException("User not found");
+        }
+        if (store.isEmpty()) {
+            throw new Exception("스토어가 존재하지 않습니다");
+        }
+        ReservationEntity resEntity = reservationEntity.get();
+        resEntity.setReservationDate(LocalDateTime.parse(reservation.getReservationTime()));
+        resEntity.setInfo(reservation.getInfo());
+        reservationRepository.save(resEntity);
+
+        return resEntity.getId();
+    }
+
+    public void deleteReservationDetail(Integer reservationId) throws Exception {
+        Optional<ReservationEntity> reservationEntity =  reservationRepository.findById(reservationId);
+        if(reservationEntity.isEmpty()){
+            throw new Exception("예약이 존재하지 않습니다");
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Integer id = userDetails.getUserId();
+        Optional<UserEntity> user = userRepository.findById(id);
+        if(user.isEmpty()){
+            throw new UsernameNotFoundException("User not found");
+        }
+        reservationRepository.delete(reservationEntity.get());
+    }
+
+    public List<ReservationGetAllResponseDto> getAllReservation() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Integer id = userDetails.getUserId();
+        Optional<UserEntity> user = userRepository.findById(id);
+        if(user.isEmpty()){
+            throw new UsernameNotFoundException("User not found");
+        }
+        List<ReservationGetAllResponseDto> responseDtos = new ArrayList<>();
+        List<ReservationEntity> reservationEntities = reservationRepository.findAllByUserEntity(user.get());
+        for(ReservationEntity reservationEntity : reservationEntities){
+            ReservationGetAllResponseDto res = ReservationGetAllResponseDto.builder()
+                    .info(reservationEntity.getInfo())
+                    .id(reservationEntity.getId())
+                    .reservationTime(reservationEntity.getReservationDate().toString())
+                    .storeId(reservationEntity.getStoreEntity().getId())
+                    .storeName(reservationEntity.getStoreEntity().getStoreName())
+                    .storeAddress(reservationEntity.getStoreEntity().getAddress())
+                    .build();
+            responseDtos.add(res);
+        }
+        return responseDtos;
     }
 }

@@ -15,5 +15,7 @@ public class ReservationGetResponseDto {
     private String storeName;
     private String storeLocation;
     private String info;
-
+    private Integer reservationId;
+    private String storePhoneNumber;
+    private Integer storeId;
 }

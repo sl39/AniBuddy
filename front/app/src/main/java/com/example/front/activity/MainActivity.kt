@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val fragmentManager: FragmentManager = supportFragmentManager
     private val fragmentHome = fragment_home()
-    private val fragmentReservationList = FragmentReservationList()
+    private val fragmentReservationList = fragment_reservation_list()
     private val fragmentFollowingList = fragment_following_list()
     private val fragmentChatList = fragment_chatroom_list()
     private val fragmentProfile = fragment_profile()
