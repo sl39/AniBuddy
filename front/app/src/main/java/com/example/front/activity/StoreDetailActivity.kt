@@ -33,7 +33,7 @@ class StoreDetailActivity : AppCompatActivity() {
     private var userId: Int = -1
     private lateinit var storeCategory: String
     private lateinit var apiService: ApiService
-    val context = this@StoreDetailActivity
+    private val context = this@StoreDetailActivity
 
 
 
