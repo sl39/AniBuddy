@@ -40,13 +40,21 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/shop" />
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:backgroundTint="#FEF7FF"
-                android:src="@drawable/anibuddy_logo" />
+<!--            <ImageButton-->
+<!--                android:id="@+id/imageButton"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:backgroundTint="#FEF7FF"-->
+<!--                android:src="@drawable/anibuddy_logo" />-->
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="73dp"
+                android:layout_marginTop="16dp"
+                android:background="#EFFFE5"
+                android:id="@+id/reservationInfo"
+                android:hint="요구사항" />
+
 
             <Button
                 android:id="@+id/dateTimePickerButton"

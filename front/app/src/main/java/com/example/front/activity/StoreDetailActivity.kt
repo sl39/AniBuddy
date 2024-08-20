@@ -515,9 +515,12 @@ class StoreDetailActivity : AppCompatActivity() {
                 val phoneNumber = it.getStorePhoneNumber() // 전화번호 가져오기
                 val storeName = it.getStoreName() // 매장 이름 가져오기
 
-                val intent = Intent(this, ReservationActivity::class.java)
+                val intent = Intent(this@StoreDetailActivity, ReservationActivity::class.java)
                 intent.putExtra("storePhoneNumber", phoneNumber) // 전화번호를 Intent에 추가
                 intent.putExtra("storeName", storeName) // 매장 이름을 Intent에 추가
+                Log.d("123123가게이르밍르ㅏㅣ믄ㅇ리ㅏㅡㅁ낭르ㅏㅣ으",storeId.toString())
+
+                intent.putExtra("storeId",storeId)
                 startActivity(intent) // ReservationActivity 시작
             } ?: run {
                 Toast.makeText(this, "전화번호를 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()

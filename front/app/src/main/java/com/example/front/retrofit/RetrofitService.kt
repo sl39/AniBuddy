@@ -22,6 +22,7 @@ object RetrofitService {
     }
 
     private val retrofit: Retrofit by lazy {
+
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -37,7 +38,9 @@ object RetrofitService {
         retrofit.create(StoreApi::class.java)
     }
 
-    val reservationService: ReservationService by lazy {
-        retrofit.create(ReservationService::class.java)
+    fun reservationService(context: Context): ReservationService {
+        init(context)
+        return retrofit.create(ReservationService::class.java)
     }
+
 }
