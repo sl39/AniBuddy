@@ -70,18 +70,18 @@ public class FollowingService {
 	            })
 	            .collect(Collectors.toList());
 	    }
-
-public StoreDetailDTO getStoreDetailDTO(Integer id) {
-	StoreEntity storeEntity = storeRepository.findById(id)
-	.orElseThrow(() -> new IllegalArgumentException("해당 가게가 없습니다!"));
-	
-	return convertToDetailDTO(storeEntity);
-	}
-
-private StoreDetailDTO convertToDetailDTO(StoreEntity store) {
-	StoreDetailDTO storeDetailDTO = new StoreDetailDTO(store.getStoreName(), store.getAddress(), store.getRoadaddress(), store.getStoreInfo(), store.getPhoneNumber(), store.getOpenday(), store.getDistrict(), store.getStoreImageList(), store.getMapx(), store.getMapy(), store.getId());
-	return storeDetailDTO;
-	}
+//
+//public StoreDetailDTO getStoreDetailDTO(Integer id) {
+//	StoreEntity storeEntity = storeRepository.findById(id)
+//	.orElseThrow(() -> new IllegalArgumentException("해당 가게가 없습니다!"));
+//	
+//	return convertToDetailDTO(storeEntity);
+//	}
+//
+//private StoreDetailDTO convertToDetailDTO(StoreEntity store) {
+//	StoreDetailDTO storeDetailDTO = new StoreDetailDTO(store.getStoreName(), store.getAddress(), store.getRoadaddress(), store.getStoreInfo(), store.getPhoneNumber(), store.getOpenday(), store.getDistrict(), store.getStoreImageList(), store.getMapx(), store.getMapy(), store.getId());
+//	return storeDetailDTO;
+//	}
 }
 
 

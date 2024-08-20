@@ -58,7 +58,7 @@
         <activity
             android:name=".ProfileAddActivity"
             android:exported="false"
-            android:label="Profile Add Activity"
+            android:label="ProfileAddActivity"
             android:parentActivityName=".fragment_profile">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -89,19 +89,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".fragment_profile" />
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
-        <activity
-            android:name=".ToggleTestActivity"
-            android:exported="false"
-            android:label="ToggleTestActivity"
-            android:parentActivityName=".fragment_following_list">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".fragment_following_list" />
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->

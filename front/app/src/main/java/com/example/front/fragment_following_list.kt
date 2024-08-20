@@ -44,10 +44,10 @@ class fragment_following_list : Fragment() {
             val userId = arguments?.getInt("userId")
 
             followAdapter = FollowingAdapter(followLists) { follow ->
-                Log.d("storeId?", "storeId = ${follow.id}")
+                Log.d("STORE_ID?", "STORE_ID = ${follow.id}")
                 Log.d("userId?", "userId = ${userId}")
                 val intent = Intent(context, StoreDetailActivity::class.java).apply {
-                putExtra("storeId", follow.id)
+                putExtra("STORE_ID", follow.id)
                 putExtra("userId", userId)
             }
             startActivity(intent)
