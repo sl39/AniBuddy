@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.front.activity.StoreDetailActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,6 +20,7 @@ class fragment_following_list : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var followAdapter: FollowingAdapter
     private var followLists: List<StoreFollowDTO> = emptyList()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,7 +33,10 @@ class fragment_following_list : Fragment() {
             recyclerView = view.findViewById(R.id.following_recyclerview)
 
             recyclerView.layoutManager = LinearLayoutManager(context)
-//
+
+
+
+
 //            val userId: Int? = arguments?.getInt("userId")
 //
 //            Log.d("FollowingFragment", "Received userId: $userId")
@@ -41,7 +46,7 @@ class fragment_following_list : Fragment() {
             followAdapter = FollowingAdapter(followLists) { follow ->
                 Log.d("storeId?", "storeId = ${follow.id}")
                 Log.d("userId?", "userId = ${userId}")
-                val intent = Intent(context, ToggleTestActivity::class.java).apply {
+                val intent = Intent(context, StoreDetailActivity::class.java).apply {
                 putExtra("storeId", follow.id)
                 putExtra("userId", userId)
             }
@@ -71,13 +76,14 @@ class fragment_following_list : Fragment() {
                         followLists = response.body() ?: emptyList()
                         followAdapter.setFollowList(followLists)
 
-//                    followAdapter = FollowingAdapter(followLists) { followLists ->
-//                        val intent = Intent(context, ProfileDetailActivity::class.java).apply {
-//                            putExtra("storeId", followLists.id)
-//                        }
-//                        startActivity(intent)
-//                    }
-//                    recyclerView.adapter = followAdapter
+                    followAdapter = FollowingAdapter(followLists) { followLists ->
+                        val intent = Intent(context, StoreDetailActivity::class.java).apply {
+                            putExtra("storeId", followLists.id)
+                            Log.d("storeId","storeId= $id")
+                        }
+                        startActivity(intent)
+                    }
+                    recyclerView.adapter = followAdapter
                 } else {
                     Log.e(
                         "FollowingFragment",

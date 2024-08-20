@@ -56,6 +56,9 @@ public interface ApiService {
 
     // 화면에서 FollowingEntitiy에 추가/삭제 Toggle 작동 API
     @POST("/api/Following/toggle")
-    Call<Void> toggleFollowing(@Query("userId") Integer userId, @Query("storeId") Integer storeId);
+    Call<Void> toggleFollowing(@Query("userId") Integer userId, @Query("storeId") Integer storeId, @Query("storeCategory") String storeCategory);
 
+    // 팔로우 했는지 안했는지 icon으로 확인
+    @GET("api/Following/Icon")
+    Call<Boolean> checkFollowing(@Query("userId") Integer userId, @Query("storeId") Integer storeId, @Query("storeCategory") String storeCategory);
 }

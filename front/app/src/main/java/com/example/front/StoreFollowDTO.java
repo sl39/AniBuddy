@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class StoreFollowDTO {
-    private String storeName, address, roadaddress;
+    private String storeName, address, storeCategory;
 
     private List<StoreImage> storeImageList;
 
@@ -14,10 +14,10 @@ public class StoreFollowDTO {
     public StoreFollowDTO() {
     }
 
-    public StoreFollowDTO(String storeName, String address, String roadaddress, List<StoreImage> storeImageList, Integer id) {
+    public StoreFollowDTO(String storeName, String address, String storeCategory, List<StoreImage> storeImageList, Integer id) {
         this.storeName = storeName;
         this.address = address;
-        this.roadaddress = roadaddress;
+        this.storeCategory = storeCategory;
         this.storeImageList = storeImageList;
         this.id = id;
 
@@ -38,12 +38,12 @@ public class StoreFollowDTO {
             this.address = address;
         }
 
-        public String getRoadaddress () {
-            return roadaddress;
+        public String getStoreCategory () {
+            return storeCategory;
         }
 
-        public void setRoadaddress (String roadaddress) {
-            this.roadaddress = roadaddress;
+        public void setStoreCategory (String storeCategory) {
+            this.storeCategory = storeCategory;
         }
 
         public List<StoreImage> getStoreImageList () {

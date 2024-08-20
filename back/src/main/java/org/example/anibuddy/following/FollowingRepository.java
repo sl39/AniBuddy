@@ -13,9 +13,13 @@ public interface FollowingRepository extends JpaRepository <FollowingEntity, Lon
 	
 	 FollowingEntity findByUserEntityAndStoreEntity(UserEntity userEntity, StoreEntity storeEntity);
 	 
-	 FollowingEntity findByUserEntityAndStoreEntityAndStoreRoadaddress(UserEntity userEntity, StoreEntity storeEntity, String storeRoaddress);
+	 FollowingEntity findByUserEntityAndStoreEntityAndStoreCategory(UserEntity userEntity, StoreEntity storeEntity, String storeCategory);
 	    
 	 void deleteByUserEntityAndStoreEntity(UserEntity userEntity, StoreEntity storeEntity);
+
+	boolean existsByUserEntityAndStoreEntityAndStoreCategory(UserEntity userEntity, StoreEntity storeEntity, String storeCategory);
+
+
 }
 	
 
