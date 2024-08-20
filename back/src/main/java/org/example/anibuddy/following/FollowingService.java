@@ -1,11 +1,13 @@
 package org.example.anibuddy.following;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.example.anibuddy.store.dto.StoreDetailDTO;
 import org.example.anibuddy.store.dto.StoreFollowDTO;
 import org.example.anibuddy.store.entity.StoreEntity;
+import org.example.anibuddy.store.entity.StoreImage;
 import org.example.anibuddy.store.repository.StoreRepository;
 import org.example.anibuddy.user.UserEntity;
 import org.example.anibuddy.user.UserRepository;
@@ -79,7 +81,11 @@ public StoreDetailDTO getStoreDetailDTO(Integer id) {
 	}
 
 private StoreDetailDTO convertToDetailDTO(StoreEntity store) {
-	StoreDetailDTO storeDetailDTO = new StoreDetailDTO(store.getStoreName(), store.getAddress(), store.getRoadaddress(), store.getStoreInfo(), store.getPhoneNumber(), store.getOpenday(), store.getDistrict(), store.getStoreImageList(), store.getMapx(), store.getMapy(), store.getId());
+	List<String> images = new ArrayList<>();
+	for(StoreImage img: store.getStoreImageList()){
+		images.add(img.getImageUrl());
+	}
+	StoreDetailDTO storeDetailDTO = new StoreDetailDTO(store.getStoreName(), store.getAddress(), store.getRoadaddress(), store.getStoreInfo(), store.getPhoneNumber(), store.getOpenday(), store.getDistrict(), images, store.getMapx(), store.getMapy(), store.getId());
 	return storeDetailDTO;
 	}
 }

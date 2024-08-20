@@ -41,15 +41,22 @@
                 android:text="매장 위치"
                 android:textSize="16sp"
                 android:textStyle="bold" />
-
-
-            <ImageButton
-                android:id="@+id/imageButton"
+            <TextView
+                android:id="@+id/reservationInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:backgroundTint="#FEF7FF"
-                android:src="@drawable/anibuddy_logo" />
+                android:text="특이 사항"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+<!--            <ImageButton-->
+<!--                android:id="@+id/imageButton"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center_horizontal"-->
+<!--                android:backgroundTint="#FEF7FF"-->
+<!--                android:src="@drawable/anibuddy_logo" />-->
 
             <TextView
                 android:id="@+id/reservationTimeTextView"

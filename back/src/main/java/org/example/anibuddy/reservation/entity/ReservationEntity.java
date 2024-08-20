@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 public class ReservationEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @JsonBackReference

@@ -3,14 +3,19 @@ package com.example.front
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.front.activity.MainActivity
+import com.example.front.retrofit.RetrofitService
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 import java.util.Locale
 
 class ReservationCompleteActivity : AppCompatActivity() {
@@ -19,32 +24,48 @@ class ReservationCompleteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservation_complete)
+        val resvationId = intent.getIntExtra("resvationId", -1)
+        var reservationDate : String? = null
+        var storeName : String = "매장 이름 없음"
+        var storeLocation : String = "매장 위치 없음"
+        var info : String = "특이사항 없음"
+        val api = RetrofitService.reservationService(this)
+        lifecycleScope.launch {
+            try{
+                val response = api.getReservations(resvationId)
+                if (response.code() == 200){
+                    val data = response.body()
+                    if(data != null){
+                        reservationDate = data.reservationDateTime
+                        storeName = data.storeName
+                        storeLocation = data.storeLocation
+                        info = data.info
+                        // 예약 시간 TextView 설정
+                        val reservationTimeTextView = findViewById<TextView>(R.id.reservationTimeTextView)
+                        reservationTimeTextView.text = "예약시간: ${reservationDate.toString()}"
+
+                        // 가져온 데이터 설정
+                        findViewById<TextView>(R.id.storeNameTextView).text = storeName
+                        findViewById<TextView>(R.id.storeLocationTextView).text = storeLocation
+                        findViewById<TextView>(R.id.reservationInfo).text = info
+
+                    }
+                } else {
+                    Log.d("ㅋㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ", response.code().toString())
+                }
+
+            } catch(e: Exception){
+                Log.d("통신안됨",e.message.toString())
+            }
+        }
 
         // Intent로부터 예약 정보 가져오기
-        val selectedYear = intent.getIntExtra("selectedYear", 0)
-        val selectedMonth = intent.getIntExtra("selectedMonth", 0)
-        val selectedDay = intent.getIntExtra("selectedDay", 0)
-        val selectedHour = intent.getIntExtra("selectedHour", 0)
-        val selectedMinute = intent.getIntExtra("selectedMinute", 0)
 
-        val storeName = intent.getStringExtra("storeName")
-        val storeLocation = intent.getStringExtra("storeLocation")
 
-        // 예약 시간 TextView 설정
-        val reservationTimeTextView = findViewById<TextView>(R.id.reservationTimeTextView)
-        reservationTimeTextView.text = "예약시간: $selectedYear-${selectedMonth + 1}-$selectedDay $selectedHour:$selectedMinute"
 
-        // 이미지 버튼 설정
-        val imageButton = findViewById<ImageButton>(R.id.imageButton)
-        val selectedImageResId = intent.getIntExtra("selectedImageResId", R.drawable.anibuddy_logo)
-        imageButton.setImageResource(selectedImageResId)
 
-        val storeNameTextView = findViewById<TextView>(R.id.storeNameTextView)
-        val storeLocationTextView = findViewById<TextView>(R.id.storeLocationTextView)
 
-        // 가져온 데이터 설정
-        findViewById<TextView>(R.id.storeNameTextView).text = storeName ?: "매장 이름 없음"
-        findViewById<TextView>(R.id.storeLocationTextView).text = storeLocation ?: "매장 위치 없음"
+
 
         // 버튼 클릭 리스너 설정
         findViewById<Button>(R.id.backToHomeButton).setOnClickListener {

@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ReservationCreateResponseDto {
-    Boolean success;
-    String message;
+    private Integer resvationId;
+
 }
