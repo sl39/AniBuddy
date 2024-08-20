@@ -31,9 +31,9 @@ class StoreDetailActivity : AppCompatActivity() {
     private lateinit var heartIcon : ImageView
     private var isFollowing = false // 팔로우 상태 추가
     private var userId: Int = -1
-    private lateinit var storeCategory: String
     private lateinit var apiService: ApiService
     private val context = this@StoreDetailActivity
+    private var storeCategory = "beauty"
 
 
 
@@ -44,9 +44,10 @@ class StoreDetailActivity : AppCompatActivity() {
 
         // Intent로부터 매장 ID 가져오기
         storeId = intent.getIntExtra("STORE_ID", -1)
+        storeCategory = intent.getStringExtra("category").toString()
         Log.d("storeIDInS.D.A","storeId=$storeId")
         userId = 1
-        storeCategory = "3"
+        Log.d("카테코리", storeCategory)
 
         // ViewPager와 TabLayout 설정
         setupViewPager()

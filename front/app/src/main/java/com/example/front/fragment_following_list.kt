@@ -78,7 +78,8 @@ class fragment_following_list : Fragment() {
 
                     followAdapter = FollowingAdapter(followLists) { followLists ->
                         val intent = Intent(context, StoreDetailActivity::class.java).apply {
-                            putExtra("storeId", followLists.id)
+                            putExtra("STORE_ID", followLists.id)
+                            putExtra("category",followLists.storeCategory)
                             Log.d("storeId","storeId= $id")
                         }
                         startActivity(intent)

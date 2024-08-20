@@ -161,6 +161,7 @@ class FragmentSearchResult : Fragment(), SearchAdapter.OnItemClickListener {
         Log.d("가게가 뭐가 나올까List", "Store 이름: "+ search.storeName + " Store category: " +  search.category + " id " + search.id)
         val intent = Intent(requireContext(),StoreDetailActivity::class.java)
         intent.putExtra("STORE_ID",search.id)
+        intent.putExtra("category",search.category)
         startActivity(intent)
     }
     private fun fetchApi(api: ApiService, longitude: Double, latitude: Double, category: String,district:List<String>,keyword: String){
