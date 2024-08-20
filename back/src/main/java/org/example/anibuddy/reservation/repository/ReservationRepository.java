@@ -1,6 +1,6 @@
 package org.example.anibuddy.Reservation.repository;
 
-import org.example.anibuddy.Reservation.entity.ReservationEntity;
+import org.example.anibuddy.Reservation.ReservationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
