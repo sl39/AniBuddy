@@ -1,5 +1,7 @@
 package com.example.front
 
+import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -9,21 +11,25 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import java.util.Calendar
-import android.Manifest
-import android.app.Activity
-import android.util.Log
-import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
-import com.example.front.retrofit.RetrofitService
-import kotlinx.coroutines.launch
 import com.example.front.retrofit.ReservationRequest
 import com.example.front.retrofit.ReservationResponse
+import com.example.front.retrofit.RetrofitService
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Calendar
+import java.util.TimeZone
+
 
 class ReservationActivity : AppCompatActivity() {
 
@@ -34,6 +40,7 @@ class ReservationActivity : AppCompatActivity() {
     private lateinit var storeNameText: TextView // TextView 추가
     private lateinit var storeName: String
     private lateinit var storeAddress: String
+    private lateinit var storeInfo: TextView
     private var selectedYear = 0
     private var selectedMonth = 0
     private var selectedDay = 0
@@ -41,8 +48,9 @@ class ReservationActivity : AppCompatActivity() {
     private var selectedMinute = 0
     private var selectedImageUri: Uri? = null
     private var storePhoneNumber: String? = null
-    private lateinit var storeId: String // 매장 ID 추가
+    private var storeId: Int = -1 // 매장 ID 추가
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservation)
@@ -52,20 +60,22 @@ class ReservationActivity : AppCompatActivity() {
         storeName = intent.getStringExtra("storeName") ?: ""
         storePhoneNumber = intent.getStringExtra("storePhoneNumber") ?: ""
         storeAddress = intent.getStringExtra("storeAddress") ?: ""
-        storeId = intent.getStringExtra("storeId") ?: ""
+        storeId = intent.getIntExtra("storeId", -1)
+
 
         // UI 요소 초기화
         dateTimePickerButton = findViewById(R.id.dateTimePickerButton)
         reserveButton = findViewById(R.id.reserveButton)
         callButton = findViewById(R.id.callButton)
-        imageButton = findViewById(R.id.imageButton)
+        storeInfo = findViewById(R.id.reservationInfo)
         storeNameText = findViewById(R.id.storeNameText) // TextView 초기화
+//        imageButton = findViewById(R.id.image)
 
         // 매장이름 설정
         storeNameText.text = storeName
 
 
-    dateTimePickerButton.setOnClickListener {
+        dateTimePickerButton.setOnClickListener {
             showDateTimePickerDialog()
         }
 
@@ -83,11 +93,12 @@ class ReservationActivity : AppCompatActivity() {
             }
         }
 
-        imageButton.setOnClickListener {
-            showImageSelectionDialog()
-        }
+//        imageButton.setOnClickListener {
+//            showImageSelectionDialog()
+//        }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun reserveButtonClicked() {
         // 날짜 및 시간 선택 여부 확인
         if (selectedYear != 0 && selectedMonth != 0 && selectedDay != 0 && selectedHour != 0 && selectedMinute != 0) {
@@ -103,22 +114,22 @@ class ReservationActivity : AppCompatActivity() {
                 return
             }
 
+            val date = LocalDateTime.ofInstant(selectedDate.toInstant(),selectedDate.timeZone.toZoneId())
+            val info = storeInfo.text.toString()
+
             // 예약 정보 생성
             val reservationRequest = ReservationRequest(
-                year = selectedYear,
-                month = selectedMonth + 1, // API에 맞게 월을 1부터 시작하도록 설정
-                day = selectedDay,
-                hour = selectedHour,
-                minute = selectedMinute,
-                phoneNumber = storePhoneNumber ?: "",
-                storeId = storeId
+                date.toString(),
+                info,
+                storeId
             )
 
             Log.d("ReservationRequest", reservationRequest.toString())
 
             lifecycleScope.launch {
                 try {
-                    val response = RetrofitService.reservationService.createReservation(reservationRequest)
+                    RetrofitService.init(this@ReservationActivity)
+                    val response = RetrofitService.reservationService(this@ReservationActivity).createReservation(reservationRequest)
                     Log.d("API Response", response.toString())
 
                     if (response.isSuccessful) {
@@ -127,7 +138,7 @@ class ReservationActivity : AppCompatActivity() {
                             handleReservationResponse(responseBody)
 
                             // 예약 완료 페이지로 이동
-                            val intent = Intent(this@ReservationActivity, ReservationCompleteActivity::class.java).apply {
+                            val completIntent = Intent(this@ReservationActivity, ReservationCompleteActivity::class.java).apply {
                                 putExtra("storeName", storeName)  // 매장 이름 추가
                                 putExtra("storeAddress", storeAddress)  // 매장 주소 추가
                                 putExtra("storePhoneNumber", storePhoneNumber)  // 전화번호 추가
@@ -139,7 +150,7 @@ class ReservationActivity : AppCompatActivity() {
                                 putExtra("reservationTime", selectedDate.timeInMillis) // 예약 시간 추가
                                 putExtra("selectedImageResId", R.drawable.anibuddy_logo) // 이미지 리소스 추가
                             }
-                            startActivity(intent)
+                            startActivity(completIntent)
                             finish() // 현재 액티비티 종료
                         } else {
                             Log.e("API Response Error", "Response Body is null")
@@ -177,23 +188,23 @@ class ReservationActivity : AppCompatActivity() {
         }
     }
 
-    private fun showImageSelectionDialog() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        imagePickerLauncher.launch(intent)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (checkSelfPermission(Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.MANAGE_EXTERNAL_STORAGE), REQUEST_CODE_GALLERY)
-            } else {
-                openGallery()
-            }
-        } else {
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_CODE_GALLERY)
-            } else {
-                openGallery()
-            }
-        }
-    }
+//    private fun showImageSelectionDialog() {
+//        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+//        imagePickerLauncher.launch(intent)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//            if (checkSelfPermission(Manifest.permission.MANAGE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//                requestPermissions(arrayOf(Manifest.permission.MANAGE_EXTERNAL_STORAGE), REQUEST_CODE_GALLERY)
+//            } else {
+//                openGallery()
+//            }
+//        } else {
+//            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), REQUEST_CODE_GALLERY)
+//            } else {
+//                openGallery()
+//            }
+//        }
+//    }
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)

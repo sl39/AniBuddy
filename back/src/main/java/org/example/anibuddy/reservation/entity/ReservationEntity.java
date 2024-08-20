@@ -1,17 +1,17 @@
-package org.example.anibuddy.Reservation.entity;
+package org.example.anibuddy.reservation.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.anibuddy.store.entity.StoreEntity;
+import org.example.anibuddy.user.UserEntity;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -19,37 +19,24 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "unique_reservation",
-                        columnNames = {"phone_number", "reservation_year", "reservation_month", "reservation_day", "reservation_hour", "reservation_minute"}
-                )
-        }
-)
 public class ReservationEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 예약 ID
+    private int id;
 
-    @Column(name = "phone_number", nullable = false)
-    private String phoneNumber; // 전화번호
+    @JsonBackReference
+    @ManyToOne
+    private UserEntity userEntity;
 
-    @Column(name = "reservation_year", nullable = false)
-    private int year; // 예약 연도
+    @JsonBackReference
+    @ManyToOne
+    private StoreEntity storeEntity;
 
-    @Column(name = "reservation_month", nullable = false)
-    private int month; // 예약 월
+    @Column
+    private LocalDateTime reservationDate;
 
-    @Column(name = "reservation_day", nullable = false)
-    private int day; // 예약 일
-
-    @Column(name = "reservation_hour", nullable = false)
-    private int hour; // 예약 시
-
-    @Column(name = "reservation_minute", nullable = false)
-    private int minute; // 예약 분
+    @Column(columnDefinition = "TEXT")
+    private String info;
     }
 
 

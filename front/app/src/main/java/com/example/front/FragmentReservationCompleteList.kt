@@ -1,11 +1,13 @@
 package com.example.front
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +22,7 @@ class FragmentReservationCompleteList : Fragment() {
     private var reservationList: List<Reservation> = listOf()
     private lateinit var reservationAdapter: ReservationAdapter
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,18 +48,24 @@ class FragmentReservationCompleteList : Fragment() {
         return view
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchCompletedReservations() {
         lifecycleScope.launch {
             try {
-                val response = RetrofitService.reservationService.getReservations() // 예약 목록 가져오기
+
+                val response = RetrofitService.reservationService(requireContext()).getReservations() // 예약 목록 가져오기
                 if (response.isSuccessful) {
                     response.body()?.let { allReservations ->
                         val currentTime = Calendar.getInstance() // 현재 시간 가져오기
 
                         // 예약일자가 지난 예약만 필터링
                         reservationList = allReservations.filter { reservation ->
+                            val date = reservation.reservationTime
+
+
                             val reservationTime = Calendar.getInstance().apply {
-                                set(reservation.year, reservation.month - 1, reservation.day, reservation.hour, reservation.minute) // 월은 0부터 시작
+                                set(date.year,date.monthValue,date.dayOfMonth,date.hour,date.minute) // 월은 0부터 시작
+
                             }
                             // 예약 시간이 현재 시간보다 지났는지 비교
                             reservationTime.before(currentTime) || reservationTime.equals(currentTime)
