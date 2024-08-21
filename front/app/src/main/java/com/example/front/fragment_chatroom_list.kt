@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.front.data.ChatApiService
+import com.example.front.data.Role
 import com.example.front.data.response.ChatRoomResponse
 import com.example.front.databinding.FragmentChatroomListBinding
 import com.example.front.databinding.ItemChatroomBinding
@@ -22,7 +22,19 @@ import retrofit2.Response
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class ChatRoomItem(val roomId: Int, var otherName: String, var otherProfileImageUrl: String, var lastChatText: String?, var lastChatDate: LocalDateTime)
+class ChatRoomItem(
+    val roomId: Int,
+    var myName: String,
+    var myId: Int,
+    var myRole: Role,
+    var myImageUrl: String,
+    var otherName: String,
+    var otherImageUrl: String,
+    var otherId: Int,
+    var otherRole: Role,
+    var lastChatText: String?,
+    var lastChatDate: LocalDateTime
+)
 
 class ChatRoomViewHolder(val binding: ItemChatroomBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -50,8 +62,17 @@ class ChatRoomAdapter(val datas: List<ChatRoomItem>) : RecyclerView.Adapter<Recy
         binding.root.setOnClickListener {
             val intent = Intent(it.context, MessageListActivity::class.java)
             intent.putExtra("roomId", datas[position].roomId)
+
+            intent.putExtra("myId", datas[position].myId)
+            intent.putExtra("myRole", datas[position].myRole.name)
+            intent.putExtra("myName", datas[position].myName)
+            intent.putExtra("myImageUrl", datas[position].myImageUrl)
+
+            intent.putExtra("otherId", datas[position].otherId)
+            intent.putExtra("otherRole", datas[position].otherRole.name)
             intent.putExtra("otherName", datas[position].otherName)
-            intent.putExtra("otherImageUrl", datas[position].otherProfileImageUrl)
+            intent.putExtra("otherImageUrl", datas[position].otherImageUrl)
+
             it.context.startActivity(intent)
         }
 
@@ -64,6 +85,7 @@ class fragment_chatroom_list : Fragment() {
     lateinit var binding: FragmentChatroomListBinding
     var chatRoomResponseList: List<ChatRoomResponse> = mutableListOf()
     val chatRoomItemList: MutableList<ChatRoomItem> = mutableListOf()
+    val TAG = "chatroomList"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,8 +97,7 @@ class fragment_chatroom_list : Fragment() {
 
         val chatApi = ChatApiService.create(requireContext())
 
-        //TODO : 본인 id, role 넣기
-        chatApi.getChatRoomList(1, "USER").enqueue(object: Callback<List<ChatRoomResponse>>{
+        chatApi.getChatRoomList().enqueue(object: Callback<List<ChatRoomResponse>>{
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onResponse(
                 call: Call<List<ChatRoomResponse>>,
@@ -88,6 +109,7 @@ class fragment_chatroom_list : Fragment() {
                 }
             }
             override fun onFailure(call: Call<List<ChatRoomResponse>>, t: Throwable) {
+                Log.e(TAG, "onFailure - chatApi.getChatRoomList")
             }
         })
         binding.recyclerview.layoutManager = LinearLayoutManager(activity)
@@ -98,12 +120,20 @@ class fragment_chatroom_list : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setChatRoomList(chatRoomList: List<ChatRoomResponse>) {
         this.chatRoomResponseList = chatRoomList
+        chatRoomItemList.clear()
 
+        //TODO: lastChatText, lastChatDate
         for(i in chatRoomResponseList){
             val chatRoomItem = ChatRoomItem(
                 roomId = i.roomId,
+                myName = i.myName,
+                myId = i.myId,
+                myRole = Role.valueOf(i.myRole),
+                myImageUrl = i.myImageUrl,
                 otherName = i.otherName,
-                otherProfileImageUrl = i.otherProfileImageUrl,
+                otherImageUrl = i.otherImageUrl,
+                otherId = i.otherId,
+                otherRole = Role.valueOf(i.otherRole),
                 lastChatText = "last chat!!!",
                 lastChatDate = LocalDateTime.now()
             )

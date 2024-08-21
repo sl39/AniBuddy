@@ -102,32 +102,35 @@ class MessageListActivity : AppCompatActivity() {
 
         val intent = intent
         val roomId = intent.getIntExtra("roomId", 0)
+        val myName = intent.getStringExtra("myName")
+        val myId = intent.getIntExtra("myId", 0)
+        val myRole = intent.getStringExtra("myRole")
+        val myImageUrl = intent.getStringExtra("myImageUrl")
         val otherName = intent.getStringExtra("otherName")
         val otherImageUrl = intent.getStringExtra("otherImageUrl")
+        val otherId = intent.getIntExtra("otherId", 0)
+        val otherRole = intent.getStringExtra("otherRole")
 
         supportActionBar?.title = otherName
 
         val messageList = mutableListOf<MessageItem>()
-        val adapter = MessageItemAdapter(messageList, "USER") //TODO: my role
-        val db = Realm.getDefaultInstance()
-
+        val adapter = MessageItemAdapter(messageList, "ROLE_USER") //TODO: my role
 
         val realmListener = RealmChangeListener<RealmResults<ChatMessage>> {
             Log.d("Realm", "realm changed!")
-            it.forEach{ chatMsg ->
-                val messageItem = MessageItem(
-                    name = chatMsg.senderName,
-                    role = chatMsg.senderRole,
-                    content = chatMsg.message,
-                    createdAt = LocalDateTime.parse(chatMsg.createdAt)
-                )
-                messageList.add(messageItem)
-                Log.d("Realm", "add message!!")
-            }
+            val messageItem = MessageItem(
+                name = it[it.size-1]!!.senderName,
+                role = it[it.size-1]!!.senderRole,
+                content = it[it.size-1]!!.message,
+                createdAt = LocalDateTime.parse(it[it.size-1]!!.createdAt)
+            )
+            messageList.add(messageItem)
+            Log.d("Realm", "add message!!")
             adapter.notifyDataSetChanged()
             binding.recyclerview.scrollToPosition(messageList.size-1)
         }
 
+        val db = Realm.getDefaultInstance()
         val chatMessage: RealmResults<ChatMessage> = db.where<ChatMessage>()
             .equalTo("roomId", roomId)
             .sort("createdAt")
@@ -179,14 +182,19 @@ class MessageListActivity : AppCompatActivity() {
             }
         })
 
-        //TODO: input my data
         binding.sendBtn.setOnClickListener {
             val chatMessageInfo = JSONObject()
             chatMessageInfo.put("roomId", roomId.toString())
+            chatMessageInfo.put("senderName", myName)
+            chatMessageInfo.put("senderId", myId.toString())
+            chatMessageInfo.put("senderRole", myRole)
+            chatMessageInfo.put("senderImageUrl", myImageUrl)
             chatMessageInfo.put("message", binding.msgEditText.text.toString())
-            chatMessageInfo.put("senderRole", "USER")
-            chatMessageInfo.put("senderId", "1")
-            chatMessageInfo.put("senderName", "test user")
+            chatMessageInfo.put("receiverRole", otherRole)
+            chatMessageInfo.put("receiverId", otherId.toString())
+            chatMessageInfo.put("receiverName", otherName)
+            chatMessageInfo.put("receiverImageUrl", otherImageUrl)
+
             webSocket.send(chatMessageInfo.toString())
             Log.d("Realm", "sendBtn - setOnClickListener")
 
@@ -198,7 +206,7 @@ class MessageListActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        webSocket.close(1000, "채팅방 종료로 웹소켓 소멸")
+        webSocket.close(1000, "ChatRoom Activity 종료로 웹소켓 소멸")
     }
 
     override fun onSupportNavigateUp(): Boolean {

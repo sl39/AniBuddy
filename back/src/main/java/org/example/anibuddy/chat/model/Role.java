@@ -2,6 +2,6 @@ package org.example.anibuddy.chat.model;
 
 
 public enum Role {
-    USER,
-    OWNER
+    ROLE_USER,
+    ROLE_OWNER
 }
