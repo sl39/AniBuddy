@@ -5,4 +5,5 @@
     <color name="gray">#CCCCCC</color>
     <color name="colorPrimary">#FFAC4A</color>
     <color name="colorSecondary">#67ABFC</color>
+    <color name="hospital">#34ACA3</color>
 </resources>

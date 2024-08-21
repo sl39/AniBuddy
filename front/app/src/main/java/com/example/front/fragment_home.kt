@@ -32,7 +32,7 @@ class fragment_home : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-        binding.reviewBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
+        binding.reviewBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFAC4A"))
         binding.reviewHospital.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
         binding.reviewTraining.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
 
@@ -45,7 +45,7 @@ class fragment_home : Fragment() {
             childFragmentManager.beginTransaction()
                 .replace(R.id.fragmenthome, fragmentReviewCategory)
                 .commitAllowingStateLoss()
-            binding.reviewBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
+            binding.reviewBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFAC4A"))
             binding.reviewHospital.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
             binding.reviewTraining.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
         }
@@ -59,7 +59,7 @@ class fragment_home : Fragment() {
                 .replace(R.id.fragmenthome, fragmentReviewCategory)
                 .commitAllowingStateLoss()
             binding.reviewBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
-            binding.reviewHospital.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
+            binding.reviewHospital.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFAC4A"))
             binding.reviewTraining.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
         }
 
@@ -73,7 +73,7 @@ class fragment_home : Fragment() {
                 .commitAllowingStateLoss()
             binding.reviewBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
             binding.reviewHospital.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
-            binding.reviewTraining.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
+            binding.reviewTraining.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFAC4A"))
         }
 
         return binding.root

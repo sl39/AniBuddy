@@ -1,5 +1,7 @@
 package com.example.front
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -39,13 +41,20 @@ class fragment_reservation_list : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentReservationBinding.inflate(inflater,container,false)
+
         binding.reservationIng.setOnClickListener {
+            binding.reservationIng.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFAC4A"))
+            binding.reservationComplete.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
             childFragmentManager.beginTransaction().replace(R.id.fragment_res,fragmentReservationList).commitAllowingStateLoss()
         }
         binding.reservationComplete.setOnClickListener {
+            binding.reservationIng.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
+            binding.reservationComplete.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFAC4A"))
             childFragmentManager.beginTransaction().replace(R.id.fragment_res,fragmentReservationCompleteList).commitAllowingStateLoss()
 
         }
+        binding.reservationIng.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFAC4A"))
+        binding.reservationComplete.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
         childFragmentManager.beginTransaction().replace(R.id.fragment_res,fragmentReservationList).commitAllowingStateLoss()
         // Inflate the layout for this fragment
         return binding.root
