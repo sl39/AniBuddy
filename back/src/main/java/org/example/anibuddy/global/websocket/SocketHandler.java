@@ -68,7 +68,7 @@ public class SocketHandler extends TextWebSocketHandler {
             //상대방의 웹소켓 세션이 없는 경우 FCM 푸시 알림 요청
             if(tempSessions.size() < 3) {
                 notificationService.pushChatNotification(
-                        reqReceiverId, reqReceiverRole, reqSenderName, msg);
+                        reqReceiverId, reqReceiverRole, msg);
             }
 
         }
@@ -116,7 +116,7 @@ public class SocketHandler extends TextWebSocketHandler {
         super.afterConnectionClosed(session, status);
     }
 
-    private static JSONObject jsonToObjectParser(String jsonStr) {
+    private JSONObject jsonToObjectParser(String jsonStr) {
         JSONParser parser = new JSONParser();
         JSONObject obj = null;
         try {
