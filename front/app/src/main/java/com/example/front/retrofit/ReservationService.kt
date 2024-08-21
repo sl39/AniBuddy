@@ -27,7 +27,15 @@ interface ReservationService {
     @GET("/api/reservation/all")
     suspend fun getAllReservations() : Response<List<Reservation>>
 
+    @PUT("/api/reservation/state")
+    suspend fun updateReservationState(@Body res : UpdateReservationStateRequest) : Response<ReservationResponse>
+
 }
+
+data class UpdateReservationStateRequest(
+    val reservationId: Int,
+    val state: Int
+)
 
 data class DeleteMessage(
     val message : String
@@ -56,7 +64,8 @@ data class Reservation(
     val storeId: Int, // 매장 ID
     val reservationTime : String,
     val storeName: String, // 매장 이름
-    val storeAddress: String // 매장 주소
+    val storeAddress: String, // 매장 주소
+    val state : Int
 )
 
 data class ReservationDetail(
@@ -66,5 +75,6 @@ data class ReservationDetail(
     val info: String,
     val reservationId: Int,
     val storePhoneNumber: String,
-    val storeId: Int
+    val storeId: Int,
+    val state : Int
 )

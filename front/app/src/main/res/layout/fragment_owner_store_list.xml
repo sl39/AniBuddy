@@ -24,6 +24,7 @@
         android:layout_margin="20dp"
         android:layout_gravity="center"
         android:text="가게 추가하기"
+        android:background="@color/colorSecondary"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold" />

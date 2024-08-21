@@ -117,31 +117,35 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                    <androidx.appcompat.widget.AppCompatButton
+                    <Button
                         android:id="@+id/addBeauty"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
+                        android:backgroundTint="@color/gray"
                         android:text="미용"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
-                    <androidx.appcompat.widget.AppCompatButton
+                    <Button
                         android:id="@+id/addHospital"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
+                        android:backgroundTint="@color/gray"
+
                         android:text="병원"
                         android:textColor="@color/white"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
 
-                    <androidx.appcompat.widget.AppCompatButton
+                    <Button
                         android:id="@+id/addTraining"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
+                        android:backgroundTint="@color/gray"
                         android:text="훈련"
                         android:textColor="@color/white"
                         android:textSize="16sp"
@@ -151,7 +155,7 @@
 
 
 
-                <androidx.appcompat.widget.AppCompatButton
+                <Button
                     android:id="@+id/addStoreButton"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"

@@ -65,7 +65,7 @@ class fragment_profile : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        textView_user_name_show = view.findViewById(R.id.textView_user_name_show)
+        textView_user_name_show = view.findViewById(R.id.textView_user_name_show_profile)
         textView_user_email_show = view.findViewById(R.id.textView_user_email_show)
         imageView_user = view.findViewById(R.id.imageView_user)
 
@@ -73,14 +73,12 @@ class fragment_profile : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        val userId = arguments?.getInt("userId")
+        val userId = arguments?.getInt("userId") ?: -1
         Log.d("ProfileFragment", "userId from arguments: $userId")
-        if (userId != null) {
-            loadUser(userId)
-            loadPet(userId)
-        } else {
-            showToast("유저를 찾을 수 없습니다!")
-        }
+
+        loadUser(userId)
+        loadPet(userId)
+
 
         //FAB에 모양 추가해주기 위해 EFAB로 변경함. 24.08.15.
         val fab: ExtendedFloatingActionButton = view.findViewById(R.id.button_to_profile_add)

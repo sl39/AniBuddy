@@ -61,7 +61,7 @@ class StoreAddFragment : Fragment() {
         bindig.addBeauty.setOnClickListener{
             if("beauty" in category){
                 category.remove("beauty")
-                bindig.addBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
+                bindig.addBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CCCCCC"))
             } else {
                 category.add("beauty")
                 bindig.addBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
@@ -71,7 +71,7 @@ class StoreAddFragment : Fragment() {
         bindig.addHospital.setOnClickListener{
             if("hospital" in category){
                 category.remove("hospital")
-                bindig.addHospital.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
+                bindig.addHospital.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CCCCCC"))
             } else {
                 category.add("hospital")
                 bindig.addHospital.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
@@ -81,7 +81,7 @@ class StoreAddFragment : Fragment() {
         bindig.addTraining.setOnClickListener{
             if("training" in category){
                 category.remove("training")
-                bindig.addTraining.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
+                bindig.addTraining.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CCCCCC"))
             } else {
                 category.add("training")
                 bindig.addTraining.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))

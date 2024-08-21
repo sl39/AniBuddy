@@ -70,12 +70,14 @@ class fragment_owner_login : Fragment() {
         val userIntent: Intent = Intent(context, MainActivity::class.java)
         val ownerIntent: Intent = Intent(context,OwnerActivity::class.java)
         val signupIntent :Intent  = Intent(context, SignUpActivity::class.java)
+        binding.userLoginBth.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
+
 
         var tag = "USER"
 
         binding.userLoginBth.setOnClickListener {
             binding.userLoginBth.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
-            binding.ownerLoginBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
+            binding.ownerLoginBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CCCCCC"))
             binding.userLoginBth.isEnabled = false
             binding.ownerLoginBtn.isEnabled = true
             tag = "USER"
@@ -83,7 +85,7 @@ class fragment_owner_login : Fragment() {
 
         binding.ownerLoginBtn.setOnClickListener {
             binding.ownerLoginBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
-            binding.userLoginBth.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
+            binding.userLoginBth.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CCCCCC"))
             binding.userLoginBth.isEnabled = true
             binding.ownerLoginBtn.isEnabled = false
             tag = "OWNER"

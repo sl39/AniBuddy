@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.front.activity.MainActivity
 import com.example.front.retrofit.RetrofitService
+import com.example.front.retrofit.UpdateReservationStateRequest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -88,7 +89,8 @@ class ReservationCompleteActivity : AppCompatActivity() {
                 val api = RetrofitService.reservationService(this)
                 lifecycleScope.launch {
                     try {
-                        val response = api.deleteReservation(reservationId)
+                        val updateReservationStateRequest = UpdateReservationStateRequest(reservationId,2)
+                        val response = api.updateReservationState(updateReservationStateRequest)
                         if(response.code() == 200){
                             Toast.makeText(this@ReservationCompleteActivity, "예약이 취소되었습니다.", Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this@ReservationCompleteActivity, MainActivity::class.java))

@@ -228,6 +228,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_gravity="center"
                     android:text="가게 등록"
+                    android:background="@color/colorPrimary"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold" />

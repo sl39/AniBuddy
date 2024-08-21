@@ -18,7 +18,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
-            android:backgroundTint="#FFAC4A"
+            android:background="@color/colorPrimary"
             android:text="사용자"
             android:textColor="@color/white"
             android:textSize="16sp"
@@ -32,7 +32,7 @@
             android:layout_gravity="center"
             android:text="사업자"
             android:textColor="@color/white"
-            android:backgroundTint="#67ABFC"
+            android:background="@color/colorSecondary"
             android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>

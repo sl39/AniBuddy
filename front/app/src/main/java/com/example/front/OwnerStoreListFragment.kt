@@ -1,5 +1,6 @@
 package com.example.front
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
@@ -13,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.replace
+import com.example.front.activity.OwenerMainActivity
 import com.example.front.data.OwnerApiService
 import com.example.front.data.response.OwnerStoreListResponse
 import com.example.front.databinding.FragmentOwnerStoreListBinding
@@ -101,6 +103,9 @@ class OwnerStoreListFragment : Fragment() {
         tv.setTypeface(null, Typeface.BOLD) // 텍스트 스타일을 Bold로 설정
         tv.setOnClickListener{
             Log.d("가게가게 이름 이름", store.storeName + " : " + store.id)
+            val intent = Intent(requireContext(), OwenerMainActivity::class.java)
+            intent.putExtra("storeId",store.id)
+            startActivity(intent)
         }
         binding.ownerStoreList.addView(tv)
     }
