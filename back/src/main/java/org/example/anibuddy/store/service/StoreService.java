@@ -25,6 +25,7 @@ import java.sql.Date;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -294,5 +295,38 @@ public class StoreService {
                 .phoneNumber(storeEntity.getPhoneNumber())
                 .build();
         return storeEntity1;
+    }
+
+    public StoreOwnerDetailResponseDto getStoreOwnerById(Integer storeId) {
+        StoreEntity storeEntity = Optional.ofNullable(storeRepository.findById(storeId).orElseThrow(() -> new UsernameNotFoundException("email not found"))).get();
+        String[] days = {"일","월", "화", "수", "목", "금","토"};
+        List<String> openday = new ArrayList<>();
+        for(String day : days){
+            if(storeEntity.getOpenday().contains(day)){
+                openday.add(day);
+            }
+        }
+        List<String> dayday = List.of(storeEntity.getOpenday().split("//"));
+        String openTime = dayday.get(0).substring(1);
+        List<String> storeCategoryList = storeEntity.getStoreCategoryList()
+                .stream()
+                .map(StoreCategory::getCategory)
+                .collect(Collectors.toList());
+        List<String> images = getStoreImages(storeId);
+
+
+
+        StoreOwnerDetailResponseDto store = StoreOwnerDetailResponseDto.builder()
+                .storeName(storeEntity.getStoreName())
+                .storeInfo(storeEntity.getStoreInfo())
+                .storePhoneNumber(storeEntity.getPhoneNumber())
+                .storeAddress(storeEntity.getAddress())
+                .openDay(openday)
+                .openTime(openTime)
+                .storeCategory(storeCategoryList)
+                .images(images)
+                .build();
+
+        return store;
     }
 }

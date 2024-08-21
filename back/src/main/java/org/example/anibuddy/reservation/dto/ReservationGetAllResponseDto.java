@@ -14,4 +14,5 @@ public class ReservationGetAllResponseDto {
     private String reservationTime;
     private String storeName;
     private String storeAddress;
+    private Integer state;
 }

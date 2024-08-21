@@ -60,9 +60,9 @@ public class UserController {
     }
 
     @GetMapping("/lists")
-    public ResponseEntity<UserDTO> getUserInfoById(@RequestParam(value = "id") Integer id) {
+    public UserDTO getUserInfoById(@RequestParam(value = "id") Integer id) {
         UserDTO userDTO = userService.getUserDTO(id);
-        return ResponseEntity.ok(userDTO);
+        return userDTO;
     }
 
     @GetMapping("")

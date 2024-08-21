@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.store.dto.*;
 import org.example.anibuddy.store.entity.StoreEntity;
 import org.example.anibuddy.store.service.StoreService;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,6 +58,12 @@ public class StoreController {
     @GetMapping("/{storeId}")
     public StoreDetailDTO getStoreById(@PathVariable(value = "storeId") Integer storeId){
         return storeService.getStoreById(storeId);
+    }
+
+    @GetMapping("/owner")
+    public StoreOwnerDetailResponseDto getStoreOwnerById(@RequestParam("storeId") Integer storeId){
+        System.out.println("들어옴?");
+        return storeService.getStoreOwnerById(storeId);
     }
 
 }

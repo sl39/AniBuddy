@@ -5,10 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.example.anibuddy.Review.dto.ReviewDetailResponseDto;
 import org.example.anibuddy.global.CustomUserDetails;
-import org.example.anibuddy.reservation.dto.ReservationCreateRequestDto;
-import org.example.anibuddy.reservation.dto.ReservationGetAllResponseDto;
-import org.example.anibuddy.reservation.dto.ReservationGetResponseDto;
-import org.example.anibuddy.reservation.dto.ReservationUpdateRequestDto;
+import org.example.anibuddy.owner.OwnerEntity;
+import org.example.anibuddy.owner.OwnerRepository;
+import org.example.anibuddy.reservation.dto.*;
 import org.example.anibuddy.reservation.entity.ReservationEntity;
 import org.example.anibuddy.reservation.repository.ReservationRepository;
 import org.example.anibuddy.store.entity.StoreEntity;
@@ -33,6 +32,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
+    private final OwnerRepository ownerRepository;
 
     public Integer addReservation(ReservationCreateRequestDto reservation) throws Exception {
         Integer storeId = reservation.getStoreId();
@@ -53,6 +53,7 @@ public class ReservationService {
                 .reservationDate(LocalDateTime.parse(reservation.getReservationTime()))
                 .storeEntity(storeEntity)
                 .userEntity(user.get())
+                .state(0)
                 .build();
 
         ReservationEntity res = reservationRepository.save(reservationEntity);
@@ -81,6 +82,7 @@ public class ReservationService {
                 .reservationId(reservationId)
                 .storePhoneNumber(storeEntity.getPhoneNumber())
                 .storeId(storeEntity.getId())
+                .state(reservation.getState())
                 .build();
 
         return responseDto;
@@ -144,9 +146,78 @@ public class ReservationService {
                     .storeId(reservationEntity.getStoreEntity().getId())
                     .storeName(reservationEntity.getStoreEntity().getStoreName())
                     .storeAddress(reservationEntity.getStoreEntity().getAddress())
+                    .state(reservationEntity.getState())
                     .build();
             responseDtos.add(res);
         }
         return responseDtos;
+    }
+
+    public void updateState(ReservationStateRequestDto reservation) throws Exception {
+        Optional<ReservationEntity> reservationEntity = reservationRepository.findById(reservation.getReservationId());
+        if(reservationEntity.isEmpty()){
+            throw new Exception("예약이 존재하지 않습니다");
+        }
+        ReservationEntity res = reservationEntity.get();
+        res.setState(reservation.getState());
+        reservationRepository.save(res);
+    }
+
+    public List<ReservationGetAllResponseDto> getAllOwnerReservation() throws Exception {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Integer id = userDetails.getUserId();
+        Optional<UserEntity> user = userRepository.findById(id);
+        if(user.isEmpty()){
+            throw new UsernameNotFoundException("User not found");
+        }
+        Optional<OwnerEntity> owner = ownerRepository.findByUserEntity(user.get());
+        if(owner.isEmpty()){
+            throw new Exception("오너가 존재하지 않습니다");
+        }
+        List<ReservationGetAllResponseDto> responseDtos = new ArrayList<>();
+
+        List<ReservationEntity> reservationEntities = reservationRepository.findByOwner(owner.get().getId());
+        for(ReservationEntity reservationEntity : reservationEntities){
+            ReservationGetAllResponseDto res = ReservationGetAllResponseDto.builder()
+                    .info(reservationEntity.getInfo())
+                    .id(reservationEntity.getId())
+                    .reservationTime(reservationEntity.getReservationDate().toString())
+                    .storeId(reservationEntity.getStoreEntity().getId())
+                    .storeName(reservationEntity.getStoreEntity().getStoreName())
+                    .storeAddress(reservationEntity.getStoreEntity().getAddress())
+                    .state(reservationEntity.getState())
+                    .build();
+            responseDtos.add(res);
+        }
+        return responseDtos;
+    }
+
+    public ReservationGetResponseDto getOwnerReservationDetail(Integer reservationId) throws Exception {
+        Optional<ReservationEntity> reservationEntity =  reservationRepository.findById(reservationId);
+        if(reservationEntity.isEmpty()){
+            throw new Exception("예약이 존재하지 않습니다");
+        }
+        ReservationEntity reservation = reservationEntity.get();
+        StoreEntity storeEntity = reservation.getStoreEntity();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Integer id = userDetails.getUserId();
+        if(id != storeEntity.getOwnerEntity().getId()){
+            throw new Exception("유저가 일치 하지 않습니다");
+        }
+        ReservationGetResponseDto responseDto = ReservationGetResponseDto.builder()
+                .info(reservation.getInfo())
+                .reservationDateTime(reservation.getReservationDate().toString())
+                .storeLocation(storeEntity.getAddress())
+                .storeName(storeEntity.getStoreName())
+                .reservationId(reservationId)
+                .storePhoneNumber(storeEntity.getPhoneNumber())
+                .storeId(storeEntity.getId())
+                .state(reservation.getState())
+                .build();
+
+        return responseDto;
+
     }
 }

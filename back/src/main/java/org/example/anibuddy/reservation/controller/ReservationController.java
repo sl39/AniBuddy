@@ -56,6 +56,27 @@ public class ReservationController {
         return reservationService.getAllReservation();
     }
 
+    @PutMapping("/state")
+    public ReservationCreateResponseDto updateReservationState(@RequestBody ReservationStateRequestDto reservation) throws Exception {
+        System.out.println(reservation.getReservationId());
+        reservationService.updateState(reservation);
+        ReservationCreateResponseDto res = ReservationCreateResponseDto.builder()
+                .resvationId(reservation.getReservationId())
+                .build();
+        return res;
+    }
+
+
+    //  owner
+    @GetMapping("/owner/all")
+    public List<ReservationGetAllResponseDto> getAllOwnerReservations() throws Exception {
+        return reservationService.getAllOwnerReservation();
+    }
+
+    @GetMapping("/owner")
+    public ReservationGetResponseDto getOwnerReservation(@RequestParam("reservationId") Integer reservationId) throws Exception {
+        return  reservationService.getOwnerReservationDetail(reservationId);
+    }
 
 
 }
