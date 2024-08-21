@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.front.data.request.TokenReqeust
 import com.example.front.data.response.MainReviewSimpleResponseDto
 import com.example.front.data.response.SerachLocationCategoryResponseDto
+import com.example.front.data.response.StoreOwnerDetailResponseDto
 import com.example.front.data.response.TokenResponse
 import com.example.front.data.response.UserTesetResponse
 import com.google.gson.Gson
@@ -48,6 +49,8 @@ interface ApiService{
                                @Query("district") district : List<String>,
                                @Query("name") name : String): Call<List<SerachLocationCategoryResponseDto>>
 
+    @GET("/api/store/owner")
+    fun getStoreOwnerById(@Query("storeId") storeId : Int) : Call<StoreOwnerDetailResponseDto>
 
 
 

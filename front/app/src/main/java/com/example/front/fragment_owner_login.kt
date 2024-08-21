@@ -16,6 +16,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.front.activity.MainActivity
+import com.example.front.activity.OwenerMainActivity
 import com.example.front.activity.OwnerActivity
 import com.example.front.activity.SignUpActivity
 import com.example.front.data.LoginApiService
@@ -68,7 +69,7 @@ class fragment_owner_login : Fragment() {
 
         val loginApi = LoginApiService.create()
         val userIntent: Intent = Intent(context, MainActivity::class.java)
-        val ownerIntent: Intent = Intent(context,OwnerActivity::class.java)
+        val ownerIntent: Intent = Intent(context,OwenerMainActivity::class.java)
         val signupIntent :Intent  = Intent(context, SignUpActivity::class.java)
         binding.userLoginBth.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
 

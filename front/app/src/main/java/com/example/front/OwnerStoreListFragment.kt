@@ -12,9 +12,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.replace
+import com.bumptech.glide.Glide
 import com.example.front.activity.OwenerMainActivity
+import com.example.front.activity.OwnerStoreDetailActivity
 import com.example.front.data.OwnerApiService
 import com.example.front.data.response.OwnerStoreListResponse
 import com.example.front.databinding.FragmentOwnerStoreListBinding
@@ -39,6 +44,12 @@ class OwnerStoreListFragment : Fragment() {
     private lateinit var binding: FragmentOwnerStoreListBinding
     private val StoreAddFragment : Fragment = StoreAddFragment()
 
+    private lateinit var apiService: ApiService
+    private lateinit var textView_user_email_show: TextView
+    private lateinit var textView_user_name_show: TextView
+    private lateinit var imageView_user : ImageView
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -53,8 +64,16 @@ class OwnerStoreListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentOwnerStoreListBinding.inflate(inflater,container,false)
+        textView_user_name_show = binding.textViewUserNameShowProfile
+        textView_user_email_show = binding.textViewUserEmailShow
         val contenxt = requireContext()
+
         val api = OwnerApiService.create(requireContext())
+        imageView_user = binding.imageViewUser
+
+        apiService = RetrofitClient.getRetrofitInstance(context).create(ApiService::class.java)
+        loadUser(1)
+
 
         binding.addStore.setOnClickListener{
             parentFragmentManager.beginTransaction().replace(R.id.ownerActivity,StoreAddFragment).addToBackStack(null).commitAllowingStateLoss()
@@ -88,7 +107,7 @@ class OwnerStoreListFragment : Fragment() {
         // tv의 레이아웃 파라미터 설정
         val layoutParams = ViewGroup.MarginLayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT, // 너비를 match_parent로 설정
-            80.dp // 높이를 60dp로 설정 (dp를 px로 변환해야 함)
+            ViewGroup.LayoutParams.WRAP_CONTENT // 높이를 60dp로 설정 (dp를 px로 변환해야 함)
         ).apply {
             setMargins(20.dp, 20.dp, 20.dp, 20.dp) // 여백을 20dp로 설정
             Gravity.CENTER // 레이아웃의 중심에 정렬
@@ -103,12 +122,44 @@ class OwnerStoreListFragment : Fragment() {
         tv.setTypeface(null, Typeface.BOLD) // 텍스트 스타일을 Bold로 설정
         tv.setOnClickListener{
             Log.d("가게가게 이름 이름", store.storeName + " : " + store.id)
-            val intent = Intent(requireContext(), OwenerMainActivity::class.java)
+            val intent = Intent(requireContext(), OwnerStoreDetailActivity::class.java)
             intent.putExtra("storeId",store.id)
             startActivity(intent)
         }
         binding.ownerStoreList.addView(tv)
     }
+
+    private fun loadUser(userId: Int) {
+        apiService.getProfileAboutUser(userId).enqueue(object : Callback<UserDTO> {
+            override fun onResponse(call: Call<UserDTO>, response: Response<UserDTO>) {
+                if (response.isSuccessful) {
+                    response.body()?.let { user ->
+                        textView_user_name_show.text = user.nickname
+                        textView_user_email_show.text = user.email
+                        Glide.with(imageView_user.context)
+                            .load(user.imageUrl)
+                            .placeholder(R.drawable.anibuddy_logo) // 로딩 중 표시할 이미지
+                            .error(R.drawable.anibuddy_logo) // 로드 실패 시 표시할 이미지
+                            .into(imageView_user) // 이미지를 로드할 ImageView
+                    }
+                }
+                // 응답 없음
+                else {
+                    showToast("요청 실패!")
+                }
+            }
+
+            // 요청 실패
+            override fun onFailure(call: Call<UserDTO>, t: Throwable) {
+                showToast("네트워크 연결 에러!")
+            }
+        })
+
+    }
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
     val Int.dp: Int
         get() = (this * Resources.getSystem().displayMetrics.density).toInt()
     companion object {

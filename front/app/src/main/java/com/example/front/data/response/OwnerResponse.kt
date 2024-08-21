@@ -72,3 +72,15 @@ data class RoadAddress(
     val y: String,
     val x: String
 )
+
+
+data class StoreOwnerDetailResponseDto(
+    val storeName :String,
+    val  storeAddress: String,
+    val storePhoneNumber : String,
+    val storeInfo : String,
+    val openDay : List<String>,
+    val openTime : String,
+    val storeCategory : List<String>,
+    val images : List<String>,
+)

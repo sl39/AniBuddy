@@ -30,6 +30,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.OwnerStoreDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.OwenerMainActivity"
             android:exported="false" />
         <activity
@@ -115,6 +118,9 @@
             android:exported="false" />
         <activity
             android:name=".ReservationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ReservationCompleteOwnerActivity"
             android:exported="false" />
 
         <meta-data

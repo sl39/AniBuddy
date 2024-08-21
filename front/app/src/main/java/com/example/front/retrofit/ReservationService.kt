@@ -30,6 +30,13 @@ interface ReservationService {
     @PUT("/api/reservation/state")
     suspend fun updateReservationState(@Body res : UpdateReservationStateRequest) : Response<ReservationResponse>
 
+    // 여기서 부터는 owner
+    @GET("/api/reservation/owner/all")
+    suspend fun getAllReservationsOwner() : Response<List<Reservation>>
+
+    @GET("/api/reservation/owner")
+    suspend fun getOwnerReservations(@Query("reservationId") resvationId: Int): Response<ReservationDetail>
+
 }
 
 data class UpdateReservationStateRequest(

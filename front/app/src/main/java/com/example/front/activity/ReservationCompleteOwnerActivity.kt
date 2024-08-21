@@ -1,4 +1,4 @@
-package com.example.front
+package com.example.front.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,23 +7,21 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import com.example.front.activity.MainActivity
+import com.example.front.R
+import com.example.front.ReservationUpdateActivity
 import com.example.front.retrofit.RetrofitService
 import com.example.front.retrofit.UpdateReservationStateRequest
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Locale
 
-class ReservationCompleteActivity : AppCompatActivity() {
+class ReservationCompleteOwnerActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
@@ -38,7 +36,7 @@ class ReservationCompleteActivity : AppCompatActivity() {
         val api = RetrofitService.reservationService(this)
         lifecycleScope.launch {
             try{
-                val response = api.getReservations(reservationId)
+                val response = api.getOwnerReservations(reservationId)
                 if (response.code() == 200){
                     val data = response.body()
                     if(data != null){
@@ -56,16 +54,17 @@ class ReservationCompleteActivity : AppCompatActivity() {
                         findViewById<TextView>(R.id.storeNameTextView).text = "가게 이름: ${storeName}"
                         findViewById<TextView>(R.id.storeLocationTextView).text =  "주소: ${storeLocation}"
                         findViewById<TextView>(R.id.reservationInfo).text = "예약 세부 사항: ${info}"
-
                         if(data.state == 2){
                             val cancelBtn = findViewById<Button>(R.id.cancelReservationButton)
                             cancelBtn.text = "취소된 예약입니다"
                             cancelBtn.isEnabled = false
                             findViewById<Button>(R.id.editReservationButton).visibility = View.INVISIBLE
-                        }else if(data.state == 1){
+                        } else if(data.state == 1){
                             val editBtn = findViewById<Button>(R.id.editReservationButton)
                             editBtn.text = "확정된 예약입니다"
                             editBtn.isEnabled = false
+                        } else {
+                            findViewById<Button>(R.id.editReservationButton).text = "예약수락"
                         }
                     }
                 } else {
@@ -81,14 +80,35 @@ class ReservationCompleteActivity : AppCompatActivity() {
 
         // 버튼 클릭 리스너 설정
         findViewById<Button>(R.id.backToHomeButton).setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, OwenerMainActivity::class.java))
             finish()
         }
 
         findViewById<Button>(R.id.editReservationButton).setOnClickListener {
-            val intent = Intent(this, ReservationUpdateActivity::class.java)
-            intent.putExtra("reservationId", reservationId)
-            startActivity(intent)
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("예약 수락")
+            builder.setMessage("예약을 수락하시겠습니까?")
+            builder.setPositiveButton("예") { dialog, which ->
+                val api = RetrofitService.reservationService(this)
+                lifecycleScope.launch {
+                    try {
+                        val updateReservationStateRequest = UpdateReservationStateRequest(reservationId,1)
+                        val response = api.updateReservationState(updateReservationStateRequest)
+                        if(response.code() == 200){
+                            Toast.makeText(this@ReservationCompleteOwnerActivity, "예약이 수락되었습니다.", Toast.LENGTH_SHORT).show()
+                            findViewById<Button>(R.id.editReservationButton).visibility = View.INVISIBLE
+                        } else {
+                            Toast.makeText(this@ReservationCompleteOwnerActivity, "예약이 수락실패.", Toast.LENGTH_SHORT).show()
+
+                        }
+                    } catch (e: Exception){
+                        Toast.makeText(this@ReservationCompleteOwnerActivity, "예약이 수락 통신실패.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+            }
+            builder.setNegativeButton("아니요") { dialog, which -> dialog.dismiss() }
+            builder.create().show()
         }
 
         findViewById<Button>(R.id.cancelReservationButton).setOnClickListener {
@@ -104,15 +124,15 @@ class ReservationCompleteActivity : AppCompatActivity() {
                         val updateReservationStateRequest = UpdateReservationStateRequest(reservationId,2)
                         val response = api.updateReservationState(updateReservationStateRequest)
                         if(response.code() == 200){
-                            Toast.makeText(this@ReservationCompleteActivity, "예약이 취소되었습니다.", Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this@ReservationCompleteActivity, MainActivity::class.java))
+                            Toast.makeText(this@ReservationCompleteOwnerActivity, "예약이 취소되었습니다.", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this@ReservationCompleteOwnerActivity, OwenerMainActivity::class.java))
                             finish()
                         } else {
-                            Toast.makeText(this@ReservationCompleteActivity, "예약이 취소실패.", Toast.LENGTH_SHORT).show()
-                            
+                            Toast.makeText(this@ReservationCompleteOwnerActivity, "예약이 취소실패.", Toast.LENGTH_SHORT).show()
+
                         }
                     } catch (e: Exception){
-                        Toast.makeText(this@ReservationCompleteActivity, "예약이 취소 통신실패.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@ReservationCompleteOwnerActivity, "예약이 취소 통신실패.", Toast.LENGTH_SHORT).show()
                     }
                 }
 

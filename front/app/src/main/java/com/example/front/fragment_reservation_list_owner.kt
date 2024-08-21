@@ -1,10 +1,13 @@
 package com.example.front
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.front.databinding.FragmentReservationListOwnerBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,7 +23,9 @@ class fragment_reservation_list_owner : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    lateinit var binding : FragmentReservationListOwnerBinding
+    private var fragmentReservationIngOwnerList = fragment_reservation_ing_owner_list()
+    private var fragmentReservationCompleteOwnerList = fragment_reservation_complete_owner_list()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -33,8 +38,25 @@ class fragment_reservation_list_owner : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        binding = FragmentReservationListOwnerBinding.inflate(inflater,container,false)
+        binding.reservationIng.setOnClickListener {
+            binding.reservationIng.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFAC4A"))
+            binding.reservationComplete.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
+            childFragmentManager.beginTransaction().replace(R.id.fragment_res_owner,fragmentReservationIngOwnerList).commitAllowingStateLoss()
+        }
+        binding.reservationComplete.setOnClickListener {
+            binding.reservationIng.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
+            binding.reservationComplete.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFAC4A"))
+            childFragmentManager.beginTransaction().replace(R.id.fragment_res_owner,fragmentReservationCompleteOwnerList).commitAllowingStateLoss()
+
+        }
+        binding.reservationIng.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFAC4A"))
+        binding.reservationComplete.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
+        childFragmentManager.beginTransaction().replace(R.id.fragment_res_owner,fragmentReservationIngOwnerList).commitAllowingStateLoss()
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reservation_list_owner, container, false)
+        return binding.root
     }
 
     companion object {

@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val api = ApiService.create(this@LoginActivity)
         val userIntent: Intent = Intent(this@LoginActivity, MainActivity::class.java)
-        val ownerIntent: Intent = Intent(this@LoginActivity, OwnerActivity::class.java)
+        val ownerIntent: Intent = Intent(this@LoginActivity, OwenerMainActivity::class.java)
         userPreferencesRepository = preferencesRepository.getUserPreferencesRepository(this@LoginActivity)
 
 

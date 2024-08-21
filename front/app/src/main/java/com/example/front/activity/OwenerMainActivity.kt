@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.front.OwnerStoreListFragment
 import com.example.front.R
 import com.example.front.databinding.ActivityOwenerMainBinding
 import com.example.front.fragment_chat_list_owner
@@ -21,14 +22,13 @@ class OwenerMainActivity : AppCompatActivity() {
     private val fragmentManager = supportFragmentManager
     private val fragmentReservationListOwner = fragment_reservation_list_owner()
     private val fragmentChatListOwner = fragment_chat_list_owner()
-    private val fragmentProfileOwner = fragment_profile_owner()
+    private val ownerStoreListFragment = OwnerStoreListFragment()
+
     var storeId = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOwenerMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        storeId = intent.getIntExtra("storeId",-1)
-        Log.d("스토어 아이디는 ", storeId.toString())
         setSupportActionBar(binding.ownerTopAppBar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         fragmentManager.beginTransaction()
@@ -54,7 +54,7 @@ class OwenerMainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.ownerreservationList -> transaction.replace(R.id.owner_main, fragmentReservationListOwner).commitAllowingStateLoss()
                 R.id.ownerchatList -> transaction.replace(R.id.owner_main, fragmentChatListOwner).commitAllowingStateLoss()
-                R.id.ownerprofile -> transaction.replace(R.id.owner_main, fragmentProfileOwner).commitAllowingStateLoss()
+                R.id.ownerprofile -> transaction.replace(R.id.owner_main, ownerStoreListFragment).commitAllowingStateLoss()
             }
 
             return true
