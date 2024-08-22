@@ -30,9 +30,18 @@ class StoreDetailActivity : AppCompatActivity() {
     private var storeId: Int = -1 // 매장 ID
     private lateinit var heartIcon : ImageView
     private var isFollowing = false // 팔로우 상태 추가
+<<<<<<< HEAD
     private lateinit var apiService: ApiService
     private val context = this@StoreDetailActivity
     private var storeCategory = "beauty"
+=======
+    private var userId: Int = -1
+    private lateinit var apiService: ApiService
+    private val context = this@StoreDetailActivity
+    private var storeCategory = "beauty"
+
+
+>>>>>>> c381439c4f316cadcbcd3ffd84c3b245b1b0d5dd
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,10 +49,19 @@ class StoreDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Intent로부터 매장 ID 가져오기
+<<<<<<< HEAD
         storeId = intent.getIntExtra("STORE_ID", storeId)
         Log.d("storeIDInS.D.A","storeId=$storeId")
         storeCategory = intent.getStringExtra("category").toString()
         Log.d("카테코리", storeCategory)
+=======
+        storeId = intent.getIntExtra("STORE_ID", -1)
+        storeCategory = intent.getStringExtra("category").toString()
+        Log.d("storeIDInS.D.A","storeId=$storeId")
+        userId = 1
+        Log.d("카테코리", storeCategory)
+
+>>>>>>> c381439c4f316cadcbcd3ffd84c3b245b1b0d5dd
         // ViewPager와 TabLayout 설정
         setupViewPager()
 

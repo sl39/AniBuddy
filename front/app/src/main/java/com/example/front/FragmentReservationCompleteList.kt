@@ -43,41 +43,41 @@ class FragmentReservationCompleteList : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(context)
 
         // 완료된 예약 목록을 가져오는 로직 추가
-        fetchCompletedReservations()
+//        fetchCompletedReservations()
 
         return view
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun fetchCompletedReservations() {
-        lifecycleScope.launch {
-            try {
-
-                val response = RetrofitService.reservationService(requireContext()).getReservations() // 예약 목록 가져오기
-                if (response.isSuccessful) {
-                    response.body()?.let { allReservations ->
-                        val currentTime = Calendar.getInstance() // 현재 시간 가져오기
-
-                        // 예약일자가 지난 예약만 필터링
-                        reservationList = allReservations.filter { reservation ->
-                            val date = reservation.reservationTime
-
-
-                            val reservationTime = Calendar.getInstance().apply {
-                                set(date.year,date.monthValue,date.dayOfMonth,date.hour,date.minute) // 월은 0부터 시작
-
-                            }
-                            // 예약 시간이 현재 시간보다 지났는지 비교
-                            reservationTime.before(currentTime) || reservationTime.equals(currentTime)
-                        }
-                        reservationAdapter.updateReservations(reservationList) // 어댑터에 데이터 업데이트
-                    } ?: Log.e("FragmentReservationCompleteList", "Response body is null")
-                } else {
-                    Log.e("FragmentReservationCompleteList", "Error fetching reservations: ${response.errorBody()?.string()}")
-                }
-            } catch (e: Exception) {
-                Log.e("FragmentReservationCompleteList", "Exception while fetching reservations", e)
-            }
-        }
-    }
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    private fun fetchCompletedReservations() {
+//        lifecycleScope.launch {
+//            try {
+//
+//                val response = RetrofitService.reservationService(requireContext()).getReservations() // 예약 목록 가져오기
+//                if (response.isSuccessful) {
+//                    response.body()?.let { allReservations ->
+//                        val currentTime = Calendar.getInstance() // 현재 시간 가져오기
+//
+//                        // 예약일자가 지난 예약만 필터링
+//                        reservationList = allReservations.filter { reservation ->
+//                            val date = reservation.reservationTime
+//
+//
+//                            val reservationTime = Calendar.getInstance().apply {
+//                                set(date.year,date.monthValue,date.dayOfMonth,date.hour,date.minute) // 월은 0부터 시작
+//
+//                            }
+//                            // 예약 시간이 현재 시간보다 지났는지 비교
+//                            reservationTime.before(currentTime) || reservationTime.equals(currentTime)
+//                        }
+//                        reservationAdapter.updateReservations(reservationList) // 어댑터에 데이터 업데이트
+//                    } ?: Log.e("FragmentReservationCompleteList", "Response body is null")
+//                } else {
+//                    Log.e("FragmentReservationCompleteList", "Error fetching reservations: ${response.errorBody()?.string()}")
+//                }
+//            } catch (e: Exception) {
+//                Log.e("FragmentReservationCompleteList", "Exception while fetching reservations", e)
+//            }
+//        }
+//    }
 }

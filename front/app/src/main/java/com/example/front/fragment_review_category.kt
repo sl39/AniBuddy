@@ -96,6 +96,7 @@ class FragmentReviewCategory : Fragment(), ReviewAdapter.OnItemClickListener {
     private lateinit var adapter: ReviewAdapter
     private lateinit var parentContext: Context
     private lateinit var location: Location
+    private var result : String = "beauty"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -166,7 +167,11 @@ class FragmentReviewCategory : Fragment(), ReviewAdapter.OnItemClickListener {
         var result = arguments?.getString("category") ?: "beauty"
         val intent : Intent = Intent(parentContext, StoreDetailActivity::class.java)
         intent.putExtra("STORE_ID",review.storeId)
+<<<<<<< HEAD
         intent.putExtra("category", result)
+=======
+        intent.putExtra("category",result)
+>>>>>>> c381439c4f316cadcbcd3ffd84c3b245b1b0d5dd
         startActivity(intent)
     }
 

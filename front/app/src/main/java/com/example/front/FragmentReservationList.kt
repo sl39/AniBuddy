@@ -51,55 +51,55 @@ class FragmentReservationList : Fragment() {
         // RetrofitService를 통해 reservationService 초기화
         reservationService = RetrofitService.reservationService(requireContext())
 
-        fetchReservations()
+//        fetchReservations()
 
         return view
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun fetchReservations() {
-        lifecycleScope.launch {
-            try {
-                // 로딩 스피너 시작
-                // showLoadingSpinner()
-
-                val response = reservationService.getReservations()
-                if (response.isSuccessful) {
-                    response.body()?.let { allReservations ->
-                        val currentTime = Calendar.getInstance() // 현재 시간 가져오기
-                        // 현재 시간보다 예약 시간이 늦은 예약만 필터링
-                        reservations.clear()
-                        reservations.addAll(allReservations.filter { reservation ->
-                            val date = reservation.reservationTime
-
-                            // 예약 시간 계산
-                            val reservationTime = Calendar.getInstance().apply {
-                                set(date.year,date.monthValue,date.dayOfMonth,date.hour,date.minute) // 월은 0부터 시작
-
-                            }
-                            // 예약 시간이 현재 시간보다 크거나 같은지 비교
-                            reservationTime.after(currentTime) || reservationTime == currentTime
-                        })
-                        reservationAdapter.notifyDataSetChanged()
-
-                        // 예약이 없을 경우 메시지 표시
-                        if (reservations.isEmpty()) {
-                            // showEmptyMessage()
-                        }
-                    }
-                } else {
-                    Log.e("FragmentReservationList", "Error fetching reservations: ${response.errorBody()?.string()}")
-                    // 에러 메시지를 사용자에게 표시
-                    // Toast.makeText(context, "예약 데이터를 가져오는 데 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                Log.e("FragmentReservationList", "Exception while fetching reservations", e)
-                // 예외 처리
-                // Toast.makeText(context, "네트워크 오류: ${e.message}", Toast.LENGTH_SHORT).show()
-            } finally {
-                // 로딩 스피너 종료
-                // hideLoadingSpinner()
-            }
-        }
-    }
+//    @RequiresApi(Build.VERSION_CODES.O)
+//    private fun fetchReservations() {
+//        lifecycleScope.launch {
+//            try {
+//                // 로딩 스피너 시작
+//                // showLoadingSpinner()
+//
+//                val response = reservationService.getReservations   ()
+//                if (response.isSuccessful) {
+//                    response.body()?.let { allReservations ->
+//                        val currentTime = Calendar.getInstance() // 현재 시간 가져오기
+//                        // 현재 시간보다 예약 시간이 늦은 예약만 필터링
+//                        reservations.clear()
+//                        reservations.addAll(allReservations.filter { reservation ->
+//                            val date = reservation.reservationTime
+//
+//                            // 예약 시간 계산
+//                            val reservationTime = Calendar.getInstance().apply {
+//                                set(date.year,date.monthValue,date.dayOfMonth,date.hour,date.minute) // 월은 0부터 시작
+//
+//                            }
+//                            // 예약 시간이 현재 시간보다 크거나 같은지 비교
+//                            reservationTime.after(currentTime) || reservationTime == currentTime
+//                        })
+//                        reservationAdapter.notifyDataSetChanged()
+//
+//                        // 예약이 없을 경우 메시지 표시
+//                        if (reservations.isEmpty()) {
+//                            // showEmptyMessage()
+//                        }
+//                    }
+//                } else {
+//                    Log.e("FragmentReservationList", "Error fetching reservations: ${response.errorBody()?.string()}")
+//                    // 에러 메시지를 사용자에게 표시
+//                    // Toast.makeText(context, "예약 데이터를 가져오는 데 실패했습니다.", Toast.LENGTH_SHORT).show()
+//                }
+//            } catch (e: Exception) {
+//                Log.e("FragmentReservationList", "Exception while fetching reservations", e)
+//                // 예외 처리
+//                // Toast.makeText(context, "네트워크 오류: ${e.message}", Toast.LENGTH_SHORT).show()
+//            } finally {
+//                // 로딩 스피너 종료
+//                // hideLoadingSpinner()
+//            }
+//        }
+//    }
 }

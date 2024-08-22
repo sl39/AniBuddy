@@ -134,23 +134,20 @@ class ReservationActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val responseBody = response.body()
                         if (responseBody != null) {
-                            handleReservationResponse(responseBody)
+                            val resvationId = handleReservationResponse(responseBody)
+                            if (resvationId == -1){
+                                Toast.makeText(this@ReservationActivity, "예약이 실패.", Toast.LENGTH_SHORT).show()
+                            }
+                            else{
+                                val completIntent = Intent(this@ReservationActivity, ReservationCompleteActivity::class.java)
+                                completIntent.putExtra("resvationId",resvationId)
+                                startActivity(completIntent)
+                                finish() // 현재 액티비티 종료
+
 
                             // 예약 완료 페이지로 이동
-                            val completIntent = Intent(this@ReservationActivity, ReservationCompleteActivity::class.java).apply {
-                                putExtra("storeName", storeName)  // 매장 이름 추가
-                                putExtra("storeAddress", storeAddress)  // 매장 주소 추가
-                                putExtra("storePhoneNumber", storePhoneNumber)  // 전화번호 추가
-                                putExtra("selectedYear", selectedYear)
-                                putExtra("selectedMonth", selectedMonth)
-                                putExtra("selectedDay", selectedDay)
-                                putExtra("selectedHour", selectedHour)
-                                putExtra("selectedMinute", selectedMinute)
-                                putExtra("reservationTime", selectedDate.timeInMillis) // 예약 시간 추가
-                                putExtra("selectedImageResId", R.drawable.anibuddy_logo) // 이미지 리소스 추가
+
                             }
-                            startActivity(completIntent)
-                            finish() // 현재 액티비티 종료
                         } else {
                             Log.e("API Response Error", "Response Body is null")
                             Toast.makeText(this@ReservationActivity, "예약에 대한 응답이 없습니다.", Toast.LENGTH_SHORT).show()
@@ -169,13 +166,13 @@ class ReservationActivity : AppCompatActivity() {
         }
     }
 
-    private fun handleReservationResponse(response: ReservationResponse) {
-        if (response.success) {
+    private fun handleReservationResponse(response: ReservationResponse): Int {
+        if (response.resvationId != null) {
             Toast.makeText(this, "예약이 완료되었습니다.", Toast.LENGTH_SHORT).show()
+            return response.resvationId
             // 추가: 예약 완료 후의 동작 (예: 다른 액티비티로 이동)
-        } else {
-            Toast.makeText(this, "예약 오류: ${response.message}", Toast.LENGTH_SHORT).show()
         }
+        return -1
     }
 
     private val REQUEST_CODE_GALLERY = 123
