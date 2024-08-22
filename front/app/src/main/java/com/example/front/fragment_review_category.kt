@@ -167,15 +167,8 @@ class FragmentReviewCategory : Fragment(), ReviewAdapter.OnItemClickListener {
         var result = arguments?.getString("category") ?: "beauty"
         val intent : Intent = Intent(parentContext, StoreDetailActivity::class.java)
         intent.putExtra("STORE_ID",review.storeId)
-<<<<<<< HEAD
-<<<<<<< HEAD
+
         intent.putExtra("category", result)
-=======
-        intent.putExtra("category",result)
->>>>>>> c381439c4f316cadcbcd3ffd84c3b245b1b0d5dd
-=======
-        intent.putExtra("category",result)
->>>>>>> c381439c4f316cadcbcd3ffd84c3b245b1b0d5dd
         startActivity(intent)
     }
 

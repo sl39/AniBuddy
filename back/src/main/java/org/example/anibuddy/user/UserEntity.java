@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.anibuddy.Review.entity.ReviewEntity;
+import org.example.anibuddy.following.FollowingEntity;
 import org.example.anibuddy.owner.OwnerEntity;
 import org.example.anibuddy.pet.PetEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,16 +69,15 @@ public class UserEntity {
         this.refreshToken = updatedRefreshToken;
     }
 
-
-
 	@OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
 	private List<PetEntity> petEntity;
+	
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.REMOVE)
+    private List<FollowingEntity> followingEntity;
 
     @PrimaryKeyJoinColumn
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "userEntity", orphanRemoval = true)
     @JsonBackReference
     private OwnerEntity ownerEntity;
-
-
-
+    
 }
