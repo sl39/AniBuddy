@@ -1,4 +1,4 @@
-package com.example.front
+package com.example.front.activity
 
 import android.annotation.SuppressLint
 import android.os.Build
@@ -6,14 +6,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.front.common.HttpWebSocket
 import com.example.front.data.ApiService
-import com.example.front.data.AuthInterceptor
 import com.example.front.data.ChatMessage
 import com.example.front.data.UserPreferencesRepository
 import com.example.front.data.preferencesRepository
@@ -21,7 +19,6 @@ import com.example.front.data.response.UserTesetResponse
 import com.example.front.databinding.ActivityMessageListBinding
 import com.example.front.databinding.ItemMyChatBinding
 import com.example.front.databinding.ItemOtherChatBinding
-import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
 import io.realm.RealmChangeListener
 import io.realm.RealmResults

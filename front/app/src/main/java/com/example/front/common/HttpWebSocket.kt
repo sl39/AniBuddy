@@ -2,17 +2,13 @@ package com.example.front.common
 
 import android.util.Log
 import com.example.front.data.ChatMessage
-import com.example.front.data.Role
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import io.realm.Realm
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
-import org.json.JSONObject
-import java.text.ParseException
 
 public class HttpWebSocket : WebSocketListener() {
 

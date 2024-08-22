@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.front.activity.MessageListActivity
 import com.example.front.data.ChatApiService
 import com.example.front.data.Role
 import com.example.front.data.response.ChatRoomResponse
@@ -122,7 +123,6 @@ class fragment_chatroom_list : Fragment() {
         this.chatRoomResponseList = chatRoomList
         chatRoomItemList.clear()
 
-        //TODO: lastChatText, lastChatDate
         for(i in chatRoomResponseList){
             val chatRoomItem = ChatRoomItem(
                 roomId = i.roomId,

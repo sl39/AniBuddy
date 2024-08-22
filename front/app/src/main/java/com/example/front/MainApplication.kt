@@ -21,11 +21,19 @@ class MainApplication : Application() {
 
         // Realm DB 초기화
         Realm.init(this)
+
+        // Realm - chat
         val config = RealmConfiguration.Builder()
             .name("chat.db")
             .schemaVersion(1)
             .build()
         Realm.setDefaultConfiguration(config)
+
+        // Realm - alarm
+        RealmConfiguration.Builder()
+            .name("alarm.db")
+            .schemaVersion(1)
+            .build()
 
         // Notification 채널 생성
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
