@@ -77,9 +77,12 @@ class fragment_following_list : Fragment() {
                         val intent = Intent(context, StoreDetailActivity::class.java).apply {
                             putExtra("STORE_ID", followLists.id)
 <<<<<<< HEAD
+<<<<<<< HEAD
                             putExtra("category", followLists.storeCategory)
                             Log.d("STORE_Id","STORE_Id= ${followLists.id}")
 =======
+=======
+>>>>>>> c381439c4f316cadcbcd3ffd84c3b245b1b0d5dd
                             putExtra("category",followLists.storeCategory)
                             Log.d("storeId","storeId= $id")
 >>>>>>> c381439c4f316cadcbcd3ffd84c3b245b1b0d5dd

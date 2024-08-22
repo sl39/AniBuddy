@@ -31,6 +31,7 @@ class StoreDetailActivity : AppCompatActivity() {
     private lateinit var heartIcon : ImageView
     private var isFollowing = false // 팔로우 상태 추가
 <<<<<<< HEAD
+<<<<<<< HEAD
     private lateinit var apiService: ApiService
     private val context = this@StoreDetailActivity
     private var storeCategory = "beauty"
@@ -39,6 +40,12 @@ class StoreDetailActivity : AppCompatActivity() {
     private lateinit var apiService: ApiService
     private val context = this@StoreDetailActivity
     private var storeCategory = "beauty"
+=======
+    private var userId: Int = -1
+    private lateinit var apiService: ApiService
+    private val context = this@StoreDetailActivity
+    private var storeCategory = "beauty"
+>>>>>>> c381439c4f316cadcbcd3ffd84c3b245b1b0d5dd
 
 
 >>>>>>> c381439c4f316cadcbcd3ffd84c3b245b1b0d5dd

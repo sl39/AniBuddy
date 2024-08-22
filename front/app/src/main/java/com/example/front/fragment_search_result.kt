@@ -162,7 +162,11 @@ class FragmentSearchResult : Fragment(), SearchAdapter.OnItemClickListener {
         val intent = Intent(requireContext(),StoreDetailActivity::class.java)
         intent.putExtra("STORE_ID",search.id)
 <<<<<<< HEAD
+<<<<<<< HEAD
         intent.putExtra("category",bundle.getString("categoryRequest"))
+=======
+        intent.putExtra("category",search.category)
+>>>>>>> c381439c4f316cadcbcd3ffd84c3b245b1b0d5dd
 =======
         intent.putExtra("category",search.category)
 >>>>>>> c381439c4f316cadcbcd3ffd84c3b245b1b0d5dd
