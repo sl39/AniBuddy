@@ -3,9 +3,13 @@ package org.example.anibuddy.pet;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+
+import org.example.anibuddy.global.CustomUserDetails;
 import org.example.anibuddy.user.UserEntity;
 import org.example.anibuddy.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,7 +39,11 @@ public class PetService {
     }
 	
 	//Service에 DB 접근 처리(생성).
-	public void createPetProfile(@RequestBody PetCreateDTO petCreateDTO, @RequestParam(value = "userId") Integer userId) {
+	public void createPetProfile(@RequestBody PetCreateDTO petCreateDTO, @RequestParam(value = "userId") Integer id) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Integer userId = userDetails.getUserId();
+		
 //		String petName, String petKind, Integer petAge, String petGender, String petNeutering, Long petChipNumber, String petSignificant, Integer userId) {
 		UserEntity userEntity = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("Invalid user ID"));		
 		PetEntity pet = new PetEntity();
@@ -104,7 +112,10 @@ public class PetService {
 	
 	//해당 userId에 속한 모든 PetEntity List형태로 가져옴
 	public List<PetEntity> getPetByUserId(Integer userId) {
-		return petRepository.findByUserEntityId(userId);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Integer id = userDetails.getUserId();
+		return petRepository.findByUserEntityId(id);
 	}
 }
 /*

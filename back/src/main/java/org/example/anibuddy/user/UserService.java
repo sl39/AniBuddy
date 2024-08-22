@@ -1,12 +1,17 @@
 package org.example.anibuddy.user;
 
+import org.example.anibuddy.global.CustomUserDetails;
 import org.example.anibuddy.pet.PetDTO;
 import org.example.anibuddy.pet.PetDetailDTO;
 import org.example.anibuddy.pet.PetEntity;
 import org.example.anibuddy.pet.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,20 +25,38 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final PetRepository petRepository;
+	
+	// userProfile 수정
+    public void editUserProfile(@RequestBody UserDTO userDTO, @RequestParam(value="id")Integer id)  {
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Integer userId = userDetails.getUserId();
+    	UserEntity user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다!"));
+    	user.setNickname(userDTO.getNickname());
+    	user.setEmail(userDTO.getEmail());
+    	user.setImageUrl(userDTO.getImageUrl());
+    	this.userRepository.save(user);
+    }
 
-	public UserDTO getUserDTO(Integer id) {
-		UserEntity userEntity = userRepository.findById(id)
+	public UserDTO getUserDTO(@RequestParam(value="id") Integer id) {
+		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        Integer userId = userDetails.getUserId();
+		UserEntity userEntity = userRepository.findById(userId)
 		.orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다!"));
 
 		return convertToUserDTO(userEntity);
 	}
 
 	private UserDTO convertToUserDTO(UserEntity user) {
-		UserDTO userDTO = new UserDTO(user.getUserName(), user.getEmail(), user.getUserAddress(), user.getId());
+		UserDTO userDTO = new UserDTO(user.getNickname(), user.getEmail(), user.getImageUrl());
 		return userDTO;
 	}
 
-	public List<PetDTO> getPetByUserId(Integer userId) {
+	public List<PetDTO> getPetByUserId(Integer id) {
+		 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        Integer userId = userDetails.getUserId();
 	       List<PetEntity> petEntity = petRepository.findByUserEntityId(userId);
 	       return petEntity.stream().map(this::convertToDTO).collect(Collectors.toList());
 	    }
@@ -41,7 +64,6 @@ public class UserService {
 	public PetDetailDTO getPetDetailDTO(Integer PetId) {
 		PetEntity petEntity = petRepository.findById(PetId)
 		.orElseThrow(() -> new IllegalArgumentException("해당 프로필이 없습니다!"));
-
 		return convertToDetailDTO(petEntity);
 	}
 
@@ -53,17 +75,6 @@ public class UserService {
     	PetDetailDTO petDetailDTO = new PetDetailDTO(pet.getPetName(), pet.getPetKind(), pet.getPetGender(), pet.getPetNeutering(), pet.getPetSignificant(), pet.getBase64Image(), pet.getPetAge(), pet.getPetId(), pet.getPetChipNumber());
     	return petDetailDTO;
     }
-//    	PetDetailDTO dto = new PetDetailDTO();
-//        dto.setPetId(pet.getPetId());
-//        dto.setPetName(pet.getPetName());
-//        dto.setPetKind(pet.getPetKind());
-//        dto.setPetAge(pet.getPetAge());
-//        dto.setPetNeutering(pet.getPetNeutering());
-//        dto.setPetChipNumber(pet.getPetChipNumber());
-//        dto.setPetGender(pet.getPetGender());
-//        dto.setPetSignificant(pet.getPetSignificant());
-//
-//        return dto;
 
 	public UserEntity getUser(Integer Id) {
 		Optional<UserEntity> userEntity = this.userRepository.findById(Id);
@@ -105,6 +116,5 @@ public class UserService {
         Optional<UserEntity> user = Optional.ofNullable(userRepository.findByNickname(nickname).orElseThrow(() -> new UsernameNotFoundException("email not found")));
         return user;
     }
-
-
+    
 }

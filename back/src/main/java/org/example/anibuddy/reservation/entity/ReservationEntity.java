@@ -38,5 +38,3 @@ public class ReservationEntity {
     @Column(columnDefinition = "TEXT")
     private String info;
     }
-
-

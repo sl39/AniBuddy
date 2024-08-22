@@ -15,7 +15,7 @@ public interface StoreSummaryRepository extends JpaRepository<StoreSummary, Inte
             "ON s.store_entity_id = r.store_entity_id " +
             "HAVING distance < 1000",
             nativeQuery = true)
-    List<Map<String, Object>> findStoresWithinDistance(double lon, double lat);
+    List<Map<String, Object>> findStoresWithinDistance(@Param("lon")double lon, @Param("lat")double lat);
 
 
 

@@ -34,21 +34,18 @@ class fragment_following_list : Fragment() {
 
             recyclerView.layoutManager = LinearLayoutManager(context)
 
-
-
-
 //            val userId: Int? = arguments?.getInt("userId")
 //
 //            Log.d("FollowingFragment", "Received userId: $userId")
 
-            val userId = arguments?.getInt("userId")
+//            val userId = arguments?.getInt("userId")
 
             followAdapter = FollowingAdapter(followLists) { follow ->
-                Log.d("STORE_ID?", "STORE_ID = ${follow.id}")
-                Log.d("userId?", "userId = ${userId}")
+//                Log.d("STORE_ID?", "STORE_ID = ${follow.id}")
+//                Log.d("userId?", "userId = ${userId}")
                 val intent = Intent(context, StoreDetailActivity::class.java).apply {
                 putExtra("STORE_ID", follow.id)
-                putExtra("userId", userId)
+//                putExtra("userId", userId)
             }
             startActivity(intent)
         }
@@ -59,11 +56,11 @@ class fragment_following_list : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val userId = arguments?.getInt("userId")
-        Log.d("찜리스트", "userId from arguments: $userId")
-        if (userId != null) {
-            loadFollowList(userId)
-        }
+//        val userId = arguments?.getInt("userId")
+//        Log.d("찜리스트", "userId from arguments: $userId")
+//        if (userId != null) {
+            loadFollowList(-1)
+//        }
     }
 
     private fun loadFollowList(userId: Int) {
@@ -78,8 +75,9 @@ class fragment_following_list : Fragment() {
 
                     followAdapter = FollowingAdapter(followLists) { followLists ->
                         val intent = Intent(context, StoreDetailActivity::class.java).apply {
-                            putExtra("storeId", followLists.id)
-                            Log.d("storeId","storeId= $id")
+                            putExtra("STORE_ID", followLists.id)
+                            putExtra("category", followLists.storeCategory)
+                            Log.d("STORE_Id","STORE_Id= ${followLists.id}")
                         }
                         startActivity(intent)
                     }

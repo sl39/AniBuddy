@@ -6,16 +6,16 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDTO {
-	private String userName, email, userAddress;
-	private Integer userId;
+	private String nickname, email, imageUrl;
+//	private Integer userId;
 	
 	public UserDTO() {
 	}
 	
-	public UserDTO(String userName, String email, String userAddress, Integer userId) {
-		this.userName = userName;
+	public UserDTO(String nickname, String email, String imageUrl) {
+		this.nickname = nickname;
 		this.email = email;
-		this.userAddress = userAddress;
-		this.userId = userId;
+		this.imageUrl = imageUrl;
+//		this.userId = userId;
 	}
 }

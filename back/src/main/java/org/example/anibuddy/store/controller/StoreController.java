@@ -58,5 +58,4 @@ public class StoreController {
     public StoreDetailDTO getStoreById(@PathVariable(value = "storeId") Integer storeId){
         return storeService.getStoreById(storeId);
     }
-
 }

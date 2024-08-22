@@ -37,8 +37,6 @@ class LoginActivity : AppCompatActivity() {
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
         api.getUserTest().enqueue(object : Callback<UserTesetResponse>{
             override fun onResponse(
                 call: Call<UserTesetResponse>,

@@ -17,7 +17,7 @@ public interface ApiService {
     Call<UserDTO> getProfileAboutUser(@Query("id") Integer userId);
 
     @GET("/api/users/profile")
-    Call<List<PetDTO>> getPetProfileByUserId(@Query("userId") Integer userId);
+    Call<List<PetDTO>> getPetProfileByUserId(@Query("id") Integer userId);
 
     @GET("/api/users/profile/detail")
     Call<PetDetailDTO> getProfileDetailByPetId(@Query("petId") Integer petId);
@@ -49,11 +49,6 @@ public interface ApiService {
     @GET("/api/Following/List")
     Call<List<StoreFollowDTO>> getFollowingStoreList(@Query("userId") Integer userId);
 
-    // 간략 FollowingList를 클릭하면 화면 전환 API - 필요한가? 이건 그냥 intent 발생시켜서 화면 전환하거나
-    // Main 리뷰에서 클릭하면 상세 복사해서 적당히 붙여넣으면 되지 않나? 이미 API 만들긴 했는데, 다른 방식으로
-    // 작동하도록 만드는 이유가 있을까?
-
-
     // 화면에서 FollowingEntitiy에 추가/삭제 Toggle 작동 API
     @POST("/api/Following/toggle")
     Call<Void> toggleFollowing(@Query("userId") Integer userId, @Query("storeId") Integer storeId, @Query("storeCategory") String storeCategory);
@@ -61,4 +56,7 @@ public interface ApiService {
     // 팔로우 했는지 안했는지 icon으로 확인
     @GET("api/Following/Icon")
     Call<Boolean> checkFollowing(@Query("userId") Integer userId, @Query("storeId") Integer storeId, @Query("storeCategory") String storeCategory);
+
+    @POST("/api/users/modify")
+    Call<Void> editUserProfile(@Body UserDTO userDTO, @Query("id") Integer id);
 }

@@ -9,6 +9,7 @@ public class UserDTO {
     public UserDTO(String nickname, String email, String imageUrl) {
         this.nickname = nickname;
         this.email = email;
+        this.imageUrl = imageUrl;
     }
     public String getNickname() { return nickname; }
 

@@ -1,3 +1,4 @@
+
 package org.example.anibuddy.user.controller;
 
 
@@ -34,11 +35,6 @@ public class UserController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createUser(
-//			@RequestParam(value = "userName") String userName,
-//			@RequestParam(value = "email") String email,
-//			@RequestParam(value = "password") String password,
-//            @RequestParam(value = "userPhone") String userPhone,
-//            @RequestParam(value = "userAddress") String userAddress
             @RequestBody UserCreateDto userCreateDto) {
 
         userService.createUser(userCreateDto.getUserName(), userCreateDto.getEmail(), userCreateDto.getPassword(), userCreateDto.getUserPhone(), userCreateDto.getUserAddress()); {
@@ -48,8 +44,8 @@ public class UserController {
 
 
     @GetMapping("/profile")
-    public ResponseEntity<List<PetDTO>> getPetByUserId(@RequestParam(value = "userId") Integer userId) {
-        List<PetDTO> pets = userService.getPetByUserId(userId);
+    public ResponseEntity<List<PetDTO>> getPetByUserId(@RequestParam(value = "id") Integer id) {
+        List<PetDTO> pets = userService.getPetByUserId(id);
         return ResponseEntity.ok(pets);
     }
 
@@ -79,5 +75,12 @@ public class UserController {
     @GetMapping("/test")
     public String test() {
         return "test";
+    }
+    
+    //유저프로필 수정
+    @PostMapping("modify")
+	public ResponseEntity<String> editUserProfile(@RequestBody UserDTO userDTO, @RequestParam(value="id") Integer id) {
+    	userService.editUserProfile(userDTO, id);
+    	return ResponseEntity.ok("프로필을 성공적으로 수정했습니다!");
     }
 }

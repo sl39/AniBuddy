@@ -30,12 +30,9 @@ class StoreDetailActivity : AppCompatActivity() {
     private var storeId: Int = -1 // 매장 ID
     private lateinit var heartIcon : ImageView
     private var isFollowing = false // 팔로우 상태 추가
-    private var userId: Int = -1
-    private lateinit var storeCategory: String
     private lateinit var apiService: ApiService
     private val context = this@StoreDetailActivity
-
-
+    private var storeCategory = "beauty"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +40,10 @@ class StoreDetailActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Intent로부터 매장 ID 가져오기
-        storeId = intent.getIntExtra("STORE_ID", -1)
+        storeId = intent.getIntExtra("STORE_ID", storeId)
         Log.d("storeIDInS.D.A","storeId=$storeId")
-        userId = 1
-        storeCategory = "3"
-
+        storeCategory = intent.getStringExtra("category").toString()
+        Log.d("카테코리", storeCategory)
         // ViewPager와 TabLayout 설정
         setupViewPager()
 
@@ -58,12 +54,11 @@ class StoreDetailActivity : AppCompatActivity() {
 
         // 이미지 클릭 시 토글(팔로우 안되어 있으면 팔로우, 되어 있으면 취소)
         heartIcon.setOnClickListener {
-            toggleFollowing(userId, storeId, storeCategory)
+            toggleFollowing(-1, storeId, storeCategory)
         }
 
         //초기값 확인
-        checkFollowing(userId, storeId, storeCategory)
-
+        checkFollowing(-1, storeId, storeCategory)
 
         binding.reservationButton.setOnClickListener {
             val storeInfoFragment = supportFragmentManager.findFragmentByTag("f0") as? StoreInfoFragment
@@ -83,12 +78,7 @@ class StoreDetailActivity : AppCompatActivity() {
 
         binding.backButton.setOnClickListener {
             finish()
-
-
-
         }
-
-//        updateFollowButton() // 초기 UI 업데이트
 
         // 매장 세부 정보 가져오기
         if (storeId != -1) {
@@ -103,6 +93,9 @@ class StoreDetailActivity : AppCompatActivity() {
 
     // storeDetailActivity 화면에서 팔로우 했는지 안했는지 확인.
     private fun checkFollowing(userId: Int, storeId: Int, storeCategory: String) {
+        Log.d("userId1", "$userId")
+        Log.d("storeId1", "$storeId")
+        Log.d("storeCategory1", "$storeCategory")
         apiService.checkFollowing(userId, storeId, storeCategory).enqueue(object :
             Callback<Boolean> {
             override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
@@ -124,9 +117,9 @@ class StoreDetailActivity : AppCompatActivity() {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     // 토글 후 상태 반전
-                    Log.d("storeId", "storeId=$storeId")
-                    Log.d("userId", "userId=$userId")
-                    Log.d("storeCategory", "storeCategory=$storeCategory")
+                    Log.d("storeId2", "storeId=$storeId")
+                    Log.d("userId2", "userId=$userId")
+                    Log.d("storeCategory2", "storeCategory=$storeCategory")
                     isFollowing = !isFollowing
                     updateHeartIcon()
                 }
@@ -255,10 +248,10 @@ class StoreDetailActivity : AppCompatActivity() {
 //        followButton.setImageResource(if (isFollowing) R.drawable.redheart else R.drawable.heart)
 //    }
 
-    private fun getCurrentUserId(): Int {
-        val preferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
-        return preferences.getInt("userId", -1)
-    }
+//    private fun getCurrentUserId(): Int {
+//        val preferences = getSharedPreferences("UserPreferences", MODE_PRIVATE)
+//        return preferences.getInt("userId", -1)
+//    }
 
     override fun onPause() {
         super.onPause()

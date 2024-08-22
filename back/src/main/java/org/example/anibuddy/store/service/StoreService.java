@@ -274,7 +274,11 @@ public class StoreService {
     }
 
     public StoreDetailDTO getStoreById(Integer storeId) {
-        StoreEntity storeEntity = Optional.ofNullable(storeRepository.findById(storeId).orElseThrow(() -> new UsernameNotFoundException("email not found"))).get();
+    	 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+         Integer id = userDetails.getUserId();
+    	
+    	StoreEntity storeEntity = Optional.ofNullable(storeRepository.findById(storeId).orElseThrow(() -> new UsernameNotFoundException("email not found"))).get();
         List<String> images = new ArrayList<String>();
         for(StoreImage image : storeEntity.getStoreImageList()){
             images.add(image.getImageUrl());

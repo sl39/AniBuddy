@@ -19,7 +19,6 @@ public interface FollowingRepository extends JpaRepository <FollowingEntity, Lon
 
 	boolean existsByUserEntityAndStoreEntityAndStoreCategory(UserEntity userEntity, StoreEntity storeEntity, String storeCategory);
 
-
 }
 	
 

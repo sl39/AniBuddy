@@ -29,7 +29,6 @@ class FollowingAdapter(private var followings: List<StoreFollowDTO>, private val
         notifyDataSetChanged() // 데이터 변경 알림
     }
 
-
         override fun getItemCount(): Int = followings.size
 
         class FollowingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -48,13 +47,10 @@ class FollowingAdapter(private var followings: List<StoreFollowDTO>, private val
                 storeAddressTextView.text = follow.address
                 storeCategoryTextView.text = follow.storeCategory
 
-//                Log.d("followsize?", "followsize = ${followings.size}")
-//                Log.d("floowImage?", "followImage = ${follow.storeImageList}")
-                
                 // 이미지가 여러 개 일 때 처음 이미지만 불러오도록 설정
                 val storeImage = follow.storeImageList.firstOrNull()
 
-                Log.d("imageUrl?", "imageUrl = ${storeImage}")
+//                Log.d("imageUrl?", "imageUrl = ${storeImage}")
                 if(storeImage != null) {
                     // .imageUrl 해주는 이유 = glide는 String, url, uri 등 기본 타입은 받지만
                     // 사용자 정의클래스, storeImage 같은 객체값은 못 받아서.

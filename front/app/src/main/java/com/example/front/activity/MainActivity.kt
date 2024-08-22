@@ -6,21 +6,21 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.FragmentManager
 import com.example.front.ApiService
 import com.example.front.FragmentReservationList
 import com.example.front.Permission
-import com.example.front.fragment_home
 import com.example.front.R
 import com.example.front.RetrofitClient
-import com.example.front.activity.SearchActivity
 import com.example.front.databinding.ActivityMainBinding
 import com.example.front.fragment_chatroom_list
 import com.example.front.fragment_following_list
+import com.example.front.fragment_home
 import com.example.front.fragment_profile
 import com.example.front.fragment_reservation_list
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.api.Authentication
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
 
     private val userId : Int = 1
     private var apiService : ApiService? = null
-
 
     companion object {
         const val EXTRA_DESTINATION = "extra_destination"
@@ -90,7 +89,7 @@ class MainActivity : AppCompatActivity() {
             val destination = it.getStringExtra(EXTRA_DESTINATION)
             val transaction = fragmentManager.beginTransaction()
 
-//            val userId = it.getIntExtra("userId", 4)
+//            val userId = it.getIntExtra("userId", -1)
 
             updateBottomNavigation(destination)
             navigateToFragment(destination)
@@ -151,8 +150,9 @@ class MainActivity : AppCompatActivity() {
                 com.example.front.R.id.follwingList -> {
                     val fragmentFollowingList = fragment_following_list().apply {
                         arguments = Bundle().apply {
-                            putInt("userId", userId)
-                            Log.d("userIdCheckFollowingList", "userId = $userId")
+//                            putInt("userId", userId)
+                            
+//                            Log.d("userIdCheckFollowingList", "userId = $userId")
                         }
                     }
 
@@ -171,8 +171,8 @@ class MainActivity : AppCompatActivity() {
                 com.example.front.R.id.profile -> {
                     val fragmentProfile = fragment_profile().apply {
                         arguments = Bundle().apply {
-                            putInt("userId", userId)
-                            Log.d("userIdCheck3", "userId = $userId")
+//                            putInt("userId", userId)
+//                            Log.d("userIdCheck3", "userId = $userId")
                         }
                     }
 

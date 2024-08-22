@@ -46,16 +46,16 @@ public class FollowingController {
     // 해당 userId, storeId, storeCategory가 FollowingEntity에 존재하면, 빨간 하트 아이콘을, 존재하지 않으면 빈 하트 아이콘을 보여주는
     @GetMapping("/Icon")
     public ResponseEntity<Boolean> checkFollowing(
-            @RequestParam(value="userId") UserEntity userEntity,
-            @RequestParam(value="storeId") StoreEntity storeEntity,
+            @RequestParam(value="userId") Integer userEntity,
+            @RequestParam(value="storeId") Integer storeEntity,
             @RequestParam(value="storeCategory") String storeCategory) {
         boolean isFollowing = followingService.isFollowing(userEntity, storeEntity, storeCategory);
         return ResponseEntity.ok(isFollowing);
     }
 
-    // follow List 중 하나 클릭화면 storeDetail로 리다이렉트
-    @GetMapping("/redirectToapi/store/{storeId}")
-    public String redirectToStore(@RequestParam("storeId") Integer storeId) {
+    // follow List 중 하나 클릭화면 storeDetail로 보내기
+    @GetMapping("/List/{storeId}")
+    public String redirectToStoreDetail(@PathVariable("storeId") Integer storeId) {
         return "redirect:/api/store/" + storeId;
     }
 }
