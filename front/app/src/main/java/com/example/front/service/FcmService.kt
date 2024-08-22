@@ -1,13 +1,12 @@
 package com.example.front.service
 
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.example.front.MessageListActivity
+import com.example.front.activity.MessageListActivity
 import com.example.front.R
 import com.example.front.data.ChatApiService
 import com.example.front.data.ChatMessage
@@ -58,10 +57,10 @@ class FcmService : FirebaseMessagingService() {
 
         val data: Map<String, String> = message.data
         val type = data["type"]
-        val jsonMsg = data["data"]
 
         if(type.equals("chat")) {
             /* 채팅 알림인 경우 */
+            val jsonMsg = data["data"]
             val gson = Gson()
             val jsonObject = gson.fromJson(jsonMsg, JsonObject::class.java)
 
@@ -91,17 +90,18 @@ class FcmService : FirebaseMessagingService() {
             val title = jsonObject.get("senderName").asString
             val body = jsonObject.get("message").asString
 
-            showNotification(title, body, jsonObject)
+            showChatNotification(title, body, jsonObject)
         }
         else if(type.equals("reservation")) {
-            /* 예약 알림인 경우 */
-            //1. AlarmManager - 일회성 알람 예약
+            /* 예약 접수/확정/취소 알림인 경우 */
+            val title = data["title"]       //"예약이 "+reservation_state+"되었습니다"
+            val content = data["content"]   //"["+storeName+"] "+date+" 예약이 "+reservation_state+"되었습니다."
 
-            //2. BroadCastReceiver - onReceive 에서 Notification 발생
+            showReservationStateNotification(title!!, content!!)
         }
     }
 
-    private fun showNotification(title: String, body: String, jsonObject: JsonObject) {
+    private fun showChatNotification(title: String, body: String, jsonObject: JsonObject) {
         val notificationId = 1
         val channelId = "ChatChannel"
 
@@ -136,5 +136,31 @@ class FcmService : FirebaseMessagingService() {
         // 알림 표시
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(notificationId, notificationBuilder.build())
+    }
+
+    private fun showReservationStateNotification(title: String, body: String) {
+        val notificationId = 2
+        val channelId = "ReservationChannel"
+
+        val intent = Intent(this, MessageListActivity::class.java).apply{
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_launcher_background) //TODO: 변경
+            .setContentTitle(title)
+            .setContentText(body)
+            .setAutoCancel(true) // 클릭 시 자동 제거
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pendingIntent) // 클릭 시 실행될 인텐트
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+
+        // 알림 표시
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(notificationId, notificationBuilder.build())
+
     }
 }
