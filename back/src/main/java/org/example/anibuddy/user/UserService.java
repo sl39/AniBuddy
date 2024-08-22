@@ -25,7 +25,7 @@ public class UserService {
 
 	private final UserRepository userRepository;
 	private final PetRepository petRepository;
-	
+
 	// userProfile 수정
     public void editUserProfile(@RequestBody UserDTO userDTO, @RequestParam(value="id")Integer id)  {
     	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -64,6 +64,7 @@ public class UserService {
 	public PetDetailDTO getPetDetailDTO(Integer PetId) {
 		PetEntity petEntity = petRepository.findById(PetId)
 		.orElseThrow(() -> new IllegalArgumentException("해당 프로필이 없습니다!"));
+
 		return convertToDetailDTO(petEntity);
 	}
 
@@ -116,5 +117,6 @@ public class UserService {
         Optional<UserEntity> user = Optional.ofNullable(userRepository.findByNickname(nickname).orElseThrow(() -> new UsernameNotFoundException("email not found")));
         return user;
     }
-    
+
+
 }

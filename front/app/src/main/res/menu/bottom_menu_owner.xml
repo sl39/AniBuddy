@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/ownerreservationList"
+        android:icon="@drawable/schedule"
+        android:title="reservationList"
+        />
+    <item
+        android:id="@+id/ownerchatList"
+        android:icon="@drawable/chatlist"
+        android:title="chatList"
+        />
+    <item
+        android:id="@+id/ownerprofile"
+        android:icon="@drawable/profile"
+        android:title="profile"
+        />
+</menu>

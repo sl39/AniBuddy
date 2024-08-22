@@ -54,14 +54,14 @@ class StoreAddFragment : Fragment() {
         bindig = FragmentStoreAddBinding.inflate(inflater,container,false)
         bindig.addAddress.setOnFocusChangeListener { v, hasFocus ->
             if(hasFocus){
-                parentFragmentManager.beginTransaction().replace(R.id.ownerActivity,AddressSearchFragment).addToBackStack(null).commitAllowingStateLoss()
+                parentFragmentManager.beginTransaction().replace(R.id.owner_main,AddressSearchFragment).addToBackStack(null).commitAllowingStateLoss()
             }
         }
 
         bindig.addBeauty.setOnClickListener{
             if("beauty" in category){
                 category.remove("beauty")
-                bindig.addBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
+                bindig.addBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CCCCCC"))
             } else {
                 category.add("beauty")
                 bindig.addBeauty.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
@@ -71,7 +71,7 @@ class StoreAddFragment : Fragment() {
         bindig.addHospital.setOnClickListener{
             if("hospital" in category){
                 category.remove("hospital")
-                bindig.addHospital.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
+                bindig.addHospital.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CCCCCC"))
             } else {
                 category.add("hospital")
                 bindig.addHospital.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
@@ -81,7 +81,7 @@ class StoreAddFragment : Fragment() {
         bindig.addTraining.setOnClickListener{
             if("training" in category){
                 category.remove("training")
-                bindig.addTraining.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
+                bindig.addTraining.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CCCCCC"))
             } else {
                 category.add("training")
                 bindig.addTraining.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
@@ -116,7 +116,7 @@ class StoreAddFragment : Fragment() {
             bundle.putString("phone_number",phone_number)
             bundle.putStringArrayList("category",category as ArrayList<String>)
             StoreAddTwoFragment.bundle = bundle
-            parentFragmentManager.beginTransaction().replace(R.id.ownerActivity,StoreAddTwoFragment).addToBackStack(null).commitAllowingStateLoss()
+            parentFragmentManager.beginTransaction().replace(R.id.owner_main,StoreAddTwoFragment).addToBackStack(null).commitAllowingStateLoss()
 
         }
 

@@ -11,37 +11,44 @@
         android:layout_height="match_parent"
         android:padding="10dp"
         >
-        <Button
+        <android.widget.Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/review_beauty"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintWidth_percent="0.33"
-            android:background="@drawable/review_category_btn"
+            android:background="@drawable/search_result_category"
             android:text="미용"
+            android:textSize="20dp"
             android:textColor="@color/black"
             />
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+
+        <android.widget.Button
             android:id="@+id/review_hospital"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/review_beauty"
-            android:text="병원"
-            android:textColor="@color/black"
-            app:layout_constraintWidth_percent="0.33"
-            android:background="@drawable/review_category_btn"/>
-        <Button
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/review_training"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/review_hospital"
-            android:text="훈련"
+            android:layout_marginLeft="2dp"
+            android:background="@drawable/search_result_category"
+            android:text="병원"
+            android:textSize="20dp"
             android:textColor="@color/black"
-            app:layout_constraintWidth_percent="0.33"
-            android:background="@drawable/review_category_btn"/>
+            app:layout_constraintLeft_toRightOf="@id/review_beauty"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.33" />
+
+        <android.widget.Button
+            android:id="@+id/review_training"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_result_category"
+            android:text="훈련"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/fragmenthome"
+            app:layout_constraintLeft_toRightOf="@id/review_hospital"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.33" />
         <FrameLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -50,6 +57,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/colorPrimary"
             />
 
 

@@ -7,6 +7,7 @@ public class UserDTO {
     }
 
     public UserDTO(String nickname, String email, String imageUrl) {
+
         this.nickname = nickname;
         this.email = email;
         this.imageUrl = imageUrl;
@@ -14,6 +15,7 @@ public class UserDTO {
     public String getNickname() { return nickname; }
 
     public void setNickname(String nickname) { this.nickname = nickname; }
+
 
     public String getEmail() { return email; }
 

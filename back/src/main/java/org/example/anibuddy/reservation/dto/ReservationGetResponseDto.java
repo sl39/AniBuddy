@@ -1,6 +1,7 @@
 package org.example.anibuddy.reservation.dto;
 
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,5 +16,8 @@ public class ReservationGetResponseDto {
     private String storeName;
     private String storeLocation;
     private String info;
-
+    private Integer reservationId;
+    private String storePhoneNumber;
+    private Integer storeId;
+    private Integer state;
 }

@@ -10,15 +10,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
-
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
-<!--    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />-->
-
 
     <application
         android:name=".MainApplication"
@@ -35,6 +30,15 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.OnwerStoreUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.OwnerStoreDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.OwenerMainActivity"
+            android:exported="false" />
+        <activity
             android:name=".MessageListActivity"
             android:exported="false" />
         <activity
@@ -45,6 +49,9 @@
             android:exported="false" />
         <activity
             android:name=".activity.SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReservationUpdateActivity"
             android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"
@@ -106,8 +113,6 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-
-
         <activity
             android:name=".ReservationDetailFragment"
             android:exported="false" />
@@ -116,6 +121,9 @@
             android:exported="false" />
         <activity
             android:name=".ReservationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ReservationCompleteOwnerActivity"
             android:exported="false" />
 
         <meta-data

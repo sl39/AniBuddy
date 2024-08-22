@@ -11,9 +11,10 @@
         android:id="@+id/alarm"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:icon="@drawable/alarm"
         android:title="Alarm"
         app:showAsAction="always"
         android:gravity="center"
-   />
+        />
 
 </menu>

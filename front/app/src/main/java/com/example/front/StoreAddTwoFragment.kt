@@ -85,7 +85,7 @@ class StoreAddTwoFragment : Fragment() {
 
         val roadAddress = bundle.getString("rnAdres")
         val detailAddress = bundle.getString("detailAddress")
-        val info = ""
+        var info = ""
         val storeImageList = mutableListOf<String>()
         val name = bundle.getString("name")
         val phone_number = bundle.getString("phone_number")
@@ -122,6 +122,7 @@ class StoreAddTwoFragment : Fragment() {
         binding.addStoreButton.setOnClickListener{
             val d = charArrayOf('일','월','화','수','목','금','토')
             var openDay = ""
+            info = binding.storeInfo.text.toString()
             val hour = binding.hour.text.toString()
             val minutes = binding.minutes.text.toString()
             val endHour = binding.endHour.text.toString()
@@ -178,8 +179,6 @@ class StoreAddTwoFragment : Fragment() {
                             val context = requireContext()
                             val intent = Intent(context, context::class.java)
                             startActivity(intent)
-
-
                         }
                     }
 

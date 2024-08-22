@@ -37,18 +37,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="60dp"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="15dp"
+            android:textSize="20dp"
+            android:textStyle="bold"
             android:layout_toEndOf="@+id/imageView_user"
             android:text="닉네임 : " />
 
         <TextView
-            android:id="@+id/textView_user_name_show"
+            android:id="@+id/textView_user_name_show_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
+            android:textSize="20dp"
             android:layout_toEndOf="@+id/textView_user_name" />
 
         <TextView
@@ -56,8 +59,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView_user_name"
-            android:layout_marginStart="60dp"
+            android:layout_marginStart="50dp"
             android:layout_marginTop="25dp"
+            android:textSize="20dp"
+            android:textStyle="bold"
             android:layout_toEndOf="@+id/imageView_user"
             android:text="Email : " />
 
@@ -68,6 +73,7 @@
             android:layout_below="@+id/textView_user_name"
             android:layout_marginStart="15dp"
             android:layout_marginTop="25dp"
+            android:textSize="20dp"
             android:layout_toEndOf="@+id/textView_user_email" />
 
         <Button

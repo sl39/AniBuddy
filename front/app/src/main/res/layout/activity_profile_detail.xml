@@ -5,125 +5,225 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/home_top_app_bar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/toolbar_background"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"
             android:src="@drawable/anibuddy_logo" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/anibuddynostroke" />
+
     </com.google.android.material.appbar.MaterialToolbar>
 
-    <Button
+    <android.widget.Button
         android:id="@+id/profile_detail_remove"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:background="@drawable/bluebutton"
-        android:layout_marginRight="20dp"
+        android:backgroundTint="#2E6AFF"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
         android:text="삭제"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="20dp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_detail_significant" />
 
-    <Button
+    <android.widget.Button
         android:id="@+id/profile_detail_edit"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:background="@drawable/bluebutton"
+        android:backgroundTint="@color/colorPrimary"
         android:text="편집"
         android:textColor="@color/black"
         android:textSize="20dp"
-        android:textStyle="bold"
         android:layout_marginRight="20dp"
         app:layout_constraintEnd_toStartOf="@+id/profile_detail_remove"
         app:layout_constraintTop_toTopOf="@+id/profile_detail_remove" />
 
     <TextView
-        android:id="@+id/profile_detail_gender"
-        android:layout_width="100dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="100dp"
-        android:text="성별"
-        android:textSize="20dp"
-        android:scrollHorizontally="true"
-        app:layout_constraintStart_toEndOf="@+id/profile_detail_name"
-        app:layout_constraintTop_toTopOf="@+id/profile_detail_name" />
-
-    <TextView
         android:id="@+id/profile_detail_age"
-        android:layout_width="100dp"
-        android:layout_height="25dp"
+        android:layout_width="140dp"
+        android:layout_height="30dp"
         android:layout_marginTop="50dp"
         android:text="나이"
         android:textSize="20dp"
         android:scrollHorizontally="true"
+        android:background="@drawable/edge"
         app:layout_constraintStart_toStartOf="@+id/profile_detail_kind"
         app:layout_constraintTop_toBottomOf="@+id/profile_detail_kind" />
 
     <TextView
-        android:id="@+id/profile_detail_neutering"
-        android:layout_width="100dp"
-        android:layout_height="25dp"
-        android:text="중성화 여부"
-        android:textSize="20dp"
-        android:scrollHorizontally="true"
-        app:layout_constraintStart_toStartOf="@+id/profile_detail_gender"
-        app:layout_constraintTop_toTopOf="@+id/profile_detail_kind" />
-
-    <TextView
         android:id="@+id/profile_detail_kind"
-        android:layout_width="100dp"
-        android:layout_height="25dp"
+        android:layout_width="140dp"
+        android:layout_height="30dp"
         android:layout_marginTop="50dp"
         android:text="품종"
         android:textSize="20dp"
         android:scrollHorizontally="true"
+        android:background="@drawable/edge"
         app:layout_constraintStart_toStartOf="@+id/profile_detail_name"
         app:layout_constraintTop_toBottomOf="@+id/profile_detail_name" />
 
     <TextView
+        android:layout_width="140dp"
+        android:layout_height="20dp"
+        android:scrollHorizontally="true"
+        android:text="칩넘버"
+        android:textColor="#909090"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/profile_detail_chipNumber"
+        app:layout_constraintEnd_toEndOf="@+id/profile_detail_chipNumber"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/profile_detail_chipNumber" />
+
+    <TextView
+        android:layout_width="140dp"
+        android:layout_height="20dp"
+        android:scrollHorizontally="true"
+        android:text="성별"
+        android:textColor="#909090"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/profile_detail_gender"
+        app:layout_constraintEnd_toEndOf="@+id/profile_detail_gender"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/profile_detail_gender" />
+
+    <TextView
+        android:id="@+id/profile_detail_gender"
+        android:layout_width="140dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="40dp"
+        android:background="@drawable/edge"
+        android:scrollHorizontally="true"
+        android:text="성별"
+        android:textSize="20dp"
+        app:layout_constraintStart_toEndOf="@+id/profile_detail_name"
+        app:layout_constraintTop_toTopOf="@+id/profile_detail_name" />
+
+    <TextView
+        android:layout_width="140dp"
+        android:layout_height="20dp"
+        android:scrollHorizontally="true"
+        android:text="중성화 여부"
+        android:textColor="#909090"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/profile_detail_neutering"
+        app:layout_constraintEnd_toEndOf="@+id/profile_detail_neutering"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/profile_detail_neutering" />
+
+    <TextView
+        android:id="@+id/profile_detail_neutering"
+        android:layout_width="140dp"
+        android:layout_height="30dp"
+        android:background="@drawable/edge"
+        android:scrollHorizontally="true"
+        android:text="중성화 여부"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="@+id/profile_detail_gender"
+        app:layout_constraintTop_toTopOf="@+id/profile_detail_kind" />
+
+    <TextView
         android:id="@+id/profile_detail_chipNumber"
-        android:layout_width="100dp"
-        android:layout_height="25dp"
+        android:layout_width="140dp"
+        android:layout_height="30dp"
+        android:background="@drawable/edge"
+        android:scrollHorizontally="true"
         android:text="칩넘버"
         android:textSize="20dp"
-        android:scrollHorizontally="true"
         app:layout_constraintStart_toStartOf="@+id/profile_detail_neutering"
         app:layout_constraintTop_toTopOf="@+id/profile_detail_age" />
 
     <TextView
-        android:id="@+id/profile_detail_name"
+        android:layout_width="140dp"
+        android:layout_height="20dp"
+        android:scrollHorizontally="true"
+        android:text="이름"
+        android:textColor="#909090"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/profile_detail_name"
+        app:layout_constraintEnd_toEndOf="@+id/profile_detail_name"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/profile_detail_name" />
+
+    <TextView
+        android:layout_width="140dp"
+        android:layout_height="20dp"
+        android:scrollHorizontally="true"
+        android:text="품종"
+        android:textColor="#909090"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/profile_detail_kind"
+        app:layout_constraintEnd_toEndOf="@+id/profile_detail_kind"
+        app:layout_constraintStart_toStartOf="@+id/profile_detail_kind" />
+
+    <TextView
+        android:layout_width="140dp"
+        android:layout_height="20dp"
+        android:scrollHorizontally="true"
+        android:text="나이"
+        android:textColor="#909090"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/profile_detail_age"
+        app:layout_constraintEnd_toEndOf="@+id/profile_detail_age"
+        app:layout_constraintStart_toStartOf="@+id/profile_detail_age" />
+
+    <TextView
         android:layout_width="100dp"
-        android:layout_height="25dp"
+        android:layout_height="20dp"
+        android:scrollHorizontally="true"
+        android:text="특이사항"
+        android:textColor="#909090"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/profile_detail_significant"
+        app:layout_constraintStart_toStartOf="@+id/profile_detail_significant" />
+
+    <TextView
+        android:id="@+id/profile_detail_name"
+        android:layout_width="140dp"
+        android:layout_height="30dp"
         android:layout_marginTop="50dp"
         android:text="이름"
         android:textSize="20dp"
+        android:background="@drawable/edge"
         android:scrollHorizontally="true"
         app:layout_constraintStart_toStartOf="@+id/profile_detail_image_edge"
         app:layout_constraintTop_toBottomOf="@+id/profile_detail_image_edge" />
 
     <TextView
         android:id="@+id/profile_detail_significant"
-        android:layout_width="300dp"
-        android:layout_height="135dp"
+        android:layout_width="320dp"
+        android:layout_height="100dp"
         android:layout_marginTop="50dp"
         android:scrollHorizontally="true"
         android:text="특이사항 불러와지는 곳"
+        android:background="@drawable/edge"
         android:textSize="20dp"
         app:layout_constraintStart_toStartOf="@+id/profile_detail_image_edge"
         app:layout_constraintTop_toBottomOf="@+id/profile_detail_age" />
 
     <RelativeLayout
         android:id="@+id/profile_detail_image_edge"
-        android:layout_width="113dp"
+        android:layout_width="100dp"
         android:layout_height="106dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="20dp"
@@ -133,9 +233,10 @@
 
         <ImageView
             android:id="@+id/profile_detail_image"
-            android:layout_width="103dp"
-            android:layout_height="96dp"
-            android:background="@drawable/edge" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="35dp"
+            android:background="@drawable/ic_add" />
 
     </RelativeLayout>
 
@@ -144,11 +245,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:itemIconTint="@drawable/menu_item_color"
+        app:itemIconTint="@null"
         app:itemTextColor="@drawable/menu_item_color"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@drawable/toolbar_background"
         app:menu="@menu/bottom_menu">
 
     </com.google.android.material.bottomnavigation.BottomNavigationView>

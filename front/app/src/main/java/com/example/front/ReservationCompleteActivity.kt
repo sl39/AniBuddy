@@ -2,29 +2,35 @@ package com.example.front
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.front.activity.MainActivity
 import com.example.front.retrofit.RetrofitService
+import com.example.front.retrofit.UpdateReservationStateRequest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 class ReservationCompleteActivity : AppCompatActivity() {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservation_complete)
-        val resvationId = intent.getIntExtra("resvationId", -1)
+        val reservationId = intent.getIntExtra("resvationId", -1)
         var reservationDate : String? = null
         var storeName : String = "매장 이름 없음"
         var storeLocation : String = "매장 위치 없음"
@@ -32,7 +38,7 @@ class ReservationCompleteActivity : AppCompatActivity() {
         val api = RetrofitService.reservationService(this)
         lifecycleScope.launch {
             try{
-                val response = api.getReservations(resvationId)
+                val response = api.getReservations(reservationId)
                 if (response.code() == 200){
                     val data = response.body()
                     if(data != null){
@@ -42,13 +48,25 @@ class ReservationCompleteActivity : AppCompatActivity() {
                         info = data.info
                         // 예약 시간 TextView 설정
                         val reservationTimeTextView = findViewById<TextView>(R.id.reservationTimeTextView)
-                        reservationTimeTextView.text = "예약시간: ${reservationDate.toString()}"
+                        var date = LocalDateTime.parse(reservationDate)
+                        var dateformate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:MM"))
+                        reservationTimeTextView.text = "예약시간: ${dateformate}"
 
                         // 가져온 데이터 설정
-                        findViewById<TextView>(R.id.storeNameTextView).text = storeName
-                        findViewById<TextView>(R.id.storeLocationTextView).text = storeLocation
-                        findViewById<TextView>(R.id.reservationInfo).text = info
+                        findViewById<TextView>(R.id.storeNameTextView).text = "가게 이름: ${storeName}"
+                        findViewById<TextView>(R.id.storeLocationTextView).text =  "주소: ${storeLocation}"
+                        findViewById<TextView>(R.id.reservationInfo).text = "예약 세부 사항: ${info}"
 
+                        if(data.state == 2){
+                            val cancelBtn = findViewById<Button>(R.id.cancelReservationButton)
+                            cancelBtn.text = "취소된 예약입니다"
+                            cancelBtn.isEnabled = false
+                            findViewById<Button>(R.id.editReservationButton).visibility = View.INVISIBLE
+                        }else if(data.state == 1){
+                            val editBtn = findViewById<Button>(R.id.editReservationButton)
+                            editBtn.text = "확정된 예약입니다"
+                            editBtn.isEnabled = false
+                        }
                     }
                 } else {
                     Log.d("ㅋㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ", response.code().toString())
@@ -59,12 +77,6 @@ class ReservationCompleteActivity : AppCompatActivity() {
             }
         }
 
-        // Intent로부터 예약 정보 가져오기
-
-
-
-
-
 
 
         // 버튼 클릭 리스너 설정
@@ -74,7 +86,9 @@ class ReservationCompleteActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.editReservationButton).setOnClickListener {
-            startActivity(Intent(this, ReservationActivity::class.java))
+            val intent = Intent(this, ReservationUpdateActivity::class.java)
+            intent.putExtra("reservationId", reservationId)
+            startActivity(intent)
         }
 
         findViewById<Button>(R.id.cancelReservationButton).setOnClickListener {
@@ -83,9 +97,25 @@ class ReservationCompleteActivity : AppCompatActivity() {
             builder.setTitle("예약 취소")
             builder.setMessage("예약을 취소하시겠습니까?")
             builder.setPositiveButton("예") { dialog, which ->
-                Toast.makeText(this, "예약이 취소되었습니다.", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
+
+                val api = RetrofitService.reservationService(this)
+                lifecycleScope.launch {
+                    try {
+                        val updateReservationStateRequest = UpdateReservationStateRequest(reservationId,2)
+                        val response = api.updateReservationState(updateReservationStateRequest)
+                        if(response.code() == 200){
+                            Toast.makeText(this@ReservationCompleteActivity, "예약이 취소되었습니다.", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this@ReservationCompleteActivity, MainActivity::class.java))
+                            finish()
+                        } else {
+                            Toast.makeText(this@ReservationCompleteActivity, "예약이 취소실패.", Toast.LENGTH_SHORT).show()
+                            
+                        }
+                    } catch (e: Exception){
+                        Toast.makeText(this@ReservationCompleteActivity, "예약이 취소 통신실패.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
             }
             builder.setNegativeButton("아니요") { dialog, which -> dialog.dismiss() }
             builder.create().show()

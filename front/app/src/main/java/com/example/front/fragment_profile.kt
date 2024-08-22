@@ -20,14 +20,17 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.front.activity.LoginActivity
+import com.example.front.data.preferencesRepository
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.api.Authentication
 import com.google.firebase.FirebaseApp
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -58,11 +61,15 @@ class fragment_profile : Fragment() {
         "https://firebasestorage.googleapis.com/v0/b/testing-f501e.appspot.com/o/images%2Fe16ef3a0-7724-4847-a490-d685d22789ce.jpg?alt=media&token=4196f722-af88-4c4d-b815-94ac70aca525"
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
+    private val userPreferencesRepository by lazy {
+        preferencesRepository.getUserPreferencesRepository(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
 
         apiService = RetrofitClient.getRetrofitInstance(context).create(ApiService::class.java)
 
@@ -89,7 +96,7 @@ class fragment_profile : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        textView_user_name_show = view.findViewById(R.id.textView_user_name_show)
+        textView_user_name_show = view.findViewById(R.id.textView_user_name_show_profile)
         textView_user_email_show = view.findViewById(R.id.textView_user_email_show)
         imageView_user = view.findViewById(R.id.imageView_user)
         userProfileEditButton = view.findViewById(R.id.userProfileEditButton)
@@ -145,7 +152,7 @@ class fragment_profile : Fragment() {
 
         //FAB에 모양 추가해주기 위해 EFAB로 변경함. 24.08.15.
         val fab: ExtendedFloatingActionButton = view.findViewById(R.id.button_to_profile_add)
-        fab.setOnClickListener {
+        fab.setOnClickListener        {
             navigateToProfileAddActivity(id)
         }
 
@@ -153,9 +160,13 @@ class fragment_profile : Fragment() {
         val logout = view.findViewById<Button>(R.id.logout_button)
         logout.setOnClickListener {
             val intent = Intent(requireContext(), LoginActivity::class.java)
-            intent.putExtra("AccessToken", "")
-            intent.putExtra("RefreshToken", "")
-            startActivity(intent)
+            val token : String = ""
+            lifecycleScope.launch {
+                userPreferencesRepository.setAccessToken(token)
+                userPreferencesRepository.setRefreshToken(token)
+                startActivity(intent)
+
+            }
         }
 
         //FirebaseApp 실행 전 초기화.

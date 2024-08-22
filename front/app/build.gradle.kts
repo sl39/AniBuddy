@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -71,7 +72,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx:25.0.0")
     implementation("com.google.firebase:firebase-messaging-ktx:23.2.1")
     implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.gms:google-services:4.3.13")
+    implementation("com.google.gms:google-services:4.3.8")
 
     implementation("com.firebaseui:firebase-ui-storage:8.0.2")
     implementation("com.github.bumptech.glide:glide:4.16.0")
@@ -115,6 +116,6 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("com.naver.maps:map-sdk:3.19.1")
 
-
+    implementation ("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable")
 
 }

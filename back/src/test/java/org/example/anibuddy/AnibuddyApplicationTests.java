@@ -12,30 +12,43 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.example.anibuddy.pet.PetDTO;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
 @SpringBootTest
 class AnibuddyApplicationTests {
-	@Test
-	public void testPetDTOConstructor() {
-		for(int i=0 ; i <100000; i ++) {
-			System.out.println(i);
-		}
-		
-	}
-}
 
+    private final StoreRepository storeRepository;
+//    private final StoreSummaryRepository storeSummaryRepository;
+
+    @Autowired
+    AnibuddyApplicationTests(StoreRepository storeRepository) {
+        this.storeRepository = storeRepository;
+//        this.storeSummaryRepository = storeSummaryRepository;
+    }
+
+
+    @Test
+    void contextLoads() {
+    }
 
 //    @Test
-//    public void testPetDTOConstructor() {
-//        PetDTO dto = new PetDTO("SampleName", "SampleKind", "SampleGender", 5, 1);
-//        assertEquals("SampleName", dto.getPetName());
-//        assertEquals("SampleKind", dto.getPetKind());
-//        assertEquals("SampleGender", dto.getPetGender());
-//        assertEquals(5, dto.getPetAge());
-//        assertEquals(1, dto.getPetId());
+//    public void transToSummary(){
+//        List<StoreEntity> storeEntityList =  storeRepository.findAll();
+//        List<StoreSummary> storeSummaryList = new ArrayList<>();
+//        for (StoreEntity storeEntity : storeEntityList) {
+//            StoreSummary storeSummary = StoreSummary.builder()
+//                    .id(storeEntity.getId())
+//                    .mapy(storeEntity.getMapy())
+//                    .mapx(storeEntity.getMapx())
+//                    .storeInfo(storeEntity.getStoreInfo())
+//                    .storeName(storeEntity.getStoreName())
+//                    .address(storeEntity.getAddress())
+//                    .roadaddress(storeEntity.getRoadaddress())
+//                    .phoneNumber(storeEntity.getPhoneNumber())
+//                    .openday(storeEntity.getOpenday())
+//                    .storeEntity(storeEntity)
+//                    .build();
+//            storeSummaryList.add(storeSummary);
+//        }
+//
+//        storeSummaryRepository.saveAll(storeSummaryList);
 //    }
+}

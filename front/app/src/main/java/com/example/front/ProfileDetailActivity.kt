@@ -35,6 +35,8 @@ class ProfileDetailActivity : AppCompatActivity() {
     private var petId: Int? = null
     private val context = this@ProfileDetailActivity
 
+    //디테일 프로필에 이미지 불러오기 추가함. 24.08.15.
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileDetailBinding.inflate(layoutInflater)

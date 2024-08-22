@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.front.data.response.LoginResponse
 import com.example.front.data.response.OwnerCreateStore
 import com.example.front.data.response.OwnerStoreListResponse
+import com.example.front.data.response.OwnerUpdateStore
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
@@ -14,6 +15,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 
 interface OwnerApiService {
 
@@ -23,6 +25,11 @@ interface OwnerApiService {
     @POST("/api/store/create")
     fun createStore(
         @Body jsonParams : OwnerCreateStore
+    ) : Call<LoginResponse>
+
+    @PUT("/api/store/update")
+    fun updateStore(
+        @Body jsonParams: OwnerUpdateStore
     ) : Call<LoginResponse>
 
 

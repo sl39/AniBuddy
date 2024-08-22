@@ -14,5 +14,5 @@ public interface StoreImageRepository extends JpaRepository<StoreImage,Integer> 
             "WHERE i.store_entity_id = :storeId",
             nativeQuery = true
     )
-    Optional<List<String>> findAllByStoreId(@Param("storeId")Integer storeId);
+    Optional<List<String>> findAllByStoreId(@Param("storeId") Integer storeId);
 }

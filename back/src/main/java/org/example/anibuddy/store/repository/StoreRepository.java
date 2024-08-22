@@ -43,7 +43,7 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
             "AND ca.store_category_list_id = :category " +
             "ORDER BY t.reviewCount DESC, r.create_date DESC",
             nativeQuery = true)
-    List<Map<String, Object>> findStoresWithinDistance(@Param("lon") double lon, @Param("lat") double lat, @Param("category") Integer category);
+    List<Map<String, Object>> findStoresWithinDistance(@Param("lon")double lon,@Param("lat") double lat,@Param("category") Integer category);
 
 
     @Query(value = "SELECT s.id as storeId, " +
@@ -58,7 +58,7 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
             "GROUP BY s.id " +
             "ORDER BY reviewCount DESC",
             nativeQuery = true)
-    List<Map<String, Object>> findStoresByCategoryAndDistrictWithReview(@Param("district") List<String> district, @Param("category") Integer category, @Param("lon") double lon, @Param("lat") double lat, @Param("name")String name);
+    List<Map<String, Object>> findStoresByCategoryAndDistrictWithReview(@Param("district") List<String> district,@Param("category") Integer category,@Param("lon") double lon,@Param("lat") double lat,@Param("name") String name);
 
 
     @Query(value = "SELECT s.* " +
