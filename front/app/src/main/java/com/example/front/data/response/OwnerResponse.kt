@@ -22,6 +22,13 @@ data class OwnerCreateStore(
     val category: List<String>
 )
 
+data class OwnerUpdateStore(
+    val storeId: Int,
+    val info : String,
+    val openDay: String,
+
+)
+
 
 data class LocationResponse(
     val meta: Meta,

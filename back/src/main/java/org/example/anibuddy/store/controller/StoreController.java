@@ -30,6 +30,14 @@ public class StoreController {
         return Map.of("message", "Store created");
     }
 
+    @PutMapping("/update")
+    public Map<String,String> updateStore(@RequestBody StoreUpdateDto storeCreateDto){
+        ResponseEntity response = storeService.updateStore(storeCreateDto);
+
+        return Map.of("message", "Store update");
+    }
+
+
     @GetMapping("/main")
     public List<MainReviewSimpleResponseDto> getMainStore(MainReviewSimpleRequestDto resqeust){
         System.out.println(resqeust.getMapx());

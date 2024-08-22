@@ -1,6 +1,7 @@
 package com.example.front.activity
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -56,6 +57,7 @@ class OwnerStoreDetailActivity : AppCompatActivity() {
                                 view.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFAC4A"))
                             }
                         }
+
                         val categoryList = binding.categoryList
                         Log.d("스토어 카테고리", data?.storeCategory.toString())
                         if(data?.storeCategory != null){
@@ -110,6 +112,12 @@ class OwnerStoreDetailActivity : AppCompatActivity() {
             })
         } else {
             Toast.makeText(this@OwnerStoreDetailActivity, "스토어 아이디없음.", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.addStoreButton.setOnClickListener{
+            val intent = Intent(this@OwnerStoreDetailActivity,OnwerStoreUpdateActivity::class.java)
+            intent.putExtra("storeId",storeId)
+            startActivity(intent)
         }
 
 

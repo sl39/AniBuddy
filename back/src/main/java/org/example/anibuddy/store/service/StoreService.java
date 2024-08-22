@@ -329,4 +329,16 @@ public class StoreService {
 
         return store;
     }
+
+    public ResponseEntity<?> updateStore(StoreUpdateDto storeCreateDto) {
+        Optional<StoreEntity> storeEntity = storeRepository.findById(storeCreateDto.getStoreId());
+        if(storeEntity.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        StoreEntity store = storeEntity.get();
+        store.setStoreInfo(storeCreateDto.getInfo());
+        store.setOpenday(storeCreateDto.getOpenDay());
+        storeRepository.save(store);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

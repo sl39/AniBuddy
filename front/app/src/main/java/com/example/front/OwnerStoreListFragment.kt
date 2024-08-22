@@ -76,7 +76,7 @@ class OwnerStoreListFragment : Fragment() {
 
 
         binding.addStore.setOnClickListener{
-            parentFragmentManager.beginTransaction().replace(R.id.ownerActivity,StoreAddFragment).addToBackStack(null).commitAllowingStateLoss()
+            parentFragmentManager.beginTransaction().replace(R.id.owner_main,StoreAddFragment).addToBackStack(null).commitAllowingStateLoss()
         }
 
         api.getOwnerStoreList().enqueue(object : Callback<List<OwnerStoreListResponse>>{

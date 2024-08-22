@@ -155,13 +155,14 @@
 
 
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/addStoreButton"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:layout_marginTop="20dp"
                     android:layout_gravity="center"
                     android:text="다음"
+                    android:background="@color/colorPrimary"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold" />

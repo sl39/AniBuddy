@@ -54,7 +54,7 @@ class StoreAddFragment : Fragment() {
         bindig = FragmentStoreAddBinding.inflate(inflater,container,false)
         bindig.addAddress.setOnFocusChangeListener { v, hasFocus ->
             if(hasFocus){
-                parentFragmentManager.beginTransaction().replace(R.id.ownerActivity,AddressSearchFragment).addToBackStack(null).commitAllowingStateLoss()
+                parentFragmentManager.beginTransaction().replace(R.id.owner_main,AddressSearchFragment).addToBackStack(null).commitAllowingStateLoss()
             }
         }
 
@@ -116,7 +116,7 @@ class StoreAddFragment : Fragment() {
             bundle.putString("phone_number",phone_number)
             bundle.putStringArrayList("category",category as ArrayList<String>)
             StoreAddTwoFragment.bundle = bundle
-            parentFragmentManager.beginTransaction().replace(R.id.ownerActivity,StoreAddTwoFragment).addToBackStack(null).commitAllowingStateLoss()
+            parentFragmentManager.beginTransaction().replace(R.id.owner_main,StoreAddTwoFragment).addToBackStack(null).commitAllowingStateLoss()
 
         }
 
