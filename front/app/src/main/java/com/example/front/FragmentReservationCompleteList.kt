@@ -16,7 +16,9 @@ import com.example.front.adapter.ReservationAdapter
 import com.example.front.retrofit.Reservation
 import com.example.front.retrofit.RetrofitService
 import kotlinx.coroutines.launch
+import java.time.Duration
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Calendar
 
 class FragmentReservationCompleteList : Fragment() {
@@ -62,17 +64,10 @@ class FragmentReservationCompleteList : Fragment() {
                         // 예약일자가 지난 예약만 필터링
                         reservationList = allReservations.filter { reservation ->
                             val date = LocalDateTime.parse(reservation.reservationTime)
-                            val year = date.year
-                            val month = date.monthValue
-                            val day = date.dayOfMonth
-                            val hour = date.hour
-                            val minutes = date.minute
-                            // 예약 시간 계산
-                            val reservationTime = Calendar.getInstance().apply {
-                                set(year,month,day,hour,minutes) // 월은 0부터 시작
-                            }
-                            // 예약 시간이 현재 시간보다 지났는지 비교
-                            reservationTime.before(currentTime) || reservationTime.equals(currentTime)
+                            val now = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+                            // 예약 시간이 현재 시간보다 크거나 같은지 비교
+                            date < now
+
                         }
                         reservationAdapter.updateReservations(reservationList) // 어댑터에 데이터 업데이트
                     } ?: Log.e("FragmentReservationCompleteList", "Response body is null")

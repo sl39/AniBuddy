@@ -20,7 +20,9 @@ import com.example.front.retrofit.RetrofitService
 import com.example.front.retrofit.UpdateReservationStateRequest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -50,6 +52,7 @@ class ReservationCompleteActivity : AppCompatActivity() {
                         // 예약 시간 TextView 설정
                         val reservationTimeTextView = findViewById<TextView>(R.id.reservationTimeTextView)
                         var date = LocalDateTime.parse(reservationDate)
+                        val now =LocalDateTime.now(ZoneId.of("Asia/Seoul"));
                         var dateformate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:MM"))
                         reservationTimeTextView.text = "예약시간: ${dateformate}"
 
@@ -57,16 +60,32 @@ class ReservationCompleteActivity : AppCompatActivity() {
                         findViewById<TextView>(R.id.storeNameTextView).text = "가게 이름: ${storeName}"
                         findViewById<TextView>(R.id.storeLocationTextView).text =  "주소: ${storeLocation}"
                         findViewById<TextView>(R.id.reservationInfo).text = "예약 세부 사항: ${info}"
-
+                        val textNote = findViewById<Button>(R.id.editReservationButton)
                         if(data.state == 2){
                             val cancelBtn = findViewById<Button>(R.id.cancelReservationButton)
                             cancelBtn.text = "취소된 예약입니다"
                             cancelBtn.isEnabled = false
                             findViewById<Button>(R.id.editReservationButton).visibility = View.INVISIBLE
+                            textNote.visibility = View.INVISIBLE
                         }else if(data.state == 1){
                             val editBtn = findViewById<Button>(R.id.editReservationButton)
                             editBtn.text = "확정된 예약입니다"
                             editBtn.isEnabled = false
+                            textNote.text = "예약시간 1시간전에 알림을 드리겠습니다. \n 예약은 1시간 전까지만 취소 가능합니다"
+                            var date = LocalDateTime.parse(reservationDate)
+                            val now = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
+                            val nowPlus = now.plusHours(1)
+
+
+                            if (date < nowPlus) {
+                                val cancelBtn = findViewById<Button>(R.id.cancelReservationButton)
+                                cancelBtn.visibility = View.INVISIBLE
+                                // 여기에 실행할 코드 작성
+                            }
+                        } else {
+                            textNote.text = "예약시간 1시간전에 알림을 드리겠습니다. \n 예약은 1시간 전까지만 취소 가능합니다"
+
+
                         }
                     }
                 } else {
