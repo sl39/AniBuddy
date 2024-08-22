@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.window.OnBackInvokedDispatcher
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -111,7 +112,7 @@ class MessageListActivity : AppCompatActivity() {
         supportActionBar?.title = otherName
 
         val messageList = mutableListOf<MessageItem>()
-        val adapter = MessageItemAdapter(messageList, "ROLE_USER") //TODO: my role
+        val adapter = MessageItemAdapter(messageList, myRole!!)
 
         val realmListener = RealmChangeListener<RealmResults<ChatMessage>> {
             Log.d("Realm", "realm changed!")

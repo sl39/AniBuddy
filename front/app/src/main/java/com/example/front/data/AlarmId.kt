@@ -4,7 +4,7 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import java.util.UUID
 
-class AlarmId() : RealmObject() {
+open class AlarmId() : RealmObject() {
 
     @PrimaryKey
     var id = UUID.randomUUID().toString()

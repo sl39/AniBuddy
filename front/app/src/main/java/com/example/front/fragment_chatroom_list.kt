@@ -11,12 +11,18 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.front.activity.MessageItem
 import com.example.front.activity.MessageListActivity
 import com.example.front.data.ChatApiService
+import com.example.front.data.ChatMessage
 import com.example.front.data.Role
 import com.example.front.data.response.ChatRoomResponse
 import com.example.front.databinding.FragmentChatroomListBinding
 import com.example.front.databinding.ItemChatroomBinding
+import io.realm.Realm
+import io.realm.RealmChangeListener
+import io.realm.RealmResults
+import io.realm.kotlin.where
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,7 +40,7 @@ class ChatRoomItem(
     var otherId: Int,
     var otherRole: Role,
     var lastChatText: String?,
-    var lastChatDate: LocalDateTime
+    var lastChatDate: LocalDateTime?
 )
 
 class ChatRoomViewHolder(val binding: ItemChatroomBinding) : RecyclerView.ViewHolder(binding.root)
@@ -58,7 +64,9 @@ class ChatRoomAdapter(val datas: List<ChatRoomItem>) : RecyclerView.Adapter<Recy
         binding.otherName.text = datas[position].otherName
         //binding.otherProfileImage.setImageURI(datas[position].otherProfileImageUrl.toUri())
         binding.lastChatText.text = datas[position].lastChatText
-        binding.lastChatDate.text = datas[position].lastChatDate.format(formatter)
+
+        val dataText: String? = datas[position].lastChatDate?.format(formatter)
+        binding.lastChatDate.text = dataText
 
         binding.root.setOnClickListener {
             val intent = Intent(it.context, MessageListActivity::class.java)
@@ -123,7 +131,24 @@ class fragment_chatroom_list : Fragment() {
         this.chatRoomResponseList = chatRoomList
         chatRoomItemList.clear()
 
+        val db = Realm.getDefaultInstance()
         for(i in chatRoomResponseList){
+
+            // 채팅방 목록에 넣을 lastDate, lastText 추출
+            val chatMessage: RealmResults<ChatMessage> = db.where<ChatMessage>()
+                .equalTo("roomId", i.roomId)
+                .sort("createdAt")
+                .findAll()
+
+            // 채팅방에 채팅 내역이 없는 경우
+            var lastChatDate: LocalDateTime? = null
+            var lastChatText = ""
+
+            if(chatMessage!!.size > 0){
+                lastChatDate = LocalDateTime.parse(chatMessage!!.last()!!.createdAt)
+                lastChatText = chatMessage!!.last()!!.message
+            }
+
             val chatRoomItem = ChatRoomItem(
                 roomId = i.roomId,
                 myName = i.myName,
@@ -134,11 +159,17 @@ class fragment_chatroom_list : Fragment() {
                 otherImageUrl = i.otherImageUrl,
                 otherId = i.otherId,
                 otherRole = Role.valueOf(i.otherRole),
-                lastChatText = "last chat!!!",
-                lastChatDate = LocalDateTime.now()
+                lastChatText = lastChatText,
+                lastChatDate = lastChatDate
             )
             chatRoomItemList.add(chatRoomItem)
         }
-        binding.recyclerview.adapter = ChatRoomAdapter(chatRoomItemList)
+        db.close()
+
+        val sortedList = chatRoomItemList.sortedByDescending {
+            it.lastChatDate ?: LocalDateTime.MIN
+        }
+
+        binding.recyclerview.adapter = ChatRoomAdapter(sortedList)
     }
 }
