@@ -33,11 +33,10 @@ class LoginActivity : AppCompatActivity() {
         val ownerIntent: Intent = Intent(this@LoginActivity, OwenerMainActivity::class.java)
         userPreferencesRepository = preferencesRepository.getUserPreferencesRepository(this@LoginActivity)
 
-
         val binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        fragmentManager.beginTransaction().replace(R.id.login_activity,fragmentOwnerLogin).commitAllowingStateLoss()
 
         api.getUserTest().enqueue(object : Callback<UserTesetResponse>{
             override fun onResponse(
@@ -70,10 +69,5 @@ class LoginActivity : AppCompatActivity() {
                     .show();
             }
         })
-
-        fragmentManager.beginTransaction().replace(R.id.login_activity,fragmentOwnerLogin).commitAllowingStateLoss()
-
     }
 }
-
-

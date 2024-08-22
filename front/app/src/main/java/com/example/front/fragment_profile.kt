@@ -1,6 +1,7 @@
 package com.example.front
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,17 +12,21 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.front.activity.LoginActivity
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.FirebaseApp
+import com.example.front.activity.MainActivity
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.example.front.data.UserPreferencesRepository
+import com.google.firebase.firestore.auth.Token
 
 class fragment_profile : Fragment() {
     private lateinit var apiService: ApiService
@@ -131,6 +136,7 @@ class fragment_profile : Fragment() {
         })
     }
 
+    //유저Id로 userProfile 불러오는 함수
     private fun loadUser(userId: Int) {
         apiService.getProfileAboutUser(userId).enqueue(object : Callback<UserDTO> {
             override fun onResponse(call: Call<UserDTO>, response: Response<UserDTO>) {

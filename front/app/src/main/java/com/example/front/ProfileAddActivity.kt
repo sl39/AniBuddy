@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import com.example.front.activity.MainActivity
 import com.example.front.databinding.ActivityProfileAddBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.FirebaseApp
 import com.google.firebase.storage.FirebaseStorage
 import retrofit2.Call
 import retrofit2.Callback
@@ -42,6 +43,7 @@ class ProfileAddActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
 
     private val context = this@ProfileAddActivity
+
 
     private val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/testing-f501e.appspot.com/o/images%2Fe16ef3a0-7724-4847-a490-d685d22789ce.jpg?alt=media&token=4196f722-af88-4c4d-b815-94ac70aca525"
 
@@ -76,6 +78,8 @@ class ProfileAddActivity : AppCompatActivity() {
         bottomNavigationView.selectedItemId = R.id.profile // 초기 선택된 항목 설정
         bottomNavigationView.setOnNavigationItemSelectedListener(ItemSelectedListener())
 
+//        FirebaseApp.initializeApp(this)
+
         initializeViews()
         setupAdapters()
         setupListeners()
@@ -107,6 +111,14 @@ class ProfileAddActivity : AppCompatActivity() {
                 petProfileRegistration(defaultImageUrl)
             }
         }
+
+
+//            selectedImageUri?.let {imageUri ->
+//                uploadImage(imageUri) { imageUrl ->
+//                    petProfileRegistration(imageUrl)
+//                }
+//            } ?: Toast.makeText(this, "이미지를 선택하세요", Toast.LENGTH_SHORT).show()
+//        }
 
         val imageView: ImageView = findViewById(R.id.profile_add_image)
         imageView.setOnClickListener{
