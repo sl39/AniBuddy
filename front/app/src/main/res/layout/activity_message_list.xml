@@ -27,28 +27,20 @@
         android:layout_height="50dp"
         android:orientation="horizontal" >
 
-        <ImageButton
-            android:id="@+id/mediaBtn"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:src="@mipmap/ic_launcher" />
-
         <EditText
             android:id="@+id/msgEditText"
             android:layout_width="0dp"
-            android:layout_weight="6"
+            android:layout_weight="1"
             android:layout_height="match_parent"
             android:paddingHorizontal="3dp"
             android:background="@android:color/transparent"
             android:inputType="text" />
 
-        <ImageButton
+        <Button
             android:id="@+id/sendBtn"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:src="@mipmap/ic_launcher" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="전송" />
 
     </LinearLayout>
 

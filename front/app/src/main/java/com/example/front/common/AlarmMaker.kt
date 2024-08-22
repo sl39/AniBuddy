@@ -88,19 +88,26 @@ class AlarmMaker {
             .equalTo("reservationId", reservationId)
             .sort("createdAt")
             .findAll()
-        val pendingIntentId: Int = alarmId.last()!!.alarmId
 
-        db.close()
-        Log.d("Realm", "Alarm Id 조회: $pendingIntentId")
+        // 예약이 이미 확정되어 IntentId가 생성된 경우
+        if(alarmId.size > 0){
+            val pendingIntentId: Int = alarmId.last()!!.alarmId
 
-        val intent = Intent(context, NotificationListActivity::class.java)
+            db.close()
+            Log.d("Realm", "Alarm Id 조회: $pendingIntentId")
 
-        // 예약건에 저장되어 있는 pendingIntentId로 동일한 PendingIntent 얻어오기
-        val pendingIntent = PendingIntent.getBroadcast(
-            context, pendingIntentId, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
+            val intent = Intent(context, NotificationListActivity::class.java)
 
-        alarmManager.cancel(pendingIntent)
+            // 예약건에 저장되어 있는 pendingIntentId로 동일한 PendingIntent 얻어오기
+            val pendingIntent = PendingIntent.getBroadcast(
+                context, pendingIntentId, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+
+            alarmManager.cancel(pendingIntent)
+        }
+        else {
+            db.close()
+        }
     }
 }

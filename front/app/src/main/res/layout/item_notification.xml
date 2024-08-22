@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 읽은 알림은 android:background="#F0F0F0" -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="20dp"
+    android:background="@color/white"
+    android:paddingVertical="10dp" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingVertical="5dp"
+        android:paddingHorizontal="5dp" >
+
+        <TextView
+            android:id="@+id/notification_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Notification Title"
+            android:layout_marginRight="5dp"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/notification_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notification Content"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/notification_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Notification Date"
+            android:textSize="12sp"
+            android:textColor="#808080" />
+
+    </LinearLayout>
+</LinearLayout>
