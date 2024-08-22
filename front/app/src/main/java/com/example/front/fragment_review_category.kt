@@ -96,6 +96,7 @@ class FragmentReviewCategory : Fragment(), ReviewAdapter.OnItemClickListener {
     private lateinit var adapter: ReviewAdapter
     private lateinit var parentContext: Context
     private lateinit var location: Location
+    private var result : String = "beauty"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -163,8 +164,10 @@ class FragmentReviewCategory : Fragment(), ReviewAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(review: MainReviewSimpleResponseDto) {
-//        val intent : Intent = Intent(parentContext, StoreDetailActivity::class.java)
-        Log.d("가게가 뭐가 나올까", review.storeId.toString())
+        val intent : Intent = Intent(parentContext, StoreDetailActivity::class.java)
+        intent.putExtra("STORE_ID",review.storeId)
+        intent.putExtra("category",result)
+        startActivity(intent)
     }
 
     companion object {

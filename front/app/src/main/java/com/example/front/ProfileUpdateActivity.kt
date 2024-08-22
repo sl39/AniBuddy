@@ -54,11 +54,11 @@ class ProfileUpdateActivity : AppCompatActivity() {
         "뱅갈", "브리티쉬숏헤어", "샤미즈", "스코티시폴드", "스핑크스", "아메리칸숏헤어", "아비시니안", "코리안숏헤어",
         "터키쉬앙고라", "페르시안", "직접 입력" ) + "다시 선택"
 
-    //프로필 수정 시 이미지 및 텍스트 작성한 것들 불러오기 추가. 24.08.15.
     private var selectedImageUri: Uri? = null
     private val REQUEST_IMAGE_SELECT = 1
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
+    private val context = this@ProfileUpdateActivity
     private val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/testing-f501e.appspot.com/o/images%2Fe16ef3a0-7724-4847-a490-d685d22789ce.jpg?alt=media&token=4196f722-af88-4c4d-b815-94ac70aca525"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +77,7 @@ class ProfileUpdateActivity : AppCompatActivity() {
         setupAdapters()
         setupListeners()
 
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
+        apiService = RetrofitClient.getRetrofitInstance(context).create(ApiService::class.java)
 
         val petId = getIntent().getIntExtra("petId", -1)
     }

@@ -3,6 +3,7 @@ package org.example.anibuddy.Review.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.Review.dto.ReviewCreateDto;
+import org.example.anibuddy.Review.dto.ReviewDetailResponseDto;
 import org.example.anibuddy.Review.entity.ReviewEntity;
 import org.example.anibuddy.Review.entity.ReviewImage;
 import org.example.anibuddy.Review.entity.ReviewTag;
@@ -10,6 +11,7 @@ import org.example.anibuddy.Review.repository.ReviewImageRepository;
 import org.example.anibuddy.Review.repository.ReviewRepository;
 import org.example.anibuddy.Review.repository.ReviewTagRepository;
 import org.example.anibuddy.store.entity.StoreEntity;
+import org.example.anibuddy.store.repository.StoreRepository;
 import org.example.anibuddy.store.service.StoreService;
 import org.example.anibuddy.user.UserEntity;
 import org.example.anibuddy.user.UserService;
@@ -31,6 +33,7 @@ public class ReviewService {
     private final StoreService storeService;
     private final UserService userService;
     private final ReviewTagRepository reviewTagRepository;
+    private final StoreRepository storeRepository;
 
 
     public List<ReviewEntity> getAll() {
@@ -104,5 +107,31 @@ public class ReviewService {
             reviewTagRepository.save(reviewTag);
 
         }
+    }
+
+    public List<ReviewDetailResponseDto> getReviews(Integer storeId) throws Exception {
+        Optional<StoreEntity> storeEntity = storeRepository.findById(storeId);
+        if (storeEntity.isEmpty()) {
+            throw new Exception("스토어가 존재하지 않습니다");
+        }
+        List<ReviewEntity> reviews = reviewRepository.findByStoreEntity(storeEntity.get());
+        List<ReviewDetailResponseDto> reviewDetailResponseDtoList = new ArrayList<>();
+        for (ReviewEntity reviewEntity : reviews) {
+            List<String> images = new ArrayList<String>();
+            for(ReviewImage reviewImage : reviewEntity.getReviewImageList()){
+                images.add(reviewImage.getImageUrl());
+            }
+            ReviewDetailResponseDto reviewDetailResponseDto = ReviewDetailResponseDto.builder()
+                    .reviewScore(reviewEntity.getReviewScore())
+                    .reviewId(reviewEntity.getId())
+                    .review(reviewEntity.getReview())
+                    .createDate(reviewEntity.getCreateDate().toString())
+                    .updateDate(reviewEntity.getUpdateDate() != null ? reviewEntity.getUpdateDate().toString() : null)
+                    .reviewImageList(images)
+                    .build();
+            reviewDetailResponseDtoList.add(reviewDetailResponseDto);
+        }
+
+        return reviewDetailResponseDtoList;
     }
 }

@@ -3,6 +3,7 @@ package org.example.anibuddy.store.repository;
 import org.example.anibuddy.store.entity.StoreEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
     Optional<StoreEntity> findByStoreNameAndAddress(String storeName, String address);
+    Optional<StoreEntity> findById(Integer id);
 
     List<StoreEntity> findTop10ByOrderByIdDesc();
 
@@ -41,7 +43,7 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
             "AND ca.store_category_list_id = :category " +
             "ORDER BY t.reviewCount DESC, r.create_date DESC",
             nativeQuery = true)
-    List<Map<String, Object>> findStoresWithinDistance(double lon, double lat,Integer category);
+    List<Map<String, Object>> findStoresWithinDistance(@Param("lon")double lon,@Param("lat") double lat,@Param("category") Integer category);
 
 
     @Query(value = "SELECT s.id as storeId, " +
@@ -56,13 +58,13 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
             "GROUP BY s.id " +
             "ORDER BY reviewCount DESC",
             nativeQuery = true)
-    List<Map<String, Object>> findStoresByCategoryAndDistrictWithReview(List<String> district, Integer category, double lon, double lat,String name);
+    List<Map<String, Object>> findStoresByCategoryAndDistrictWithReview(@Param("district") List<String> district,@Param("category") Integer category,@Param("lon") double lon,@Param("lat") double lat,@Param("name") String name);
 
 
     @Query(value = "SELECT s.* " +
             " FROM store_entity s " +
             " WHERE s.owner_entity_id = :id ", nativeQuery = true)
-    List<StoreEntity> findAllByOwnerEntity(int id);
+    List<StoreEntity> findAllByOwnerEntity(@Param("id") int id);
 
 
 

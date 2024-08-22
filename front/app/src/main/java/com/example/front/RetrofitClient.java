@@ -1,8 +1,12 @@
 package com.example.front;
 
+import android.content.Context;
+
+import com.example.front.data.AuthInterceptor;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -15,11 +19,16 @@ public class RetrofitClient {
             .setLenient()
             .create();
 
-    public static Retrofit getRetrofitInstance() {
+    public static Retrofit getRetrofitInstance(Context context) {
+        AuthInterceptor authInterceptor = new AuthInterceptor(context);
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(authInterceptor)
+                .build();
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(okHttpClient)
                     .build();
         }
         return retrofit;

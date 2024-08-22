@@ -42,6 +42,9 @@ class ProfileAddActivity : AppCompatActivity() {
     private lateinit var petChipNumberEditText: EditText
     private lateinit var imageView: ImageView
 
+    private val context = this@ProfileAddActivity
+
+
     private val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/testing-f501e.appspot.com/o/images%2Fe16ef3a0-7724-4847-a490-d685d22789ce.jpg?alt=media&token=4196f722-af88-4c4d-b815-94ac70aca525"
 
     private var userId: Int? = null
@@ -81,7 +84,7 @@ class ProfileAddActivity : AppCompatActivity() {
         setupAdapters()
         setupListeners()
 
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
+        apiService = RetrofitClient.getRetrofitInstance(context).create(ApiService::class.java)
 
     }
 
@@ -208,7 +211,7 @@ class ProfileAddActivity : AppCompatActivity() {
 
 
     //이미지 업로드 메소드
-    fun uploadImage(imageUri: Uri, callback: (String?) -> Unit) {
+    private fun uploadImage(imageUri: Uri, callback: (String?) -> Unit) {
         val fileName = "images/${UUID.randomUUID()}.jpg"
         val imageRef = storageRef.child(fileName)
 
@@ -276,6 +279,7 @@ class ProfileAddActivity : AppCompatActivity() {
 //        }
         builder.show()
     }
+
     private fun convertCategoryToEnglish(category: String): String {
         return when (category) {
             "강아지" -> "DOG"
@@ -298,7 +302,6 @@ class ProfileAddActivity : AppCompatActivity() {
         val petAge = petAgeEditText.getText().toString().toInt()
         val petChipNumber = petChipNumberEditText.getText().toString().toLong()
 
-        // db에 base64Image로 만들어놔서... 나중에 수정하려면 base64Image를 imageUri로만 바꾸기
         val imageUrl = imageUrl
         val base64Image = imageUrl
 
@@ -320,32 +323,32 @@ class ProfileAddActivity : AppCompatActivity() {
 //        if (base64Image.isNotEmpty()) {
 //            apiService.petProfileRegistration(petCreateDTO, userId).enqueue(object :
 //                Callback<UserResponse> {
-                        apiService.petProfileRegistration(petCreateDTO, userId).enqueue(object : Callback<UserResponse> {
-                override fun onResponse(
-                    call: Call<UserResponse>,
-                    response: Response<UserResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        Toast.makeText(
-                            this@ProfileAddActivity,
-                            "프로필 추가 완료: ${response.body()?.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        finish()
-                    } else {
-                        Toast.makeText(this@ProfileAddActivity, "요청 실패!", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+        apiService.petProfileRegistration(petCreateDTO, userId).enqueue(object : Callback<UserResponse> {
+            override fun onResponse(
+                call: Call<UserResponse>,
+                response: Response<UserResponse>
+            ) {
+                if (response.isSuccessful) {
                     Toast.makeText(
                         this@ProfileAddActivity,
-                        "network error! : ${t.message}",
+                        "프로필 추가 완료: ${response.body()?.message}",
                         Toast.LENGTH_SHORT
-                    ).show();
+                    ).show()
+                    finish()
+                } else {
+                    Toast.makeText(this@ProfileAddActivity, "요청 실패!", Toast.LENGTH_SHORT).show()
                 }
-            })
-        }
+            }
+
+            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                Toast.makeText(
+                    this@ProfileAddActivity,
+                    "network error! : ${t.message}",
+                    Toast.LENGTH_SHORT
+                ).show();
+            }
+        })
+    }
 
     inner class ItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener {
         override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
@@ -368,7 +371,6 @@ class ProfileAddActivity : AppCompatActivity() {
         finish() // ProfileAddActivity 종료
     }
 }
-
 
 
 

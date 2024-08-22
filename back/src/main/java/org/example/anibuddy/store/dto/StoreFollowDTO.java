@@ -10,20 +10,19 @@ import org.example.anibuddy.store.entity.StoreImage;
 @Getter
 @Setter
 public class StoreFollowDTO {
-	private String storeName, address, roadaddress;
+	private String storeName, address, storeCategory;
 	private List<StoreImage> storeImageList;
 	private Integer id;
     
 	public StoreFollowDTO() {
 	}
 	
-	public StoreFollowDTO(String storeName, String address, String roadaddress, List<StoreImage> storeImageList, Integer id) {
+	public StoreFollowDTO(String storeName, String address, String storeCategory, List<StoreImage> storeImageList, Integer id) {
 		this.storeName = storeName;
 		this.address = address;
-		this.roadaddress = roadaddress;
+		this.storeCategory = storeCategory;
 		this.storeImageList = storeImageList;
 		this.id = id;
 	}
 }
-// roadaddress를 category로 가정하고 api 작성. 이후 category 해결되면 roadaddresss 수정.
 	

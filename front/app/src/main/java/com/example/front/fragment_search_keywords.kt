@@ -100,7 +100,7 @@ class fragment_search_keywords : Fragment() {
             val view  = categoryBtns.getChildAt(i)
             if (view is Button){
                 if(view.text.equals(selectCategory)){
-                    view.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
+                    view.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
 
                 }
             }
@@ -109,7 +109,7 @@ class fragment_search_keywords : Fragment() {
             val view  = districtBtns.getChildAt(i)
             if(view is Button){
                 if (selectDistrict.contains(view.text)){
-                    view.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
+                    view.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
 
                 }
             }
@@ -126,7 +126,7 @@ class fragment_search_keywords : Fragment() {
                 view.setOnClickListener {
                     if (selectDistrict.contains(view.text.toString())) {
                         selectDistrict.remove(view.text.toString())
-                        view.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
+                        view.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
 
                     } else {
                         // Reset background for all buttons first
@@ -145,14 +145,14 @@ class fragment_search_keywords : Fragment() {
                 view.setOnClickListener {
                     if (view.text.toString() == selectCategory) {
                         selectCategory = "test"
-                        view.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
+                        view.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
 
                     } else {
                         // Reset background for all buttons first
                         for (j in 0 until districtBtns.childCount) {
                             val button = districtBtns.getChildAt(j)
                             if (button is Button) {
-                                button.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFFFFF"))
+                                button.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
 
                             }
                         }

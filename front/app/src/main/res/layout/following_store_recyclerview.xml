@@ -3,51 +3,66 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="396dp"
-    android:layout_height="78dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/edge"
     app:layout_constraintTop_toBottomOf="@+id/view"
-    android:layout_marginTop="40dp"
+    android:padding="16dp"
+    android:layout_margin="8dp"
     tools:layout_editor_absoluteX="5dp"
-    android:id="@+id/following_store_recyclerview"
-    android:layout_marginLeft="5dp">
+    android:id="@+id/following_store_recyclerview">
 
-<ImageView
-    android:id="@+id/followList1"
-    android:layout_width="74dp"
-    android:layout_height="74dp"
-    android:layout_alignParentStart="true"
-    android:layout_alignParentTop="true"
-    app:srcCompat="@drawable/chat" />
+    <ImageView
+        android:id="@+id/followList1"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@drawable/chat" />
 
-<TextView
-    android:id="@+id/followingList1Name"
-    android:layout_width="75dp"
-    android:layout_height="27dp"
-    android:layout_alignTop="@+id/followList1"
-    android:layout_marginStart="30dp"
-    android:layout_marginTop="5dp"
-    android:layout_toEndOf="@+id/followList1"
-    android:text="이름1" />
+    <TextView
+        android:id="@+id/followingList1Name"
+        android:layout_width="230dp"
+        android:layout_height="27dp"
+        android:layout_alignTop="@+id/followList1"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:layout_toEndOf="@+id/followList1"
+        android:text="이름1"
+        android:textSize="20dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:scrollbars="horizontal"
+        />
 
-<TextView
-    android:id="@+id/followingList1Address"
-    android:layout_width="75dp"
-    android:layout_height="27dp"
-    android:layout_marginStart="30dp"
-    android:layout_marginTop="35dp"
-    android:layout_toEndOf="@+id/followList1"
-    android:text="주소1" />
+    <TextView
+        android:id="@+id/followingList1Address"
+        android:layout_width="230dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/followingList1Name"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/followList1"
+        android:breakStrategy="balanced"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:scrollbars="horizontal"
+        android:text="주소1"
+        android:textSize="15dp" />
 
-<TextView
-    android:id="@+id/followingList1Cateogry"
-    android:layout_width="75dp"
-    android:layout_height="27dp"
-    android:layout_alignTop="@+id/followingList1Name"
-    android:layout_marginStart="80dp"
-    android:layout_marginTop="0dp"
-    android:layout_toEndOf="@+id/followingList1Name"
-    android:text="카테고리1"
-    tools:layout_editor_absoluteX="238dp"
-    tools:layout_editor_absoluteY="143dp" />
+    <TextView
+        android:id="@+id/followingList1Cateogry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:scrollbars="horizontal"
+        android:background="@drawable/followbutton"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="카테고리1"
+        android:textSize="15dp"
+        android:gravity="center"/>
+
 </RelativeLayout>

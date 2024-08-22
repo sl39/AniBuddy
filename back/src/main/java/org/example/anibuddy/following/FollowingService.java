@@ -1,11 +1,13 @@
 package org.example.anibuddy.following;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.example.anibuddy.store.dto.StoreDetailDTO;
 import org.example.anibuddy.store.dto.StoreFollowDTO;
 import org.example.anibuddy.store.entity.StoreEntity;
+import org.example.anibuddy.store.entity.StoreImage;
 import org.example.anibuddy.store.repository.StoreRepository;
 import org.example.anibuddy.user.UserEntity;
 import org.example.anibuddy.user.UserRepository;
@@ -18,29 +20,34 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FollowingService {
 
-	private FollowingRepository followingRepository;
-	private StoreRepository storeRepository;
-	private UserRepository userRepository;
+	private final FollowingRepository followingRepository;
+	private final StoreRepository storeRepository;
+	private final UserRepository userRepository;
+	
+	
+	public boolean isFollowing(UserEntity userEntity, StoreEntity storeEntity, String storeCategory) {
 
-
-
+        return followingRepository.existsByUserEntityAndStoreEntityAndStoreCategory(userEntity, storeEntity, storeCategory);
+    }
+	
     // 버튼 누르면 리스트에 추가, 한 번 더 누르면 삭제
 
-	public void toggleFollowing(Integer userId, Integer storeId) {
+	public void toggleFollowing(Integer userId, Integer storeId, String storeCategory) {
 	        // storeId로 StoreEntity 조회
-        StoreEntity store = storeRepository.findById(storeId)
+		// store id 조회
+        StoreEntity storeEntity = storeRepository.findById(storeId)
         		.orElseThrow(() -> new EntityNotFoundException("Store with ID " + storeId + " not found"));
-
-        String storeRoadaddress = store.getRoadaddress();
-        UserEntity user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User with ID " + userId + " not found"));
-	    FollowingEntity existingFollowing = followingRepository.findByUserEntityAndStoreEntityAndStoreRoadaddress(user, store, storeRoadaddress);
+        // user id 조회
+        UserEntity userEntity = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User with ID " + userId + " not found"));
+        
+	    FollowingEntity existingFollowing = followingRepository.findByUserEntityAndStoreEntityAndStoreCategory(userEntity, storeEntity, storeCategory);
 	    if (existingFollowing != null) {
 	        followingRepository.delete(existingFollowing);
 	    } else {	
 	        FollowingEntity following = new FollowingEntity();
-	        following.setUserEntity(user);
-	        following.setStoreEntity(store);
-	        following.setStoreRoadaddress(storeRoadaddress);
+	        following.setUserEntity(userEntity);
+	        following.setStoreEntity(storeEntity);
+	        following.setStoreCategory(storeCategory);
 	        followingRepository.save(following);
 	    }
 	}
@@ -59,24 +66,28 @@ public class FollowingService {
 	                storeDTO.setId(store.getId());
 	                storeDTO.setStoreName(store.getStoreName());
 	                storeDTO.setAddress(store.getAddress());
-	                storeDTO.setRoadaddress(store.getRoadaddress());
+	                storeDTO.setStoreCategory(following.getStoreCategory());
 	                storeDTO.setStoreImageList(store.getStoreImageList());
 	                return storeDTO;
 	            })
 	            .collect(Collectors.toList());
 	    }
 
-public StoreDetailDTO getStoreDetailDTO(Integer id) {
-	StoreEntity storeEntity = storeRepository.findById(id)
-	.orElseThrow(() -> new IllegalArgumentException("해당 가게가 없습니다!"));
-	
-	return convertToDetailDTO(storeEntity);
-	}
-
-private StoreDetailDTO convertToDetailDTO(StoreEntity store) {
-	StoreDetailDTO storeDetailDTO = new StoreDetailDTO(store.getStoreName(), store.getAddress(), store.getRoadaddress(), store.getStoreInfo(), store.getPhoneNumber(), store.getOpenday(), store.getDistrict(), store.getStoreImageList(), store.getMapx(), store.getMapy(), store.getId());
-	return storeDetailDTO;
-	}
+//public StoreDetailDTO getStoreDetailDTO(Integer id) {
+//	StoreEntity storeEntity = storeRepository.findById(id)
+//	.orElseThrow(() -> new IllegalArgumentException("해당 가게가 없습니다!"));
+//
+//	return convertToDetailDTO(storeEntity);
+//	}
+//
+//private StoreDetailDTO convertToDetailDTO(StoreEntity store) {
+//	List<String> images = new ArrayList<>();
+//	for(StoreImage img: store.getStoreImageList()){
+//		images.add(img.getImageUrl());
+//	}
+//	StoreDetailDTO storeDetailDTO = new StoreDetailDTO(store.getStoreName(), store.getAddress(), store.getRoadaddress(), store.getStoreInfo(), store.getPhoneNumber(), store.getOpenday(), store.getDistrict(), images, store.getMapx(), store.getMapy(), store.getId());
+//	return storeDetailDTO;
+//	}
 }
 
 

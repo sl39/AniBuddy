@@ -4,6 +4,7 @@ plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
     id("kotlin-kapt")
+    id("realm-android")
 }
 
 android {
@@ -102,6 +103,18 @@ dependencies {
     implementation("com.google.dagger:dagger:2.0")
     // gps
     implementation ("com.google.android.gms:play-services-location:21.0.1")
+
+    implementation ("com.tickaroo.tikxml:annotation:0.8.13")
+    implementation ("com.tickaroo.tikxml:core:0.8.13")
+    implementation ("com.tickaroo.tikxml:retrofit-converter:0.8.13")
+    kapt ("com.tickaroo.tikxml:processor:0.8.13")
+
+    implementation("com.google.android.material:material:1.12.0")
+
+    // Naver Maps SDK
+    implementation("androidx.multidex:multidex:2.0.1")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("com.naver.maps:map-sdk:3.19.1")
 
     implementation ("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable")
 

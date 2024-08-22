@@ -70,7 +70,7 @@ public class SignupService {
         userRepository.save(user);
         if(user.getRole().getKey().equals("ROLE_OWNER")){
             OwnerEntity ownerEntity = OwnerEntity.builder()
-                    .id(user.getId())
+                    .userEntity(user)
                     .name(user.getUserName())
                     .email(user.getEmail())
                     .build();

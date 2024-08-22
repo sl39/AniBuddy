@@ -29,9 +29,8 @@ public class FollowingEntity {
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	private UserEntity userEntity;
-	
+
 	@Column
-	private String storeRoadaddress;
-	
-	    
+	private String storeCategory;
+
 }	

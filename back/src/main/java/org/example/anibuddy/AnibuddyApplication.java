@@ -9,5 +9,4 @@ public class AnibuddyApplication {
     public static void main(String[] args) {
         SpringApplication.run(AnibuddyApplication.class, args);
     }
-
 }

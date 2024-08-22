@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.front.activity.LoginActivity
+import com.google.firebase.FirebaseApp
 import com.example.front.activity.MainActivity
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import retrofit2.Call
@@ -37,13 +38,14 @@ class fragment_profile : Fragment() {
     private var petProfiles: List<PetDTO> = emptyList()
     private lateinit var logout_button: Button
     private var userId: Int? = null
+    //private val context = requireContext()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
+        apiService = RetrofitClient.getRetrofitInstance(context).create(ApiService::class.java)
 
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
@@ -58,14 +60,17 @@ class fragment_profile : Fragment() {
             intent.putExtra("petId", profile.petId)
             startActivity(intent)
         }
+
         recyclerView.adapter = petAdapter
         return view
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        textView_user_name_show = view.findViewById(R.id.textView_user_name_show)
+        textView_user_name_show = view.findViewById(R.id.textView_user_name_show_profile)
         textView_user_email_show = view.findViewById(R.id.textView_user_email_show)
         imageView_user = view.findViewById(R.id.imageView_user)
 
@@ -73,14 +78,12 @@ class fragment_profile : Fragment() {
 
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        val userId = arguments?.getInt("userId")
+        val userId = arguments?.getInt("userId") ?: -1
         Log.d("ProfileFragment", "userId from arguments: $userId")
-        if (userId != null) {
-            loadUser(userId)
-            loadPet(userId)
-        } else {
-            showToast("유저를 찾을 수 없습니다!")
-        }
+
+        loadUser(userId)
+        loadPet(userId)
+
 
         //FAB에 모양 추가해주기 위해 EFAB로 변경함. 24.08.15.
         val fab: ExtendedFloatingActionButton = view.findViewById(R.id.button_to_profile_add)
@@ -96,6 +99,8 @@ class fragment_profile : Fragment() {
             intent.putExtra("RefreshToken", "")
             startActivity(intent)
         }
+
+        FirebaseApp.initializeApp(requireContext())
     }
 
     private fun navigateToProfileAddActivity(userId: Int?) {
@@ -126,7 +131,7 @@ class fragment_profile : Fragment() {
             }
 
             override fun onFailure(call: Call<List<PetDTO>>, t: Throwable) {
-                showToast("Network error!")
+                showToast("네트워크 연결 에러!")
             }
         })
     }

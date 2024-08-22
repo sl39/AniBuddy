@@ -1,10 +1,13 @@
 package org.example.anibuddy.user;
 
+import org.example.anibuddy.global.CustomUserDetails;
 import org.example.anibuddy.pet.PetDTO;
 import org.example.anibuddy.pet.PetDetailDTO;
 import org.example.anibuddy.pet.PetEntity;
 import org.example.anibuddy.pet.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +25,10 @@ public class UserService {
 	private final PetRepository petRepository;
 
 	public UserDTO getUserDTO(Integer id) {
-		UserEntity userEntity = userRepository.findById(id)
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
+		UserEntity userEntity = userRepository.findById(userId)
 		.orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다!"));
 
 		return convertToUserDTO(userEntity);
@@ -33,9 +39,12 @@ public class UserService {
 		return userDTO;
 	}
 
-	public List<PetDTO> getPetByUserId(Integer userId) {
-	       List<PetEntity> petEntity = petRepository.findByUserEntityId(userId);
-	       return petEntity.stream().map(this::convertToDTO).collect(Collectors.toList());
+	public List<PetDTO> getPetByUserId(Integer id) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		Integer userId = userDetails.getUserId();
+		List<PetEntity> petEntity = petRepository.findByUserEntityId(userId);
+		return petEntity.stream().map(this::convertToDTO).collect(Collectors.toList());
 	    }
 
 	public PetDetailDTO getPetDetailDTO(Integer PetId) {

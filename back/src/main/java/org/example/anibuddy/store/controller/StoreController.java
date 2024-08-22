@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.store.dto.*;
 import org.example.anibuddy.store.entity.StoreEntity;
 import org.example.anibuddy.store.service.StoreService;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,10 +24,19 @@ public class StoreController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createStore(@RequestBody StoreCreateDto storeCreateDto){
-        ResponseEntity  response = storeService.createStore(storeCreateDto);
-        return response;
+    public Map<String,String> createStore(@RequestBody StoreCreateDto storeCreateDto){
+        ResponseEntity response = storeService.createStore(storeCreateDto);
+
+        return Map.of("message", "Store created");
     }
+
+    @PutMapping("/update")
+    public Map<String,String> updateStore(@RequestBody StoreUpdateDto storeCreateDto){
+        ResponseEntity response = storeService.updateStore(storeCreateDto);
+
+        return Map.of("message", "Store update");
+    }
+
 
     @GetMapping("/main")
     public List<MainReviewSimpleResponseDto> getMainStore(MainReviewSimpleRequestDto resqeust){
@@ -50,6 +61,17 @@ public class StoreController {
     @GetMapping("/search/location")
     public List<StoreSearchLocationCategoryResponse> serachLocationCategory(StoreSearchLocationCategoryRequestDto reqeust){
         return storeService.serachLocationCategory(reqeust.getDistrict(),reqeust.getCategory(),reqeust.getMapx(), reqeust.getMapy(), reqeust.getName());
+    }
+
+    @GetMapping("/{storeId}")
+    public StoreDetailDTO getStoreById(@PathVariable(value = "storeId") Integer storeId){
+        return storeService.getStoreById(storeId);
+    }
+
+    @GetMapping("/owner")
+    public StoreOwnerDetailResponseDto getStoreOwnerById(@RequestParam("storeId") Integer storeId){
+        System.out.println("들어옴?");
+        return storeService.getStoreOwnerById(storeId);
     }
 
 }

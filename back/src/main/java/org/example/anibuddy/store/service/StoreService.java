@@ -3,10 +3,10 @@ package org.example.anibuddy.store.service;
 import jakarta.transaction.Transactional;
 import jdk.jfr.Category;
 import lombok.RequiredArgsConstructor;
-import org.example.anibuddy.store.dto.MainReviewSimpleResponseDto;
-import org.example.anibuddy.store.dto.StoreCreateDto;
-import org.example.anibuddy.store.dto.StoreSearchLocationCategoryResponse;
-import org.example.anibuddy.store.dto.StoreWithDistanceDTO;
+import org.example.anibuddy.global.CustomUserDetails;
+import org.example.anibuddy.owner.OwnerEntity;
+import org.example.anibuddy.owner.OwnerRepository;
+import org.example.anibuddy.store.dto.*;
 import org.example.anibuddy.store.entity.StoreCategory;
 import org.example.anibuddy.store.entity.StoreEntity;
 import org.example.anibuddy.store.entity.StoreImage;
@@ -16,12 +16,16 @@ import org.example.anibuddy.store.repository.StoreRepository;
 import org.example.anibuddy.store.repository.StoreSummaryRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +33,7 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
     private final StoreImageRepository storeImageRepository;
-    private final StoreSummaryRepository storeSummaryRepository;
-    private final StoreCategoryRepository storeCategoryRepository;
+    private final OwnerRepository ownerRepository;
 
     public List<StoreEntity> findAll(){
         return storeRepository.findTop10ByOrderByIdDesc();
@@ -42,6 +45,41 @@ public class StoreService {
         if(storeEntity.isPresent()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String role = userDetails.getRole();
+        Integer ownerId = userDetails.getUserId();
+        if(role.equals("ROLE_USER")){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<OwnerEntity> owner = ownerRepository.findById(ownerId);
+        if(owner.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+
+        List<StoreCategory> storeCategories = new ArrayList<>();
+        for(String cate: storeCreateDto.getCategory()){
+            int id;
+            if (cate.equals("beauty")){
+                id = 1;
+            } else if (cate.equals("hospital")){
+                id = 2;
+            } else if (cate.equals("training")) {
+                id = 3;
+            } else {
+                id = 4;
+                cate = "etc";
+            }
+            StoreCategory category = new StoreCategory().builder()
+                    .id(id)
+                    .category(cate)
+                    .build();
+            storeCategories.add(category);
+        }
+
+
 
         StoreEntity newStoreEntity = new StoreEntity().builder()
                 .mapx(storeCreateDto.getMapx())
@@ -52,6 +90,9 @@ public class StoreService {
                 .storeInfo(storeCreateDto.getInfo())
                 .openday(storeCreateDto.getOpenDay())
                 .phoneNumber(storeCreateDto.getPhone_number())
+                .storeCategoryList(storeCategories)
+                .ownerEntity(owner.get())
+                .district(storeCreateDto.getDistrict())
                 .build();
 
 
@@ -67,7 +108,7 @@ public class StoreService {
         }
 
         storeImageRepository.saveAll(storeImagesList);
-        return new ResponseEntity<>(newStoreEntity.getStoreName(), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
     @Transactional
     public String createStoreAll(List<StoreCreateDto> storeCreateDtoList){
@@ -124,6 +165,8 @@ public class StoreService {
         Optional<StoreEntity> storeEntity = storeRepository.findByStoreNameAndAddress(storeName, address);
         return storeEntity;
     }
+    
+    
 
     public List<MainReviewSimpleResponseDto> getMainStore(double mapx, double mapy, String category) {
         int categoryId = 0;
@@ -229,5 +272,73 @@ public class StoreService {
             return storeImages.get();
         }
         return storeImg;
+    }
+
+    public StoreDetailDTO getStoreById(Integer storeId) {
+        StoreEntity storeEntity = Optional.ofNullable(storeRepository.findById(storeId).orElseThrow(() -> new UsernameNotFoundException("email not found"))).get();
+        List<String> images = new ArrayList<String>();
+        for(StoreImage image : storeEntity.getStoreImageList()){
+            images.add(image.getImageUrl());
+
+        }
+        StoreDetailDTO storeEntity1 = StoreDetailDTO.builder()
+                .storeImageList(images)
+                .storeName(storeEntity.getStoreName())
+                .storeInfo(storeEntity.getStoreInfo())
+                .mapy(storeEntity.getMapy())
+                .mapx(storeEntity.getMapx())
+                .address(storeEntity.getAddress())
+                .roadaddress(storeEntity.getRoadaddress())
+                .district(storeEntity.getDistrict())
+                .id(storeEntity.getId())
+                .openday(storeEntity.getOpenday())
+                .phoneNumber(storeEntity.getPhoneNumber())
+                .build();
+        return storeEntity1;
+    }
+
+    public StoreOwnerDetailResponseDto getStoreOwnerById(Integer storeId) {
+        StoreEntity storeEntity = Optional.ofNullable(storeRepository.findById(storeId).orElseThrow(() -> new UsernameNotFoundException("email not found"))).get();
+        String[] days = {"일","월", "화", "수", "목", "금","토"};
+        List<String> openday = new ArrayList<>();
+        for(String day : days){
+            if(storeEntity.getOpenday().contains(day)){
+                openday.add(day);
+            }
+        }
+        List<String> dayday = List.of(storeEntity.getOpenday().split("//"));
+        String openTime = dayday.get(0).substring(1);
+        List<String> storeCategoryList = storeEntity.getStoreCategoryList()
+                .stream()
+                .map(StoreCategory::getCategory)
+                .collect(Collectors.toList());
+        List<String> images = getStoreImages(storeId);
+
+
+
+        StoreOwnerDetailResponseDto store = StoreOwnerDetailResponseDto.builder()
+                .storeName(storeEntity.getStoreName())
+                .storeInfo(storeEntity.getStoreInfo())
+                .storePhoneNumber(storeEntity.getPhoneNumber())
+                .storeAddress(storeEntity.getAddress())
+                .openDay(openday)
+                .openTime(openTime)
+                .storeCategory(storeCategoryList)
+                .images(images)
+                .build();
+
+        return store;
+    }
+
+    public ResponseEntity<?> updateStore(StoreUpdateDto storeCreateDto) {
+        Optional<StoreEntity> storeEntity = storeRepository.findById(storeCreateDto.getStoreId());
+        if(storeEntity.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        StoreEntity store = storeEntity.get();
+        store.setStoreInfo(storeCreateDto.getInfo());
+        store.setOpenday(storeCreateDto.getOpenDay());
+        storeRepository.save(store);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

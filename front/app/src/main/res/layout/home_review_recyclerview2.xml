@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
+    android:layout_margin="8dp">
+
+    <ImageView
+        android:id="@+id/review_image"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:adjustViewBounds="true"
+        android:src="@drawable/anibuddy_logo"
+        app:layout_constraintEnd_toStartOf="@+id/home_review_store_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintWidth_percent="0.3" />
+
+    <TextView
+        android:id="@+id/home_review_store_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:text=""
+        app:layout_constraintStart_toEndOf="@+id/review_image"
+        app:layout_constraintTop_toTopOf="@+id/review_image"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/home_review_store_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="무슨 무슨 가게 어쩌구 저쩌구"
+        app:layout_constraintTop_toBottomOf="@id/home_review_store_name"
+        app:layout_constraintStart_toStartOf="@id/home_review_store_name"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <RatingBar
+        android:id="@+id/home_review_ratingbar"
+        style="@style/Widget.AppCompat.RatingBar.Indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:isIndicator="true"
+        android:max="5"
+        android:rating="3"
+        android:stepSize="0.5"
+        android:progressTint="#DFD681"
+        app:layout_constraintTop_toBottomOf="@id/home_review_store_text"
+        app:layout_constraintStart_toStartOf="@id/home_review_store_name" />
+
+    <TextView
+        android:id="@+id/home_review_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="20시간전"
+        app:layout_constraintTop_toBottomOf="@id/home_review_ratingbar"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

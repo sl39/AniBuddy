@@ -33,6 +33,7 @@ class ProfileDetailActivity : AppCompatActivity() {
     private lateinit var profileDetailSignificant: TextView
     private lateinit var profileDetailImage: ImageView
     private var petId: Int? = null
+    private val context = this@ProfileDetailActivity
 
     //디테일 프로필에 이미지 불러오기 추가함. 24.08.15.
 
@@ -48,7 +49,7 @@ class ProfileDetailActivity : AppCompatActivity() {
         bottomNavigationView.selectedItemId = R.id.profile // 초기 선택된 항목 설정
         bottomNavigationView.setOnNavigationItemSelectedListener(ItemSelectedListener())
 
-        apiService = RetrofitClient.getRetrofitInstance().create(ApiService::class.java)
+        apiService = RetrofitClient.getRetrofitInstance(context).create(ApiService::class.java)
 
         val petId = getIntent().getIntExtra("petId", -1)
         Log.d("ProfileDetailActivity", "petId from intent: $petId")
@@ -62,7 +63,6 @@ class ProfileDetailActivity : AppCompatActivity() {
             profileDetailSignificant = findViewById(R.id.profile_detail_significant)
             profileDetailImage = findViewById(R.id.profile_detail_image)
             loadPetDetail(petId)
-//            petProfileEdit(petId)
         } else {
             showToast("해당 프로필을 찾을 수 없습니다!")
         }
@@ -104,7 +104,6 @@ class ProfileDetailActivity : AppCompatActivity() {
                             .placeholder(R.drawable.anibuddy_logo) // 로딩 중 표시할 이미지
                             .error(R.drawable.anibuddy_logo) // 로드 실패 시 표시할 이미지
                             .into(profileDetailImage) // 이미지를 로드할 ImageView
-
                     } ?: run {
                         Log.d("ProfileFragment", "Response body is null")
                     }
@@ -195,103 +194,4 @@ class ProfileDetailActivity : AppCompatActivity() {
         startActivity(intent)
         finish() // ProfileAddActivity 종료
     }
-
-
-
 }
-
-//    private fun navigateToProfileFragment() {
-//        // UserId를 인텐트로 전달하여 MainActivity에서 사용합니다.
-//        val userId = getIntent().getStringExtra("userId")
-//        val intent = Intent(this, MainActivity::class.java).apply {
-//            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-//            putExtra("navigateToProfileFragment", true)
-//            putExtra("userId", userId) // 사용자 ID를 전달
-//        }
-//        startActivity(intent)
-//        finish() // 현재 액티비티 종료
-//    }
-
-
-
-
-
-//
-//    private fun petProfileEdit() {
-//        apiService.getPetProfileAboutUserId(userId).enqueue(object : Callback<List<PetDTO>> {
-//            override fun onResponse(call: Call<List<PetDTO>>, response: Response<List<PetDTO>>) {
-//                if (response.isSuccessful) {
-//                    Log.d("ProfileFragment", "userId from arguments: $userId")
-//                }
-//                else {
-//                    Log.e("ProfileFragment", "Response not successful: ${response.code()} - ${response.message()}")
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<List<PetDTO>>, t: Throwable) {
-//                showToast("Network error!")
-//            }
-//        })
-//    }
-//}
-//
-//
-//private fun loadPet(userId: Int) {
-//    apiService.getPetProfileByUserId(userId).enqueue(object : Callback<List<PetDTO>> {
-//        override fun onResponse(call: Call<List<PetDTO>>, response: Response<List<PetDTO>>) {
-//            if (response.isSuccessful) {
-//                Log.d("ProfileFragment", "userId from arguments: $userId")
-//                Log.d("ProfileFragment", "수신된 프로필: $petProfiles")
-//                petProfiles = response.body() ?: emptyList()
-//                petAdapter = PetAdapter(petProfiles) {petDTO ->
-//                    val intent = Intent(context, ProfileDetailActivity::class.java).apply {
-//                        putExtra("petId", petDTO.petId)
-//                    }
-//                    startActivity(intent)
-//                }
-//                recyclerView.adapter = petAdapter
-//            }
-//            else {
-//                Log.e("ProfileFragment", "Response not successful: ${response.code()} - ${response.message()}")
-//                Log.e("ProfileFragment", "Error body: ${response.errorBody()?.string()}")
-//            }
-//        }
-//
-//        override fun onFailure(call: Call<List<PetDTO>>, t: Throwable) {
-//            showToast("Network error!")
-//        }
-//    })
-//}
-//
-//private fun loadUser(userId: Int) {
-//    apiService.getProfileAboutUser(userId).enqueue(object : Callback<UserDTO> {
-//        override fun onResponse(call: Call<UserDTO>, response: Response<UserDTO>) {
-//            Log.d("ProfileFragment", "API Response Code: ${response.code()}")
-//            Log.d("ProfileFragment", "Response Body: ${response.body()}")
-//            Log.d("ProfileFragment", "Response Error Body: ${response.errorBody()?.string()}")
-//
-//            if (response.isSuccessful) {
-//                response.body()?.let { user ->
-//                    textView_user_name_show.text = user.userName
-//                    textView_user_email_show.text = user.email
-//                    textView_address_show.text = user.  userAddress
-//                } ?: run {
-//                    Log.d("ProfileFragment", "Response body is null")
-//                }
-//            } else {
-//                Log.d("ProfileFragment", "Response not successful: ${response.errorBody()?.string()}")
-//                showToast("요청 실패!")
-//            }
-//        }
-//
-//        override fun onFailure(call: Call<UserDTO>, t: Throwable) {
-//            Log.e("ProfileFragment", "API Failure: ${t.message}")
-//            showToast("네트워크 연결 에러!")
-//        }
-//    })
-//}
-//
-//private fun showToast(message: String) {
-//    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-//}
-//}

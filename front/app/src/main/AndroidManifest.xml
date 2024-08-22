@@ -10,8 +10,13 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
 
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -25,6 +30,18 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".activity.OnwerStoreUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.OwnerStoreDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.OwenerMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MessageListActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.OwnerActivity"
             android:exported="false" />
         <activity
@@ -32,6 +49,9 @@
             android:exported="false" />
         <activity
             android:name=".activity.SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReservationUpdateActivity"
             android:exported="false" />
         <activity
             android:name=".activity.LoginActivity"
@@ -45,7 +65,7 @@
         <activity
             android:name=".ProfileAddActivity"
             android:exported="false"
-            android:label="Profile Add Activity"
+            android:label="ProfileAddActivity"
             android:parentActivityName=".fragment_profile">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -82,19 +102,6 @@
             <!-- </intent-filter> -->
         </activity>
         <activity
-            android:name=".ToggleTestActivity"
-            android:exported="false"
-            android:label="ToggleTestActivity"
-            android:parentActivityName=".fragment_following_list">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".fragment_following_list" />
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
-        <activity
             android:name=".activity.StoreDetailActivity"
             android:exported="false" />
         <activity
@@ -106,6 +113,22 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
+        <activity
+            android:name=".ReservationDetailFragment"
+            android:exported="false" />
+        <activity
+            android:name=".ReservationCompleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReservationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.ReservationCompleteOwnerActivity"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="nigmvlrtnj" />
     </application>
 
 </manifest>
