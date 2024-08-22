@@ -10,7 +10,6 @@ import lombok.Setter;
 import org.example.anibuddy.store.entity.StoreEntity;
 import org.example.anibuddy.user.UserEntity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity

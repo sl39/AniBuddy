@@ -1,11 +1,16 @@
 package org.example.anibuddy.global.websocket;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.anibuddy.chat.model.Role;
+import org.example.anibuddy.notification.repository.FcmTokenRepository;
+import org.example.anibuddy.notification.service.NotificationService;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -18,9 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class SocketHandler extends TextWebSocketHandler {
 
+    private final NotificationService notificationService;
     List<HashMap<String, Object>> chatRoomList = new ArrayList<>();
 
     @Override
@@ -30,6 +37,9 @@ public class SocketHandler extends TextWebSocketHandler {
         JSONObject obj = jsonToObjectParser(msg);
 
         Integer reqRoomId = Integer.parseInt((String)obj.get("roomId"));
+        String reqSenderName = (String)obj.get("senderName");
+        Role reqReceiverRole = Role.valueOf((String)obj.get("receiverRole"));
+        Integer reqReceiverId = Integer.parseInt((String)obj.get("receiverId"));
 
         HashMap<String, Object> tempSessions = new HashMap<String, Object>();
         if(!chatRoomList.isEmpty()) {
@@ -55,6 +65,12 @@ public class SocketHandler extends TextWebSocketHandler {
                     }
                 }
             }
+            //상대방의 웹소켓 세션이 없는 경우 FCM 푸시 알림 요청
+            if(tempSessions.size() < 3) {
+                notificationService.pushChatNotification(
+                        reqReceiverId, reqReceiverRole, msg);
+            }
+
         }
     }
 
@@ -100,7 +116,7 @@ public class SocketHandler extends TextWebSocketHandler {
         super.afterConnectionClosed(session, status);
     }
 
-    private static JSONObject jsonToObjectParser(String jsonStr) {
+    private JSONObject jsonToObjectParser(String jsonStr) {
         JSONParser parser = new JSONParser();
         JSONObject obj = null;
         try {

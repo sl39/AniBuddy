@@ -5,6 +5,7 @@ plugins {
     id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("realm-android")
+    id("com.google.gms.google-services") //FCM
 }
 
 android {

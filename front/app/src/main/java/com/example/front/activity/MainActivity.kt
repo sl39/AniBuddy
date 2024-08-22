@@ -1,26 +1,43 @@
 package com.example.front.activity
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import com.example.front.ApiService
 import com.example.front.FragmentReservationList
 import com.example.front.Permission
 import com.example.front.R
 import com.example.front.RetrofitClient
+import com.example.front.activity.SearchActivity
+import com.example.front.data.ChatApiService
+import com.example.front.data.response.FcmTokenResponse
 import com.example.front.databinding.ActivityMainBinding
 import com.example.front.fragment_chatroom_list
 import com.example.front.fragment_following_list
 import com.example.front.fragment_home
 import com.example.front.fragment_profile
 import com.example.front.fragment_reservation_list
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.api.Authentication
 
+import com.google.firebase.messaging.FirebaseMessaging
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -30,9 +47,20 @@ class MainActivity : AppCompatActivity() {
     private val fragmentFollowingList = fragment_following_list()
     private val fragmentChatList = fragment_chatroom_list()
     private val fragmentProfile = fragment_profile()
+    private lateinit var sharedPreferences: SharedPreferences
+
     override fun onStart() {
         super.onStart()
         Permission(this).requestLocation() // 위치 권한 요청
+        askNotificationPermission() // 알림 권한 요청
+
+        // 토큰 등록 사실이 확인 되지 않는 경우에 서버에 토큰 전송
+        sharedPreferences = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        if(!isFcmTokenRegistered()) {
+            Log.d("SharedPreferences","mark FcmToken Registered")
+            registerFcmToken() // 푸시 알림에 필요한 토큰을 등록
+            markFcmTokenRegistered() // 토큰 등록 사실을 표시
+        }
     }
 
     private val userId : Int = 1
@@ -67,7 +95,6 @@ class MainActivity : AppCompatActivity() {
 
         apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService::class.java)
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
@@ -151,7 +178,7 @@ class MainActivity : AppCompatActivity() {
                     val fragmentFollowingList = fragment_following_list().apply {
                         arguments = Bundle().apply {
 //                            putInt("userId", userId)
-                            
+
 //                            Log.d("userIdCheckFollowingList", "userId = $userId")
                         }
                     }
@@ -224,6 +251,86 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+    // 권한 요청 런처
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Log.d("Permission", "알림 권한이 허용되었습니다")
+        } else {
+            Log.d("Permission", "알림 권한이 거부되었습니다")
+        }
+    }
+
+    // 알림 권한 확인 및 요청
+    private fun askNotificationPermission() {
+        // TIRAMISU 버전 이하라면 권한 요청 필요X
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+
+        // 알림 권한이 이미 허용된 상태인지 확인
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.d("Permission", "알림 권한이 이미 허용되어 있습니다")
+        } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+            val alertDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(this)
+            alertDialogBuilder
+                .setTitle("알림 권한 요청")
+                .setMessage("알림을 받기 위해서는 알림 권한 설정이 필요합니다.")
+                .setNegativeButton("취소") { dialog, which ->
+                    Log.d("Permission", "알림 권한이 거부되었습니다")
+                }
+                .setPositiveButton("알림 권한 설정") { dialog, which ->
+                    requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }
+            val dialog: AlertDialog = alertDialogBuilder.create()
+            dialog.show()
+        } else {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
+
+    private fun registerFcmToken() {
+
+        var token: String? = null
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.d("FcmToken", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            token = task.result
+            Log.d("FcmToken", "FCM Token is ${token}")
+
+            // 서버에 token 값 저장하기
+            val chatApi = ChatApiService.create(this)
+
+            chatApi.registerFcmToken(token!!).enqueue(object: Callback<FcmTokenResponse> {
+                override fun onResponse(
+                    call: Call<FcmTokenResponse>,
+                    response: Response<FcmTokenResponse>
+                ) {
+                    if(response.isSuccessful) {
+                        response.body()!!.let {
+                            Log.d("FcmToken", "id:${it.clientId} role:${it.clientRole} fcmToken:${it.fcmToken}")
+                        }
+                    }
+                }
+                override fun onFailure(call: Call<FcmTokenResponse>, t: Throwable) {
+                    Log.e("FcmToken", "onFailure - $t")
+                }
+            })
+        })
+    }
+
+    private fun isFcmTokenRegistered(): Boolean {
+        return sharedPreferences.getBoolean("fcm_token_registered", false)
+    }
+
+    private fun markFcmTokenRegistered() {
+        sharedPreferences.edit().putBoolean("fcm_token_registered", true).apply()
+    }
 }
 
 
