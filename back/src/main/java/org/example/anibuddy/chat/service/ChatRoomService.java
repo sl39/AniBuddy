@@ -8,6 +8,8 @@ import org.example.anibuddy.chat.model.Role;
 import org.example.anibuddy.chat.repository.ChatRoomRepository;
 import org.example.anibuddy.owner.OwnerEntity;
 import org.example.anibuddy.owner.OwnerRepository;
+import org.example.anibuddy.store.entity.StoreEntity;
+import org.example.anibuddy.store.repository.StoreRepository;
 import org.example.anibuddy.user.UserEntity;
 import org.example.anibuddy.user.UserRepository;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
     private final OwnerRepository ownerRepository;
+    private final StoreRepository storeRepository;
 
     @Transactional
     public ChatRoomResponse makeChatRoom(int userId, ChatRoomRequest chatRoomRequest) {
@@ -31,9 +34,12 @@ public class ChatRoomService {
         UserEntity user = userRepository
                 .findById(userId)
                 .orElseThrow(() -> new RuntimeException("user 정보가 조회되지 않습니다."));
-        OwnerEntity owner = ownerRepository
-                .findById(chatRoomRequest.getOwnerId())
-                .orElseThrow(() -> new RuntimeException("owner 정보가 조회되지 않습니다"));
+        StoreEntity store = storeRepository
+                .findById(chatRoomRequest.getStoreId())
+                .orElseThrow(() -> new RuntimeException("store 정보가 조회되지 않습니다."));
+
+        OwnerEntity owner = store.getOwnerEntity();
+        if(owner == null) throw new RuntimeException("owner 정보가 조회되지 않습니다.");
 
         // 이미 같은 구성원의 채팅방이 존재하는지 확인
         Optional<ChatRoomEntity> optionalChatRoom = chatRoomRepository.findByUserAndOwner(user, owner);

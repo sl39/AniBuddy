@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.front.activity.MessageItem
 import com.example.front.activity.MessageListActivity
 import com.example.front.data.ChatApiService
 import com.example.front.data.ChatMessage
@@ -20,7 +19,6 @@ import com.example.front.data.response.ChatRoomResponse
 import com.example.front.databinding.FragmentChatroomListBinding
 import com.example.front.databinding.ItemChatroomBinding
 import io.realm.Realm
-import io.realm.RealmChangeListener
 import io.realm.RealmResults
 import io.realm.kotlin.where
 import retrofit2.Call

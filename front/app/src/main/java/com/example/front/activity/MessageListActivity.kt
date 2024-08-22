@@ -181,22 +181,25 @@ class MessageListActivity : AppCompatActivity() {
         })
 
         binding.sendBtn.setOnClickListener {
-            val chatMessageInfo = JSONObject()
-            chatMessageInfo.put("roomId", roomId.toString())
-            chatMessageInfo.put("senderName", myName)
-            chatMessageInfo.put("senderId", myId.toString())
-            chatMessageInfo.put("senderRole", myRole)
-            chatMessageInfo.put("senderImageUrl", myImageUrl)
-            chatMessageInfo.put("message", binding.msgEditText.text.toString())
-            chatMessageInfo.put("receiverRole", otherRole)
-            chatMessageInfo.put("receiverId", otherId.toString())
-            chatMessageInfo.put("receiverName", otherName)
-            chatMessageInfo.put("receiverImageUrl", otherImageUrl)
+            //빈칸이거나 공백밖에 없으면 전송 안되게 하기
+            if(binding.msgEditText.text.toString().isNotBlank()){
+                val chatMessageInfo = JSONObject()
+                chatMessageInfo.put("roomId", roomId.toString())
+                chatMessageInfo.put("senderName", myName)
+                chatMessageInfo.put("senderId", myId.toString())
+                chatMessageInfo.put("senderRole", myRole)
+                chatMessageInfo.put("senderImageUrl", myImageUrl)
+                chatMessageInfo.put("message", binding.msgEditText.text.toString())
+                chatMessageInfo.put("receiverRole", otherRole)
+                chatMessageInfo.put("receiverId", otherId.toString())
+                chatMessageInfo.put("receiverName", otherName)
+                chatMessageInfo.put("receiverImageUrl", otherImageUrl)
 
-            webSocket.send(chatMessageInfo.toString())
-            Log.d("Realm", "sendBtn - setOnClickListener")
+                webSocket.send(chatMessageInfo.toString())
+                Log.d("Realm", "sendBtn - setOnClickListener")
 
-            binding.msgEditText.setText("")
+                binding.msgEditText.setText("")
+            }
         }
 
         binding.recyclerview.scrollToPosition(messageList.size-1)

@@ -2,7 +2,6 @@ plugins {
 //    alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("com.android.application")
-    id("com.google.gms.google-services")
     id("kotlin-kapt")
     id("realm-android")
     id("com.google.gms.google-services") //FCM
@@ -55,7 +54,6 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

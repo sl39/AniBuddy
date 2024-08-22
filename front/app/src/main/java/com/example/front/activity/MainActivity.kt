@@ -13,15 +13,12 @@ import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import com.example.front.ApiService
-import com.example.front.FragmentReservationList
 import com.example.front.Permission
 import com.example.front.R
 import com.example.front.RetrofitClient
-import com.example.front.activity.SearchActivity
 import com.example.front.data.ChatApiService
 import com.example.front.data.response.FcmTokenResponse
 import com.example.front.databinding.ActivityMainBinding
@@ -32,7 +29,6 @@ import com.example.front.fragment_profile
 import com.example.front.fragment_reservation_list
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.api.Authentication
 
 import com.google.firebase.messaging.FirebaseMessaging
 import retrofit2.Call

@@ -4,6 +4,7 @@ import com.google.firebase.messaging.*;
 import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.chat.model.Role;
 import org.example.anibuddy.notification.dto.FcmTokenResponse;
+import org.example.anibuddy.notification.dto.NotificationResponse;
 import org.example.anibuddy.notification.model.FcmTokenEntity;
 import org.example.anibuddy.notification.model.NotificationEntity;
 import org.example.anibuddy.notification.repository.FcmTokenRepository;
@@ -23,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -36,6 +39,40 @@ public class NotificationService {
     private final UserRepository userRepository;
     private final OwnerRepository ownerRepository;
     private final Logger logger = LoggerFactory.getLogger(NotificationService.class);
+
+    //알림 리스트 조회
+    public List<NotificationResponse> getNotificationList(Role role, int id) {
+
+        List<NotificationEntity> entities = new ArrayList<>();
+
+        if(role.equals(Role.ROLE_USER)) {
+            UserEntity userEntity = userRepository
+                    .findById(id)
+                    .orElseThrow(() -> new RuntimeException("user 정보가 조회되지 않습니다."));
+            entities = notificationRepository.findAllByToUser(userEntity);
+        }
+        else if (role.equals(Role.ROLE_OWNER)) {
+            OwnerEntity ownerEntity = ownerRepository
+                    .findById(id)
+                    .orElseThrow(() -> new RuntimeException("owner 정보가 조회되지 않습니다."));
+            entities = notificationRepository.findAllByToOwner(ownerEntity);
+        }
+
+        List<NotificationResponse> responses = new ArrayList<>();
+
+        for(NotificationEntity entity : entities) {
+            responses.add(new NotificationResponse(
+                    entity.getNotification_type(),
+                    entity.getNotified_at().toString(),
+                    entity.getTitle(),
+                    entity.getContent(),
+                    entity.isRead()
+            ));
+        }
+        System.out.println(responses.size());
+
+        return responses;
+    }
 
     // 토큰 등록
     @Transactional
@@ -108,34 +145,37 @@ public class NotificationService {
             if(optional.isPresent()){
                 otherFcmToken = optional.get().getFcmToken();
             } else {
-                throw new RuntimeException("상대방의 fcm 토큰이 존재하지 않습니다");
+                //테스트 환경에서 Owner의 fcm Token을 발급받을 수 없어 주석처리
+                //throw new RuntimeException("상대방의 fcm 토큰이 존재하지 않습니다");
             }
         }
 
         //FCM 서버에 푸시 메세지 요청 보내기
-        Message message = Message.builder()
-                .putData("type", "chat")
-                .putData("data", jsonMsg)
-                .setToken(otherFcmToken)
-                .build();
+        if(otherFcmToken != null){
+            Message message = Message.builder()
+                    .putData("type", "chat")
+                    .putData("data", jsonMsg)
+                    .setToken(otherFcmToken)
+                    .build();
+            try {
+                String response = FirebaseMessaging.getInstance().send(message);
+                logger.info("Successfully sent chat push message: " + response);
 
-        try {
-            String response = FirebaseMessaging.getInstance().send(message);
-            logger.info("Successfully sent chat push message: " + response);
-
-        } catch (FirebaseMessagingException e) {
-            e.printStackTrace();
+            } catch (FirebaseMessagingException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     //예약 알림 fcm 서버에 요청
-    //TODO jsonMsg에 예약상태, 날짜, 가게이름 put해서 여기로 넘겨주기
     public void pushReservationNotification(int ReceiverId, Role ReceiverRole, String jsonMsg){
         //상대방의 FCM token 받아오기
         String otherFcmToken = null;
+        UserEntity userEntity = null;
+        OwnerEntity ownerEntity = null;
 
         if(ReceiverRole.equals(Role.ROLE_USER)) {
-            UserEntity userEntity = userRepository
+            userEntity = userRepository
                     .findById(ReceiverId)
                     .orElseThrow(() -> new RuntimeException("user 정보가 조회되지 않습니다."));
 
@@ -147,7 +187,7 @@ public class NotificationService {
             }
         }
         else if (ReceiverRole.equals(Role.ROLE_OWNER)) {
-            OwnerEntity ownerEntity = ownerRepository
+            ownerEntity = ownerRepository
                     .findById(ReceiverId)
                     .orElseThrow(() -> new RuntimeException("owner 정보가 조회되지 않습니다."));
 
@@ -155,7 +195,8 @@ public class NotificationService {
             if(optional.isPresent()){
                 otherFcmToken = optional.get().getFcmToken();
             } else {
-                throw new RuntimeException("상대방의 fcm 토큰이 존재하지 않습니다");
+                //테스트 환경에서 Owner의 fcm Token을 발급받을 수 없어 주석처리
+                //throw new RuntimeException("상대방의 fcm 토큰이 존재하지 않습니다");
             }
         }
 
@@ -194,8 +235,14 @@ public class NotificationService {
             e.printStackTrace();
         }
 
-        NotificationEntity entity = new NotificationEntity("RESERVATION", title, content);
-        notificationRepository.save(entity);
+        if(userEntity != null) {
+            NotificationEntity entity = new NotificationEntity("RESERVATION", title, content, "ROLE_USER", userEntity, null);
+            notificationRepository.save(entity);
+        }
+        else if (ownerEntity != null) {
+            NotificationEntity entity = new NotificationEntity("RESERVATION", title, content, "ROLE_OWNER", null, ownerEntity);
+            notificationRepository.save(entity);
+        }
     }
 
     private JSONObject jsonToObjectParser(String jsonStr) {

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.example.anibuddy.owner.OwnerEntity;
+import org.example.anibuddy.user.UserEntity;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +20,17 @@ public class NotificationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private OwnerEntity toOwner;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity toUser;
+
+    @Column(nullable = false)
+    private String toRole;
 
     @Column(nullable = false)
     private LocalDateTime notified_at = LocalDateTime.now();
@@ -37,11 +50,16 @@ public class NotificationEntity {
     public NotificationEntity(
             String type,
             String title,
-            String content
+            String content,
+            String toRole,
+            UserEntity toUser,
+            OwnerEntity toOwner
     ){
         this.notification_type = type;
         this.title = title;
         this.content = content;
+        this.toRole = toRole;
+        this.toUser = toUser;
+        this.toOwner = toOwner;
     }
-
 }

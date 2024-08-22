@@ -3,20 +3,27 @@ package com.example.front.data
 import android.content.Context
 import com.example.front.data.response.ChatRoomResponse
 import com.example.front.data.response.FcmTokenResponse
+import com.example.front.data.response.NotificationResponse
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface ChatApiService {
+
+    //알림 리스트 불러오기
+    @GET("/api/notifications")
+    fun getNotificationList(): Call<List<NotificationResponse>>
+
+    //채팅방 생성하기 (같은 멤버의 채팅방이 이미 존재한다면 새롭게 생성하지 않음)
+    @POST("/api/user/chatrooms")
+    fun makeChatRoom(@Body storeId: Int): Call<ChatRoomResponse>
 
     //채팅방 목록 불러오기
     @GET("/api/chatrooms")

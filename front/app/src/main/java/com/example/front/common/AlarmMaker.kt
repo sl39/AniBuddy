@@ -1,5 +1,6 @@
 package com.example.front.common
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
@@ -9,6 +10,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.front.activity.NotificationListActivity
 import com.example.front.data.AlarmId
+import com.example.front.receiver.AlarmReceiver
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import io.realm.RealmResults
@@ -21,6 +23,7 @@ class AlarmMaker {
 
     private lateinit var alarmManager: AlarmManager
 
+    @SuppressLint("ScheduleExactAlarm")
     @RequiresApi(Build.VERSION_CODES.O)
     fun addAlarm(context: Context, reservationId:Int, reservationDate: LocalDateTime, storeName:String): Int {
         alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -30,6 +33,7 @@ class AlarmMaker {
         val month = reservationDate.monthValue-1
         val day = reservationDate.dayOfMonth
         val hour = reservationDate.hour
+        val minute = reservationDate.minute
 
         // 당일 예약 시간 1시간 전 알림
         val calendar: Calendar = Calendar.getInstance().apply {
@@ -37,25 +41,31 @@ class AlarmMaker {
             set(Calendar.MONTH, month) //1월=0
             set(Calendar.DAY_OF_MONTH, day) //1일=1
             set(Calendar.HOUR_OF_DAY, hour-1)
-            set(Calendar.MINUTE, 0)
+            set(Calendar.MINUTE, minute)
             set(Calendar.SECOND, 0)
         }
 
-        val intent = Intent(context, NotificationListActivity::class.java).apply {
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
+            action = "SEND_BROADCAST"
             putExtra("storeName", storeName)
         }
+        Log.d("Realm", "storeName: $storeName")
+
+
         val pendingIntentId: Int = Random().nextInt(1000)
+        Log.d("Realm", "Alarm Id 생성: $pendingIntentId")
 
         // pendingIntentId(requestCode)는 PendingIntent의 고유 식별자!!
         val pendingIntent = PendingIntent.getBroadcast(
             context, pendingIntentId, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         // Realm - pendingIntentId 저장
         val config = RealmConfiguration.Builder()
             .name("alarm.db")
             .schemaVersion(1)
+            .allowWritesOnUiThread(true)
             .build()
         val db = Realm.getInstance(config)
         db.executeTransaction{
@@ -70,6 +80,7 @@ class AlarmMaker {
             calendar.timeInMillis, //알람 발생 시간
             pendingIntent //알람이 울릴때 실행될 작업 - Broadcast 지정
         )
+        Log.d("Realm", "alarmManager.setExactAndAllowWhileIdle")
 
         return pendingIntentId
     }

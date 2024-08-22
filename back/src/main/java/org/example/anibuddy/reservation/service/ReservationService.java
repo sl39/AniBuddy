@@ -4,7 +4,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.example.anibuddy.Review.dto.ReviewDetailResponseDto;
+import org.example.anibuddy.chat.model.Role;
 import org.example.anibuddy.global.CustomUserDetails;
+import org.example.anibuddy.notification.service.NotificationService;
 import org.example.anibuddy.owner.OwnerEntity;
 import org.example.anibuddy.owner.OwnerRepository;
 import org.example.anibuddy.reservation.dto.*;
@@ -14,6 +16,7 @@ import org.example.anibuddy.store.entity.StoreEntity;
 import org.example.anibuddy.store.repository.StoreRepository;
 import org.example.anibuddy.user.UserEntity;
 import org.example.anibuddy.user.UserRepository;
+import org.json.simple.JSONObject;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +37,7 @@ public class ReservationService {
     private final StoreRepository storeRepository;
     private final UserRepository userRepository;
     private final OwnerRepository ownerRepository;
+    private final NotificationService notificationService;
 
     public Integer addReservation(ReservationCreateRequestDto reservation) throws Exception {
         Integer storeId = reservation.getStoreId();
@@ -57,6 +62,17 @@ public class ReservationService {
                 .build();
 
         ReservationEntity res = reservationRepository.save(reservationEntity);
+
+        // 예약 접수 fcm 알림 발송
+        JSONObject obj = new JSONObject();
+        obj.put("storeName", storeEntity.getStoreName());
+        obj.put("reservation_date", reservationEntity.getReservationDate().toString());
+        obj.put("reservation_state", "0");
+
+        notificationService.pushReservationNotification(user.get().getId(), Role.ROLE_USER, obj.toJSONString());
+        //현재 데이터에는 Owner가 없는 Store가 대부분이라 getOwnerEntity()에서 에러가 나 예약 실패가 되기 때문에 주석 처리
+        //notificationService.pushReservationNotification(storeEntity.getOwnerEntity().getId(), Role.ROLE_OWNER, obj.toJSONString());
+
         return res.getId();
     }
 
@@ -161,6 +177,16 @@ public class ReservationService {
         ReservationEntity res = reservationEntity.get();
         res.setState(reservation.getState());
         reservationRepository.save(res);
+
+        // 예약 확정/취소 fcm 알림 발송 - 현재 데이터에는 Owner가 없는 Store가 대부분이라 getOwnerEntity()에서 에러 날 수 있음!
+        JSONObject obj = new JSONObject();
+        obj.put("storeName", res.getStoreEntity().getStoreName());
+        obj.put("reservation_date", res.getReservationDate().toString());
+        obj.put("reservation_state", res.getState().toString());
+
+        notificationService.pushReservationNotification(res.getUserEntity().getId(), Role.ROLE_USER, obj.toJSONString());
+        //현재 데이터에는 Owner가 없는 Store가 대부분이라 getOwnerEntity()에서 에러가 나 예약 실패가 되기 때문에 주석 처리
+        //notificationService.pushReservationNotification(res.getStoreEntity().getOwnerEntity().getId(), Role.ROLE_OWNER, obj.toJSONString());
     }
 
     public List<ReservationGetAllResponseDto> getAllOwnerReservation() throws Exception {
