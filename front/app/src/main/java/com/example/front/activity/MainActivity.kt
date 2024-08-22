@@ -1,11 +1,14 @@
 package com.example.front.activity
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
 import com.example.front.ApiService
 import com.example.front.FragmentReservationList
@@ -30,15 +33,12 @@ class MainActivity : AppCompatActivity() {
     private val fragmentFollowingList = fragment_following_list()
     private val fragmentChatList = fragment_chatroom_list()
     private val fragmentProfile = fragment_profile()
-    override fun onStart() {
-        super.onStart()
-        Permission(this).requestLocation() // 위치 권한 요청
-    }
 
     private val userId : Int = 1
     private var apiService : ApiService? = null
 
     companion object {
+        private const val PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 100
         const val EXTRA_DESTINATION = "extra_destination"
         const val DESTINATION_HOME = "home"
         const val DESTINATION_RESERVATION_LIST = "reservation_list"
@@ -50,22 +50,69 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.homeTopAppBar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        fragmentManager.beginTransaction()
-           .replace(R.id.menu_frame_layout, fragmentHome)
-            .commitAllowingStateLoss()
+        requestLocationPermission()
+//        fragmentManager.beginTransaction()
+//           .replace(R.id.menu_frame_layout, fragmentHome)
+//            .commitAllowingStateLoss()
 
         val bottomNavigationView: BottomNavigationView =
             findViewById(R.id.home_menu_bottom_navigation)
         bottomNavigationView.setOnNavigationItemSelectedListener(ItemSelectedListener())
-
-        handleIntent(intent)
-
+//
+//        handleIntent(intent)
+//
         apiService = RetrofitClient.getRetrofitInstance(this).create(ApiService::class.java)
+    }
+
+    private fun requestLocationPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // 권한이 없을 경우, 사용자에게 요청
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSION_REQUEST_ACCESS_FINE_LOCATION
+            )
+        } else {
+            // 권한이 이미 있을 경우, 위치 정보를 사용할 수 있음
+            Log.d("123","123")
+            handleIntent(intent)
+
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            PERMISSION_REQUEST_ACCESS_FINE_LOCATION -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // 권한이 부여되면 위치 정보를 사용할 수 있음
+                    handleIntent(intent)
+
+                    Log.d("test","test")
+                } else {
+                    // 권한이 거부되면, 기능 사용 불가
+                    Log.d("test","test123")
+                    handleIntent(intent)
+
+                }
+                return
+            }
+        }
     }
 
 

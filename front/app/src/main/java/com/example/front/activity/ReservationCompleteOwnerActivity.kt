@@ -54,11 +54,13 @@ class ReservationCompleteOwnerActivity : AppCompatActivity() {
                         findViewById<TextView>(R.id.storeNameTextView).text = "가게 이름: ${storeName}"
                         findViewById<TextView>(R.id.storeLocationTextView).text =  "주소: ${storeLocation}"
                         findViewById<TextView>(R.id.reservationInfo).text = "예약 세부 사항: ${info}"
+                        val textNote = findViewById<Button>(R.id.editReservationButton)
+                        textNote.visibility = View.INVISIBLE
                         if(data.state == 2){
                             val cancelBtn = findViewById<Button>(R.id.cancelReservationButton)
                             cancelBtn.text = "취소된 예약입니다"
                             cancelBtn.isEnabled = false
-                            findViewById<Button>(R.id.editReservationButton).visibility = View.INVISIBLE
+                            findViewById<TextView>(R.id.textNote).visibility = View.INVISIBLE
                         } else if(data.state == 1){
                             val editBtn = findViewById<Button>(R.id.editReservationButton)
                             editBtn.text = "확정된 예약입니다"
