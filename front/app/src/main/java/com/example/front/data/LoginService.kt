@@ -20,7 +20,8 @@ import retrofit2.http.POST
 interface LoginApiService{
     @POST("/api/auth/login")
     @Headers(
-        "content-type: application/json"
+        "content-type: application/json",
+        "Authroization: Bearer 1"
     )
     fun ownerLogin(
         @Body jsonParams : LoginRequest,
@@ -29,6 +30,7 @@ interface LoginApiService{
     @POST("/api/auth/signup/check/email")
     @Headers(
         "content-type: application/json"
+        ,"Authroization: Bearer 1"
     )
     fun checkEmail(
         @Body jsonParams: CheckEmail,
@@ -36,7 +38,8 @@ interface LoginApiService{
 
     @POST("/api/auth/signup/check/nickname")
     @Headers(
-        "content-type: application/json"
+        "content-type: application/json",
+        "Authroization: Bearer 1"
     )
     fun checkNickname(
         @Body jsonParams : CheckNickname,
@@ -44,7 +47,8 @@ interface LoginApiService{
 
     @POST("/api/auth/signup")
     @Headers(
-        "content-type: application/json"
+        "content-type: application/json",
+        "Authorization: Bearer 1"
     )
     fun signup(
         @Body jsonParams: signupRequest

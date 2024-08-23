@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.front.BuildConfig
 import com.example.front.common.HttpWebSocket
 import com.example.front.data.ApiService
 import com.example.front.data.ChatMessage
@@ -166,7 +167,7 @@ class MessageListActivity : AppCompatActivity() {
                     val client = OkHttpClient()
                     val request: Request = Request.Builder()
                         .addHeader("Authorization", "Bearer $accessToken")
-                        .url("ws://10.0.2.2:8080/chat/$roomId").build()
+                        .url("ws://3.36.140.201:8080/chat/$roomId").build()
 
                     val websocketListener = HttpWebSocket()
                     webSocket = client.newWebSocket(request, websocketListener)

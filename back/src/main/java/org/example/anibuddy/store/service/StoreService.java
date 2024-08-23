@@ -14,6 +14,8 @@ import org.example.anibuddy.store.repository.StoreCategoryRepository;
 import org.example.anibuddy.store.repository.StoreImageRepository;
 import org.example.anibuddy.store.repository.StoreRepository;
 import org.example.anibuddy.store.repository.StoreSummaryRepository;
+import org.example.anibuddy.user.UserEntity;
+import org.example.anibuddy.user.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -34,6 +36,7 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final StoreImageRepository storeImageRepository;
     private final OwnerRepository ownerRepository;
+    private final UserRepository userRepository;
 
     public List<StoreEntity> findAll(){
         return storeRepository.findTop10ByOrderByIdDesc();
@@ -52,12 +55,16 @@ public class StoreService {
         if(role.equals("ROLE_USER")){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        Optional<OwnerEntity> owner = ownerRepository.findById(ownerId);
-        if(owner.isEmpty()){
+        Optional<UserEntity> userEntity = userRepository.findById(ownerId);
+        if(userEntity.isEmpty()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+
+        Optional<OwnerEntity> owner = ownerRepository.findByUserEntity(userEntity.get());
+        if(owner.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
         List<StoreCategory> storeCategories = new ArrayList<>();
         for(String cate: storeCreateDto.getCategory()){
