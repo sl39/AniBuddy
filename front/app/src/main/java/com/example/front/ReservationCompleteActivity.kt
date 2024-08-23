@@ -60,7 +60,7 @@ class ReservationCompleteActivity : AppCompatActivity() {
                         findViewById<TextView>(R.id.storeNameTextView).text = "가게 이름: ${storeName}"
                         findViewById<TextView>(R.id.storeLocationTextView).text =  "주소: ${storeLocation}"
                         findViewById<TextView>(R.id.reservationInfo).text = "예약 세부 사항: ${info}"
-                        val textNote = findViewById<Button>(R.id.editReservationButton)
+                        val textNote = findViewById<TextView>(R.id.textNote)
                         if(data.state == 2){
                             val cancelBtn = findViewById<Button>(R.id.cancelReservationButton)
                             cancelBtn.text = "취소된 예약입니다"

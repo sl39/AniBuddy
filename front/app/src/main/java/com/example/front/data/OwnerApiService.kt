@@ -1,6 +1,7 @@
 package com.example.front.data
 
 import android.content.Context
+import com.example.front.BuildConfig
 import com.example.front.data.response.LoginResponse
 import com.example.front.data.response.OwnerCreateStore
 import com.example.front.data.response.OwnerStoreListResponse
@@ -35,7 +36,7 @@ interface OwnerApiService {
 
 
     companion object{
-        private const val BASE_URL = "http://10.0.2.2:8080"
+        private const val BASE_URL = BuildConfig.BASE_URL
         val gson : Gson = GsonBuilder().setLenient().create();
 
         fun create(context: Context) : OwnerApiService {

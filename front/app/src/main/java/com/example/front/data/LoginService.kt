@@ -1,5 +1,6 @@
 package com.example.front.data
 
+import com.example.front.BuildConfig
 import com.example.front.data.request.CheckEmail
 import com.example.front.data.request.CheckNickname
 import com.example.front.data.request.LoginRequest
@@ -51,7 +52,7 @@ interface LoginApiService{
 
 
     companion object{
-        private const val BASE_URL = "http://10.0.2.2:8080"
+        private const val BASE_URL = BuildConfig.BASE_URL
         val gson : Gson = GsonBuilder().setLenient().create();
 
         fun create() : LoginApiService {

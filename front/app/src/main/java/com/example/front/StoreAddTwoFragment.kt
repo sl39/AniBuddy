@@ -33,7 +33,7 @@ private const val ARG_PARAM2 = "param2"
  * Use the [StoreAddTwoFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class StoreAddTwoFragment : Fragment() {
+class  StoreAddTwoFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -176,6 +176,7 @@ class StoreAddTwoFragment : Fragment() {
                         response: Response<LoginResponse>
                     ) {
                         if(response.code() == 200){
+                            Log.d("들어오나 드렁오나", "emfdjdhskdmefjsdlkjafsdkjlfdsajkld")
                             val context = requireContext()
                             val intent = Intent(context, context::class.java)
                             startActivity(intent)

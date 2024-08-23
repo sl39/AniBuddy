@@ -1,6 +1,7 @@
 package com.example.front.retrofit
 
 import android.content.Context
+import com.example.front.BuildConfig
 import com.example.front.data.AuthInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -32,6 +33,7 @@ interface ReviewApi {
     suspend fun getReviewsByStoreId(@Path("storeId") storeId: Int): List<ReviewEntity>
 
     companion object {
+        private const val BASE_URL = BuildConfig.BASE_URL
         fun create(context: Context): ReviewApi {
             val authInterceptor = AuthInterceptor(context)
             val okHttpClient = OkHttpClient.Builder()
@@ -39,7 +41,7 @@ interface ReviewApi {
                 .build()
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8080/")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build()

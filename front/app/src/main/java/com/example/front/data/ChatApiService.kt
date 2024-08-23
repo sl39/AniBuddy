@@ -1,6 +1,7 @@
 package com.example.front.data
 
 import android.content.Context
+import com.example.front.BuildConfig
 import com.example.front.data.response.ChatRoomResponse
 import com.example.front.data.response.FcmTokenResponse
 import com.example.front.data.response.NotificationResponse
@@ -34,7 +35,7 @@ interface ChatApiService {
     fun registerFcmToken(@Body fcmToken: String): Call<FcmTokenResponse>
 
     companion object {
-        private const val BASE_URL = "http://10.0.2.2:8080" //localhost
+        private const val BASE_URL = BuildConfig.BASE_URL
         val gson : Gson = GsonBuilder().setLenient().create();
 
         fun create(context : Context) : ChatApiService {
