@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.front.activity.MessageListActivity
@@ -101,6 +103,9 @@ class fragment_chatroom_list : Fragment() {
         Log.d("CRList", "onCreateView")
 
         binding = FragmentChatroomListBinding.inflate(inflater, container, false)
+        binding.recyclerview.addItemDecoration(
+            DividerItemDecoration(context, LinearLayout.VERTICAL)
+        )
 
         val chatApi = ChatApiService.create(requireContext())
 

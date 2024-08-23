@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.front.R
@@ -40,6 +42,7 @@ class NotificationAdapter(val datas: List<NotificationItem>): RecyclerView.Adapt
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        Log.d("onBind", datas[position].notificationTitle)
 
         val binding = (holder as NotificationViewHolder).binding
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -63,9 +66,11 @@ class NotificationListActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
         supportActionBar?.title = "알림"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        binding.notificationRecyclerview.addItemDecoration(
+            DividerItemDecoration(applicationContext, LinearLayout.VERTICAL)
+        )
 
-        val recyclerView: RecyclerView = findViewById(R.id.notification_recyclerview)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.notificationRecyclerview.layoutManager = LinearLayoutManager(this)
 
         //알림 리스트 생성
         val itemList = mutableListOf<NotificationItem>()
@@ -79,7 +84,9 @@ class NotificationListActivity : AppCompatActivity() {
             ) {
                 if(response.isSuccessful) {
                     val responseList = response.body()!!
+                    Log.d("chatApi","get NotificationList! size: ${responseList.size}")
 
+                    itemList.clear()
                     for(i in responseList) {
                         val item = NotificationItem(
                             notificationTitle = i.title,
@@ -88,18 +95,21 @@ class NotificationListActivity : AppCompatActivity() {
                         )
                         itemList.add(item)
                     }
+                    val sortedList = itemList.sortedByDescending {
+                        LocalDateTime.parse(it.notificationDate)
+                    }
+                    binding.notificationRecyclerview.adapter = NotificationAdapter(sortedList)
+                    Log.d("chatApi", "size: ${ itemList.size}" )
                 }
             }
             override fun onFailure(call: Call<List<NotificationResponse>>, t: Throwable) {
                 Log.e("chatApi", "chatApi.getNotificationList - $t")
             }
         })
+    }
 
-        val sortedList = itemList.sortedByDescending {
-            LocalDateTime.parse(it.notificationDate)
-        }
-
-        //어댑터 설정
-        recyclerView.adapter = NotificationAdapter(itemList)
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 }
