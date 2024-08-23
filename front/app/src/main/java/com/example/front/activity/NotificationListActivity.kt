@@ -13,6 +13,7 @@ import com.example.front.R
 import com.example.front.data.ChatApiService
 import com.example.front.data.response.ChatRoomResponse
 import com.example.front.data.response.NotificationResponse
+import com.example.front.databinding.ActivityNotificationListBinding
 import com.example.front.databinding.ItemNotificationBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -51,11 +52,17 @@ class NotificationAdapter(val datas: List<NotificationItem>): RecyclerView.Adapt
 
 class NotificationListActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityNotificationListBinding
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.activity_notification_list)
+        binding = ActivityNotificationListBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.title = "알림"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val recyclerView: RecyclerView = findViewById(R.id.notification_recyclerview)
         recyclerView.layoutManager = LinearLayoutManager(this)

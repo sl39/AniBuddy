@@ -151,6 +151,13 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 return@setOnMenuItemClickListener true
             }
+
+        menu?.findItem(R.id.menu_alarm)?.setOnMenuItemClickListener {
+            intent = Intent(this@MainActivity, NotificationListActivity::class.java)
+            startActivity(intent)
+            return@setOnMenuItemClickListener true
+        }
+
         onMenuItemClickListener
         return true
     }
