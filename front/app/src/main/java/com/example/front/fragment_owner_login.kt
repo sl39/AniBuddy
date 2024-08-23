@@ -85,7 +85,7 @@ class fragment_owner_login : Fragment() {
         }
 
         binding.ownerLoginBtn.setOnClickListener {
-            binding.ownerLoginBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FF8A00"))
+            binding.ownerLoginBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#67ABFC"))
             binding.userLoginBth.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CCCCCC"))
             binding.userLoginBth.isEnabled = true
             binding.ownerLoginBtn.isEnabled = false
@@ -103,9 +103,6 @@ class fragment_owner_login : Fragment() {
                 val password = binding.ediPassword.text.toString().trim()
                 val data = LoginRequest(email,password,tag)
                 Log.d("로그인", email + ": " + password + ": " + data)
-
-
-
 
                 loginApi.ownerLogin(data).enqueue(object : Callback<LoginResponse> {
                     override fun onResponse(

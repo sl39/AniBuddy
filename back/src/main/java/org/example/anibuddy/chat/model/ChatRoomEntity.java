@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.owner.OwnerEntity;
 import org.example.anibuddy.user.UserEntity;
 

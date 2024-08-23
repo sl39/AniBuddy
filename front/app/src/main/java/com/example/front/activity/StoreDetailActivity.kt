@@ -1,6 +1,7 @@
 package com.example.front.activity
 
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -19,6 +20,7 @@ import com.example.front.ServiceFragment
 import com.example.front.StoreInfoFragment
 import com.example.front.databinding.ActivityStoreDetailBinding
 import com.example.front.retrofit.RetrofitService
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -143,7 +145,6 @@ class StoreDetailActivity : AppCompatActivity() {
         }
     }
 
-
     private fun setupViewPager() {
         binding.pager.adapter = ViewPagerAdapter(this)
         TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
@@ -154,73 +155,8 @@ class StoreDetailActivity : AppCompatActivity() {
                 else -> ""
             }
         }.attach()
+
     }
-//
-//    private fun setupFollowButton() { // 팔로우 버튼 설정
-//        binding.followButton.setOnClickListener {
-//            if (storeId != -1) { // storeId가 유효할 때만 처리
-//                isFollowing = !isFollowing
-//                updateFollowStatus() // 팔로우 상태로 업데이트
-//            }
-//        }
-//        updateFollowButton() // 초기 UI 업데이트
-//    }
-//
-//    private fun updateFollowStatus() {
-//        val followButton: ImageView = binding.followButton
-//        if (isFollowing) {
-//            followedStores.add(storeId)
-//            followButton.setImageResource(R.drawable.redheart) // 팔로우 상태 이미지
-//            Toast.makeText(this, "팔로우했습니다!", Toast.LENGTH_SHORT).show()
-//            sendFollowRequest(storeId) // 팔로우 요청
-//        } else {
-//            followedStores.remove(storeId)
-//            followButton.setImageResource(R.drawable.heart) // 기본 이미지
-//            Toast.makeText(this, "팔로우 취소했습니다!", Toast.LENGTH_SHORT).show()
-//            sendUnfollowRequest(storeId) // 언팔로우 요청
-//        }
-//    }
-//
-//    private fun sendFollowRequest(storeId: Int) {
-//        val userId = getCurrentUserId() // 현재 사용자 ID를 가져오는 메서드
-//        val followRecord = FollowRecord(userId, storeId) // FollowRecord 객체 생성
-//
-//        lifecycleScope.launch {
-//            try {
-//                val response = RetrofitService.storeService.followStore(followRecord)
-//                if (response.isSuccessful) {
-//                    Log.d("Follow Status", "팔로우 성공")
-//                } else {
-//                    Log.e("Follow Error", "팔로우 실패: ${response.message()}")
-//                }
-//            } catch (e: Exception) {
-//                Log.e("Follow Error", "오류 발생: ${e.message}", e)
-//            }
-//        }
-//    }
-//
-//    private fun sendUnfollowRequest(storeId: Int) {
-//        val userId = getCurrentUserId() // 현재 사용자 ID를 가져오는 메서드
-//        val followRecord = FollowRecord(userId, storeId) // FollowRecord 객체 생성
-//
-//        lifecycleScope.launch {
-//            try {
-//                val response = RetrofitService.storeService.unfollowStore(followRecord)
-//                if (response.isSuccessful) {
-//                    Log.d("Unfollow Status", "언팔로우 성공")
-//                } else {
-//                    Log.e("Unfollow Error", "언팔로우 실패: ${response.message()}")
-//                }
-//            } catch (e: Exception) {
-//                Log.e("Unfollow Error", "오류 발생: ${e.message}", e)
-//            }
-//        }
-//    }
-//
-//    private fun restoreFollowingStatus() {
-//        val preferences = getSharedPreferences("StorePreferences", MODE_PRIVATE)
-//        isFollowing = preferences.getBoolean("isFollowing_$storeId", false)
-//    }
 
     private fun fetchStoreDetails(storeId: Int) {
         lifecycleScope.launch {

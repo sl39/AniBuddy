@@ -19,7 +19,9 @@ import com.example.front.retrofit.Reservation
 import com.example.front.retrofit.ReservationService
 import com.example.front.retrofit.RetrofitService
 import kotlinx.coroutines.launch
+import java.time.Duration
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Calendar
 
 class fragment_reservation_ing_owner_list : Fragment() {
@@ -75,18 +77,10 @@ class fragment_reservation_ing_owner_list : Fragment() {
                         reservations.clear()
                         reservations.addAll(allReservations.filter { reservation ->
                             val date = LocalDateTime.parse(reservation.reservationTime)
-                            val year = date.year
-                            val month = date.monthValue
-                            val day = date.dayOfMonth
-                            val hour = date.hour
-                            val minutes = date.minute
-                            // 예약 시간 계산
-                            val reservationTime = Calendar.getInstance().apply {
-                                set(year,month,day,hour,minutes) // 월은 0부터 시작
-
-                            }
+                            val now = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
                             // 예약 시간이 현재 시간보다 크거나 같은지 비교
-                            reservationTime.after(currentTime) || reservationTime == currentTime
+                            date > now
+
                         })
                         reservationAdapter.notifyDataSetChanged()
 

@@ -61,6 +61,7 @@ class StoreAddTwoFragment : Fragment() {
         }
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,7 +75,6 @@ class StoreAddTwoFragment : Fragment() {
         var mapy: Double = 0.0
         val api = LocationApiService.create()
         val creatStoreApi = OwnerApiService.create(requireContext())
-
         if (address != null) {
             api.getLocation("KakaoAK 5ad4598a787c971bf6290233c6bcbfc0", address)
                 .enqueue(object : Callback<LocationResponse> {
@@ -87,6 +87,7 @@ class StoreAddTwoFragment : Fragment() {
                         if (data != null && data.documents.isNotEmpty()) {
                             mapx = data.documents[0].x.toDouble()
                             mapy = data.documents[0].y.toDouble()
+
                         }
                     }
 
@@ -99,18 +100,25 @@ class StoreAddTwoFragment : Fragment() {
         val roadAddress = bundle.getString("rnAdres")
         val detailAddress = bundle.getString("detailAddress")
         var info = ""
+        val storeImageList = mutableListOf<String>()
         val name = bundle.getString("name")
         val phone_number = bundle.getString("phone_number")
         val category = bundle.getStringArrayList("category")
 
-        // 날짜 선택 버튼 설정
+        binding = FragmentStoreAddTwoBinding.inflate(inflater,container,false)
+
+//        binding.hour.filters = arrayOf(InputFilterMinMax(0,23))
+//        binding.minutes.filters = arrayOf(InputFilterMinMax(0,59))
+//        binding.endHour.filters = arrayOf(InputFilterMinMax(0,23))
+//        binding.endMinutes.filters = arrayOf(InputFilterMinMax(0,59))
+
         val dayBtns = binding.dayLinear
-        for (i in 0 until dayBtns.childCount) {
+        for(i in 0 .. dayBtns.childCount){
             val view = dayBtns.getChildAt(i)
-            if (view is androidx.appcompat.widget.AppCompatButton) {
-                view.setOnClickListener {
+            if(view is androidx.appcompat.widget.AppCompatButton){
+                view.setOnClickListener{
                     val txt = view.text.toString()
-                    if (txt in dayday) {
+                        if(txt in dayday) {
                         view.backgroundTintList =
                             ColorStateList.valueOf(Color.parseColor("#D9D9D9"))
                         dayday.remove(txt)
@@ -119,6 +127,7 @@ class StoreAddTwoFragment : Fragment() {
                             ColorStateList.valueOf(Color.parseColor("#FF8A00"))
                         dayday.add(txt)
                     }
+
                 }
             }
         }
@@ -128,9 +137,8 @@ class StoreAddTwoFragment : Fragment() {
             selectImagesFromGallery()
         }
 
-        // 가게 등록 버튼 클릭 리스너 설정
-        binding.addStoreButton.setOnClickListener {
-            val d = charArrayOf('일', '월', '화', '수', '목', '금', '토')
+        binding.addStoreButton.setOnClickListener{
+            val d = charArrayOf('일','월','화','수','목','금','토')
             var openDay = ""
             info = binding.storeInfo.text.toString()
             val hour = binding.hour.text.toString()
@@ -138,31 +146,43 @@ class StoreAddTwoFragment : Fragment() {
             val endHour = binding.endHour.text.toString()
             val endMinutes = binding.endMinutes.text.toString()
             var district = ""
+            if(hour=="" || minutes=="" || endHour=="" || endMinutes==""){
 
-            if (hour.isEmpty() || minutes.isEmpty() || endHour.isEmpty() || endMinutes.isEmpty()) {
                 return@setOnClickListener
             }
             if (dayday.isEmpty()) {
                 return@setOnClickListener
             }
-
-            val tiempo = "$hour:$minutes - $endHour:$endMinutes"
-            for (s: Char in d) {
-                for (j: String in dayday) {
-                    if (s.toString() == j) {
-                        openDay += "$j $tiempo//"
+            val tiempo = hour + ":" + minutes + " - " + endHour + ":" + endMinutes
+            for(s: Char in d){
+                for(j: String in dayday){
+                    if(s.toString().equals(j)){
+                        openDay += j + " " + tiempo + "//"
                     }
                 }
             }
-
             val guArray = arrayOf(
-                "북구", "남구", "동래구", "금정구", "사상구", "부산진구", "강서구",
-                "해운대구", "동구", "영도구", "연제구", "사하구", "중구", "수영구", "기장군", " 서구"
+                "북구",
+                "남구",
+                "동래구",
+                "금정구",
+                "사상구",
+                "부산진구",
+                "강서구",
+                "해운대구",
+                "동구",
+                "영도구",
+                "연제구",
+                "사하구",
+                "중구",
+                "수영구",
+                "기장군",
+                " 서구"
             )
-
-            for (dst: String in guArray) {
-                if (address?.contains(dst) == true) {
+            for(dst : String in guArray){
+                if(address?.contains(dst) == true){
                     district = dst
+
                     break
                 }
             }
@@ -177,8 +197,7 @@ class StoreAddTwoFragment : Fragment() {
                         call: Call<LoginResponse>,
                         response: Response<LoginResponse>
                     ) {
-                        if (response.code() == 200) {
-                            Log.d("들어오냐","들어오냐고")
+                        if(response.code() == 200){
                             val context = requireContext()
                             val intent = Intent(context, context::class.java)
                             startActivity(intent)
@@ -186,15 +205,32 @@ class StoreAddTwoFragment : Fragment() {
                     }
 
                     override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                        Log.d("ㄷㄱㄷㄱㄷㄱㄷㄱㄷㄱㄷ", "ㄷㄱㄷㄱㄷㄱㄷㄱㄷㄱㄷㄱ")
+                        Log.d("ㄷㄱㄷㄱㄷㄱㄷㄱㄷㄱㄷ","ㄷㄱㄷㄱㄷㄱㄷㄱㄷㄱㄷㄱ")
                     }
+
                 })
             }
+
+
+
+
+
         }
 
+
+        // Inflate the layout for this fragment
         return binding.root
     }
+    fun getAddress (address: String): List<Double> {
+        var mapx : Double = 0.0
+        var mapy : Double = 0.0
+        var list: MutableList<Double> = mutableListOf()
 
+
+        list.add(mapx)
+        list.add(mapy)
+        return list
+    }
     private fun selectImagesFromGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
@@ -239,7 +275,18 @@ class StoreAddTwoFragment : Fragment() {
         }
     }
 
+
+
     companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment StoreAddTwoFragment.
+         */
+        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             StoreAddTwoFragment().apply {

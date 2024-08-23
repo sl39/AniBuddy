@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "org.example"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.2-SNAPSHOT"
 
 java {
     toolchain {
@@ -49,7 +49,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     runtimeOnly("com.h2database:h2")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    //implementation("org.springframework.boot:spring-boot-starter-web")
     implementation ("org.springframework.boot:spring-boot-starter-oauth2-client")
 
     //websocket
@@ -57,6 +57,9 @@ dependencies {
 
     //json <-> str
     implementation("com.googlecode.json-simple:json-simple:1.1")
+
+    //FCM 푸시알림
+    implementation("com.google.firebase:firebase-admin:9.2.0")
 }
 
 tasks.withType<Test> {

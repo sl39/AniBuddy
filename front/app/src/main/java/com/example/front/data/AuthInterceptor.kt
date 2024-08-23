@@ -2,6 +2,7 @@ package com.example.front.data
 
 import android.content.Context
 import android.util.Log
+import com.example.front.BuildConfig
 import com.example.front.data.request.TokenReqeust
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -19,9 +20,10 @@ class AuthInterceptor(private val context: Context) : Interceptor {
     private val userPreferencesRepository by lazy {
         preferencesRepository.getUserPreferencesRepository(context)
     }
+    private val BASE_URL = BuildConfig.BASE_URL
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("http://10.0.2.2:8080")  // 실제 API 베이스 URL로 교체하세요.
+        .baseUrl(BASE_URL)  // 실제 API 베이스 URL로 교체하세요.
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

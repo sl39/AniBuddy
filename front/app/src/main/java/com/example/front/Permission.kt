@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Build
+import android.util.Log
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -35,7 +36,10 @@ class Permission(private val context: Context){
     )
 
     fun requestLocation() {
+        Log.d("SDK 버전", Build.VERSION.SDK_INT.toString())
+
         if (Build.VERSION.SDK_INT >= 29) {
+
             if (ActivityCompat.checkSelfPermission(
                     context,
                     permissionsLocationUpApi29Impl[0]
@@ -49,11 +53,13 @@ class Permission(private val context: Context){
                     permissionsLocationUpApi29Impl[2]
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
+                Log.d("여기는 실행이 되겠지?","실행이 되겠지?")
                 ActivityCompat.requestPermissions(
                     context as Activity,
                     permissionsLocationUpApi29Impl,
                     REQUEST_LOCATION
                 )
+                Log.d("Request Permission Completed", "requestPermissions 이후 코드 실행됨")
             }
         } else {
             if (ActivityCompat.checkSelfPermission(
@@ -73,6 +79,4 @@ class Permission(private val context: Context){
             }
         }
     }
-
-
 }

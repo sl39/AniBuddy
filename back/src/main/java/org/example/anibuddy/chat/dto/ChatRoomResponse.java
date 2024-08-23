@@ -10,6 +10,14 @@ import lombok.Setter;
 public class ChatRoomResponse {
 
     private int roomId;
+
+    private int myId;
+    private String myRole;
+    private String myName;
+    private String myImageUrl;
+
+    private int otherId;
+    private String otherRole;
     private String otherName;
-    private String otherProfileImageUrl;
+    private String otherImageUrl;
 }

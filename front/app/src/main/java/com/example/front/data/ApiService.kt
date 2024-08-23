@@ -1,6 +1,8 @@
 package com.example.front.data
 
 import android.content.Context
+import android.util.Log
+import com.example.front.BuildConfig
 import com.example.front.data.request.TokenReqeust
 import com.example.front.data.response.MainReviewSimpleResponseDto
 import com.example.front.data.response.SerachLocationCategoryResponseDto
@@ -19,8 +21,8 @@ import retrofit2.http.GET
 import retrofit2.http.HeaderMap
 import retrofit2.http.Headers
 import retrofit2.http.POST
-import retrofit2.http.Path
 import retrofit2.http.Query
+
 
 
 interface ApiService{
@@ -56,7 +58,7 @@ interface ApiService{
 
 
     companion object{
-        private const val BASE_URL = "http://10.0.2.2:8080"
+        private const val BASE_URL = BuildConfig.BASE_URL
         val gson : Gson = GsonBuilder().setLenient().create();
 
         fun create(context: Context) : ApiService {

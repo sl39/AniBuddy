@@ -1,5 +1,6 @@
 package com.example.front.data
 
+import com.example.front.BuildConfig
 import com.example.front.data.request.CheckEmail
 import com.example.front.data.request.CheckNickname
 import com.example.front.data.request.LoginRequest
@@ -19,7 +20,8 @@ import retrofit2.http.POST
 interface LoginApiService{
     @POST("/api/auth/login")
     @Headers(
-        "content-type: application/json"
+        "content-type: application/json",
+        "Authroization: Bearer 1"
     )
     fun ownerLogin(
         @Body jsonParams : LoginRequest,
@@ -28,6 +30,7 @@ interface LoginApiService{
     @POST("/api/auth/signup/check/email")
     @Headers(
         "content-type: application/json"
+        ,"Authroization: Bearer 1"
     )
     fun checkEmail(
         @Body jsonParams: CheckEmail,
@@ -35,7 +38,8 @@ interface LoginApiService{
 
     @POST("/api/auth/signup/check/nickname")
     @Headers(
-        "content-type: application/json"
+        "content-type: application/json",
+        "Authroization: Bearer 1"
     )
     fun checkNickname(
         @Body jsonParams : CheckNickname,
@@ -43,7 +47,8 @@ interface LoginApiService{
 
     @POST("/api/auth/signup")
     @Headers(
-        "content-type: application/json"
+        "content-type: application/json",
+        "Authorization: Bearer 1"
     )
     fun signup(
         @Body jsonParams: signupRequest
@@ -51,7 +56,7 @@ interface LoginApiService{
 
 
     companion object{
-        private const val BASE_URL = "http://10.0.2.2:8080"
+        private const val BASE_URL = BuildConfig.BASE_URL
         val gson : Gson = GsonBuilder().setLenient().create();
 
         fun create() : LoginApiService {

@@ -1,6 +1,5 @@
 package com.example.front
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -20,20 +19,24 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.front.activity.MessageListActivity
+import com.example.front.data.ChatApiService
+import com.example.front.data.response.ChatRoomResponse
 import com.example.front.retrofit.ReservationRequest
 import com.example.front.retrofit.ReservationResponse
 import com.example.front.retrofit.RetrofitService
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import java.util.TimeZone
 
 
 class ReservationActivity : AppCompatActivity() {
 
     private lateinit var dateTimePickerButton: Button
+    private lateinit var chattingButton: Button
     private lateinit var reserveButton: Button
     private lateinit var callButton: Button
     private lateinit var imageButton: ImageButton
@@ -65,6 +68,7 @@ class ReservationActivity : AppCompatActivity() {
 
         // UI 요소 초기화
         dateTimePickerButton = findViewById(R.id.dateTimePickerButton)
+        chattingButton = findViewById(R.id.chattingButton)
         reserveButton = findViewById(R.id.reserveButton)
         callButton = findViewById(R.id.callButton)
         storeInfo = findViewById(R.id.reservationInfo)
@@ -77,6 +81,43 @@ class ReservationActivity : AppCompatActivity() {
 
         dateTimePickerButton.setOnClickListener {
             showDateTimePickerDialog()
+        }
+
+        // 채팅으로 1:1 문의하기
+        chattingButton.setOnClickListener {
+            //채팅방이 이미 존재하는지 확인하고 없다면 새롭게 생성
+            val chatApi = ChatApiService.create(applicationContext)
+
+            chatApi.makeChatRoom(storeId).enqueue(object: Callback<ChatRoomResponse> {
+                @RequiresApi(Build.VERSION_CODES.O)
+                override fun onResponse(
+                    call: Call<ChatRoomResponse>,
+                    response: Response<ChatRoomResponse>
+                ) {
+                    if(response.isSuccessful) {
+                        Log.d("chatApi", "채팅방 생성 및 조회 성공")
+
+                        val chatRoomInfo = response.body()!!
+                        val intent = Intent(applicationContext, MessageListActivity::class.java).apply {
+                            putExtra("roomId", chatRoomInfo.roomId)
+
+                            putExtra("myId", chatRoomInfo.myId)
+                            putExtra("myRole", chatRoomInfo.myRole)
+                            putExtra("myName", chatRoomInfo.myName)
+                            putExtra("myImageUrl", chatRoomInfo.myImageUrl)
+
+                            putExtra("otherId", chatRoomInfo.otherId)
+                            putExtra("otherRole", chatRoomInfo.otherRole)
+                            putExtra("otherName", chatRoomInfo.otherName)
+                            putExtra("otherImageUrl", chatRoomInfo.otherImageUrl)
+                        }
+                        startActivity(intent)
+                    }
+                }
+                override fun onFailure(call: Call<ChatRoomResponse>, t: Throwable) {
+                    Log.e("chatApi", "chatApi.makeChatRoom - $t")
+                }
+            })
         }
 
         reserveButton.setOnClickListener {
@@ -139,6 +180,16 @@ class ReservationActivity : AppCompatActivity() {
                                 Toast.makeText(this@ReservationActivity, "예약이 실패.", Toast.LENGTH_SHORT).show()
                             }
                             else{
+                                // 예약 1시간 전에 알림을 받을 수 있도록 알람 등록 -> BroadCastReceiver 수신
+                                // 원래 Owner가 예약 수락할 때 등록하지만 알람 테스트 용으로 작성함
+                                // 테스트 완료 - 알림은 제때 생성됐지만 storeName가 빈 문자열로 전달됐음
+//                                val alarmMaker = AlarmMaker()
+//                                alarmMaker.addAlarm(
+//                                    this@ReservationActivity,
+//                                    resvationId,
+//                                    date,
+//                                    storeName)
+
                                 val completIntent = Intent(this@ReservationActivity, ReservationCompleteActivity::class.java)
                                 completIntent.putExtra("resvationId",resvationId)
                                 startActivity(completIntent)
@@ -219,6 +270,7 @@ class ReservationActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun showDateTimePickerDialog() {
         showDatePickerDialog()
     }

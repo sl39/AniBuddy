@@ -14,6 +14,8 @@ import org.example.anibuddy.store.repository.StoreCategoryRepository;
 import org.example.anibuddy.store.repository.StoreImageRepository;
 import org.example.anibuddy.store.repository.StoreRepository;
 import org.example.anibuddy.store.repository.StoreSummaryRepository;
+import org.example.anibuddy.user.UserEntity;
+import org.example.anibuddy.user.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -34,6 +36,7 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final StoreImageRepository storeImageRepository;
     private final OwnerRepository ownerRepository;
+    private final UserRepository userRepository;
 
     public List<StoreEntity> findAll(){
         return storeRepository.findTop10ByOrderByIdDesc();
@@ -41,8 +44,10 @@ public class StoreService {
 
     public ResponseEntity<?> createStore(StoreCreateDto storeCreateDto){
         Optional<StoreEntity> storeEntity = storeRepository.findByStoreNameAndAddress(storeCreateDto.getName(), storeCreateDto.getAddress());
-
+        System.out.println(1);
         if(storeEntity.isPresent()){
+            System.out.println(2);
+
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -50,14 +55,24 @@ public class StoreService {
         String role = userDetails.getRole();
         Integer ownerId = userDetails.getUserId();
         if(role.equals("ROLE_USER")){
+            System.out.println(3);
+
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Optional<UserEntity> userEntity = userRepository.findById(ownerId);
+        if(userEntity.isEmpty()){
+            System.out.println(4);
+
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        Optional<OwnerEntity> owner = ownerRepository.findById(ownerId);
+        Optional<OwnerEntity> owner = ownerRepository.findByUserEntity(userEntity.get());
         if(owner.isEmpty()){
+            System.out.println(6);
+
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
+        System.out.println(5);
 
         List<StoreCategory> storeCategories = new ArrayList<>();
         for(String cate: storeCreateDto.getCategory()){

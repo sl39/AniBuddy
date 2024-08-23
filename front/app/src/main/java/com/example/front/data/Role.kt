@@ -1,6 +1,6 @@
 package com.example.front.data
 
 enum class Role {
-    USER,
-    OWNER
+    ROLE_USER,
+    ROLE_OWNER
 }

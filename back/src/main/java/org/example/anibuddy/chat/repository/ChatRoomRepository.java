@@ -15,7 +15,6 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoomEntity, Intege
 
     Optional<ChatRoomEntity> findByUserAndOwner(UserEntity user, OwnerEntity owner);
 
-    // @Query("select c from ChatRoomEntity c where c.user.id = :#{#userId}")
     List<ChatRoomEntity> findAllByUser(UserEntity user);
 
     List<ChatRoomEntity> findAllByOwner(OwnerEntity owner);

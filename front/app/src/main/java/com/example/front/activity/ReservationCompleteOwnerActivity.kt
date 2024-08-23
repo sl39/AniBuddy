@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.front.R
 import com.example.front.ReservationUpdateActivity
+import com.example.front.common.AlarmMaker
 import com.example.front.retrofit.RetrofitService
 import com.example.front.retrofit.UpdateReservationStateRequest
 import kotlinx.coroutines.launch
@@ -54,11 +55,13 @@ class ReservationCompleteOwnerActivity : AppCompatActivity() {
                         findViewById<TextView>(R.id.storeNameTextView).text = "가게 이름: ${storeName}"
                         findViewById<TextView>(R.id.storeLocationTextView).text =  "주소: ${storeLocation}"
                         findViewById<TextView>(R.id.reservationInfo).text = "예약 세부 사항: ${info}"
+                        val textNote = findViewById<TextView>(R.id.textNote)
+                        textNote.visibility = View.INVISIBLE
                         if(data.state == 2){
                             val cancelBtn = findViewById<Button>(R.id.cancelReservationButton)
                             cancelBtn.text = "취소된 예약입니다"
                             cancelBtn.isEnabled = false
-                            findViewById<Button>(R.id.editReservationButton).visibility = View.INVISIBLE
+                            findViewById<TextView>(R.id.textNote).visibility = View.INVISIBLE
                         } else if(data.state == 1){
                             val editBtn = findViewById<Button>(R.id.editReservationButton)
                             editBtn.text = "확정된 예약입니다"
@@ -97,6 +100,14 @@ class ReservationCompleteOwnerActivity : AppCompatActivity() {
                         if(response.code() == 200){
                             Toast.makeText(this@ReservationCompleteOwnerActivity, "예약이 수락되었습니다.", Toast.LENGTH_SHORT).show()
                             findViewById<Button>(R.id.editReservationButton).visibility = View.INVISIBLE
+
+                            // 예약 1시간 전에 알림을 받을 수 있도록 알람 등록 -> BroadCastReceiver 수신
+                            val alarmMaker = AlarmMaker()
+                            alarmMaker.addAlarm(
+                                this@ReservationCompleteOwnerActivity,
+                                reservationId,
+                                LocalDateTime.parse(reservationDate),
+                                storeName)
                         } else {
                             Toast.makeText(this@ReservationCompleteOwnerActivity, "예약이 수락실패.", Toast.LENGTH_SHORT).show()
 
@@ -105,7 +116,6 @@ class ReservationCompleteOwnerActivity : AppCompatActivity() {
                         Toast.makeText(this@ReservationCompleteOwnerActivity, "예약이 수락 통신실패.", Toast.LENGTH_SHORT).show()
                     }
                 }
-
             }
             builder.setNegativeButton("아니요") { dialog, which -> dialog.dismiss() }
             builder.create().show()
@@ -124,6 +134,10 @@ class ReservationCompleteOwnerActivity : AppCompatActivity() {
                         val updateReservationStateRequest = UpdateReservationStateRequest(reservationId,2)
                         val response = api.updateReservationState(updateReservationStateRequest)
                         if(response.code() == 200){
+                            // 예약 시에 등록한 알람 삭제
+                            val alarmMaker = AlarmMaker()
+                            alarmMaker.removeAlarm(this@ReservationCompleteOwnerActivity, reservationId)
+
                             Toast.makeText(this@ReservationCompleteOwnerActivity, "예약이 취소되었습니다.", Toast.LENGTH_SHORT).show()
                             startActivity(Intent(this@ReservationCompleteOwnerActivity, OwenerMainActivity::class.java))
                             finish()
