@@ -275,7 +275,7 @@ class ProfileUpdateActivity : AppCompatActivity() {
         val petGender = petGenderEditText.getText().toString().trim()
         val petSignificant = petSignificantEditText.getText().toString().trim()
         val petCategory =  if (selectedMainCategory == "직접 입력") "P" else convertCategoryToEnglish(selectedMainCategory)
-        val petAge = petAgeEditText.getText().toString().toInt()
+        val petAge = petAgeEditText.getText().toString()
         val petChipNumber = petChipNumberEditText.getText().toString().toLong()
 
         val imageUrl = imageUrl
