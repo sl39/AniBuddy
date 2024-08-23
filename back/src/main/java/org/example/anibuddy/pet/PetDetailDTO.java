@@ -6,15 +6,15 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PetDetailDTO {
-	private String petName, petKind, petGender, petNeutering, petSignificant, base64Image;
-    private Integer petAge, petId;
+	private String petName, petKind, petGender, petNeutering, petSignificant, base64Image, petAge;
+    private Integer petId;
     private long petChipNumber;
     
     public PetDetailDTO() {
     }
     
     public PetDetailDTO(String petName, String petKind, String petGender, String petNeutering, String petSignificant, String base64Image,
-    					Integer petAge, Integer petId, long petChipNumber) {
+    					String petAge, Integer petId, long petChipNumber) {
         this.petName = petName;
         this.petKind = petKind;
         this.petGender = petGender;

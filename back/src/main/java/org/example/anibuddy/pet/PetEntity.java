@@ -32,7 +32,7 @@ public class PetEntity {
     private String petKind;
 
 	@Column(nullable = false)
-    private Integer petAge;
+    private String petAge;
 
     @Column(nullable = false)
     private String petGender;
@@ -40,10 +40,10 @@ public class PetEntity {
     @Column(nullable = false)
     private String petNeutering;
     
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Long petChipNumber;
     
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String petSignificant;
     
     @Column(nullable = false)

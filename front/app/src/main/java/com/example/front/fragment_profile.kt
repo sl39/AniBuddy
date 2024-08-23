@@ -135,7 +135,7 @@ class fragment_profile : Fragment() {
         //유저프로필 수정 기능 추가. 24.08.20.
         userProfileEditButton.setOnClickListener {
             enableTextViewEditing(textView_user_name_show)
-            enableTextViewEditing(textView_user_email_show)
+        // enableTextViewEditing(textView_user_email_show)
 
             userProfileEditButton.visibility = View.GONE
             userProfileSaveButton.visibility = View.VISIBLE
@@ -157,17 +157,17 @@ class fragment_profile : Fragment() {
         }
 
         // 로그아웃 버튼 구현 24.08.15.
-        val logout = view.findViewById<Button>(R.id.logout_button)
-        logout.setOnClickListener {
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            val token : String = ""
-            lifecycleScope.launch {
-                userPreferencesRepository.setAccessToken(token)
-                userPreferencesRepository.setRefreshToken(token)
-                startActivity(intent)
-
-            }
-        }
+//        val logout = view.findViewById<Button>(R.id.logout_button)
+//        logout.setOnClickListener {
+//            val intent = Intent(requireContext(), LoginActivity::class.java)
+//            val token : String = ""
+//            lifecycleScope.launch {
+//                userPreferencesRepository.setAccessToken(token)
+//                userPreferencesRepository.setRefreshToken(token)
+//                startActivity(intent)
+//
+//            }
+//        }
 
         //FirebaseApp 실행 전 초기화.
         FirebaseApp.initializeApp(requireContext())

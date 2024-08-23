@@ -51,6 +51,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="10dp"
             android:layout_marginTop="15dp"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textSize="20dp"
             android:layout_toEndOf="@+id/textView_user_name" />
 
@@ -118,18 +120,14 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_interface_1" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="340dp"
-        android:id="@+id/profile_recyclerview"
-        app:layout_constraintTop_toBottomOf="@+id/textView_my_pet"
-        app:layout_constraintBottom_toTopOf="@+id/logout_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginLeft="3dp"
-        android:layout_marginRight="3dp"
-        />
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:id="@+id/profile_recyclerview"
+            app:layout_constraintTop_toBottomOf="@+id/textView_my_pet"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/button_to_profile_add"
@@ -142,16 +140,16 @@
         android:layout_marginBottom="5dp"
         tools:ignore="MissingConstraints" />
 
-    <Button
-        android:id="@+id/logout_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/profile_recyclerview"
-        android:gravity="center"
-        android:text="로그아웃"
-        android:textColor="#000000"
-        android:textSize="36dp"
-        android:textStyle="bold"
-        tools:ignore="MissingConstraints" />
+<!--    <Button-->
+<!--        android:id="@+id/logout_button"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/profile_recyclerview"-->
+<!--        android:gravity="center"-->
+<!--        android:text="로그아웃"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="36dp"-->
+<!--        android:textStyle="bold"-->
+<!--        tools:ignore="MissingConstraints" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,13 @@
 package com.example.front;
 
 public class PetDTO {
-    private String petName, petKind, petGender, base64Image;
-    private Integer petAge, petId;
+    private String petName, petKind, petGender, base64Image, petAge;
+    private Integer petId;
 
     public PetDTO() {
     }
 
-    public PetDTO(String petName, String petKind, String petGender, String base64Image, Integer petAge, Integer petId) {
+    public PetDTO(String petName, String petKind, String petGender, String base64Image, String petAge, Integer petId) {
         this.petName = petName;
         this.petKind = petKind;
         this.petGender = petGender;
@@ -47,11 +47,11 @@ public class PetDTO {
         this.base64Image = base64Image;
     }
 
-        public Integer getPetAge () {
+        public String getPetAge () {
             return petAge;
         }
 
-        public void setPetAge(Integer petAge) {
+        public void setPetAge(String petAge) {
             this.petAge = petAge;
         }
 

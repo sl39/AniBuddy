@@ -281,26 +281,40 @@ class ProfileUpdateActivity : AppCompatActivity() {
         val imageUrl = imageUrl
         val base64Image = imageUrl
 
-        val petCreateDTO = PetCreateDTO(petName, petKind, petNeutering, petGender, petSignificant, petCategory, base64Image, petAge, petChipNumber)
+        val petCreateDTO = PetCreateDTO(
+            petName,
+            petKind,
+            petNeutering,
+            petGender,
+            petSignificant,
+            petCategory,
+            base64Image,
+            petAge,
+            petChipNumber
+        )
 
         val petId = getIntent().getIntExtra("petId", -1)
-
-        apiService.petProfileUpdate(petCreateDTO, petId).enqueue(object :
-            Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>){
-                if(response.isSuccessful) {
-                    Toast.makeText(this@ProfileUpdateActivity,"프로필 수정 완료", Toast.LENGTH_SHORT).show();
-                    finish()
-                } else {
-                    Toast.makeText(this@ProfileUpdateActivity, "요청 실패!", Toast.LENGTH_SHORT).show()
+        if (petCreateDTO.petName != null && petCreateDTO.petKind != null && petCreateDTO.petNeutering != null && petCreateDTO.petGender != null && petCreateDTO.petAge != null && petCreateDTO.petCategory != null) {
+            apiService.petProfileUpdate(petCreateDTO, petId).enqueue(object :
+                Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@ProfileUpdateActivity, "프로필 수정 완료", Toast.LENGTH_SHORT)
+                            .show();
+                        finish()
+                    } else {
+                        Toast.makeText(this@ProfileUpdateActivity, "요청 실패!", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
-            }
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                Toast.makeText(this@ProfileUpdateActivity, "network error!", Toast.LENGTH_SHORT).show();
-            }
-        })
-    }
 
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Toast.makeText(this@ProfileUpdateActivity, "network error!", Toast.LENGTH_SHORT)
+                        .show();
+                }
+            })
+        }
+    }
     inner class ItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener {
         override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
             when (menuItem.itemId) {

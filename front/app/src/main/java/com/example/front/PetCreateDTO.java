@@ -1,15 +1,14 @@
 package com.example.front;
 
 public class PetCreateDTO {
-    private String petName, petKind, petNeutering, petGender, petSignificant, petCategory, base64Image;
-    private Integer petAge;
+    private String petName, petKind, petNeutering, petGender, petSignificant, petCategory, base64Image, petAge;
     private long petChipNumber;
 
     public PetCreateDTO() {
     }
 
     // 매개변수가 있는 생성자
-    public PetCreateDTO(String petName, String petKind, String petNeutering, String petGender, String petSignificant, String petCategory, String base64Image, Integer petAge, long petChipNumber) {
+    public PetCreateDTO(String petName, String petKind, String petNeutering, String petGender, String petSignificant, String petCategory, String base64Image, String petAge, long petChipNumber) {
         this.petName = petName;
         this.petKind = petKind;
         this.petGender = petGender;
@@ -48,9 +47,9 @@ public class PetCreateDTO {
 
     public void setBase64Image(String base64Image) { this.base64Image = base64Image; }
 
-    public Integer getPetAge() { return petAge; }
+    public String getPetAge() { return petAge; }
 
-    public void setPetAge(Integer petAge) { this.petAge = petAge; }
+    public void setPetAge(String petAge) { this.petAge = petAge; }
 
     public long getPetChipNumber() { return petChipNumber; }
 

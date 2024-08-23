@@ -15,7 +15,7 @@ public class PetSignUpForm {
 	private String petGender;
 	
 	@NotEmpty(message="반려동물의 나이는 필수 항목입니다.")
-	private Integer petAge;
+	private String petAge;
 	
 	@NotEmpty(message="반려동물의 중성화 여부는 필수 항목입니다.")
 	private String petNeutering;
