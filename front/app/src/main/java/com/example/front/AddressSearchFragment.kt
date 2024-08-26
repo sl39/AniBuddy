@@ -59,8 +59,7 @@ class AddressSearchFragment : Fragment(), AddressAdapter.OnItemClickListener {
         val api = AddressApiService.create()
         binding.searchButton.setOnClickListener {
             if (!binding.searchEditText.text.equals("")){
-                val secretKey = "aEO7JxyqKxOzb9OCTBPeDUd48feyPvSGv5oeS5bwJYICwtU4fP+/p7RjLY7vcx6e5QOle1T5aZT38OfB2s66yQ=="
-                Log.d("키워드 값",binding.searchEditText.text.toString())
+                val secretKey = BuildConfig.ADDRESS_KEY
                 api.getAddress(secretKey,binding.searchEditText.text.toString(),10,1).enqueue(object:
                     Callback<NewAddressListResponse> {
                     override fun onResponse(

@@ -44,8 +44,6 @@ class ReviewAdapter(
     fun addImages(reviewId: Int, images: List<String>) {
         if (images.isNotEmpty()) {
             imageUrls[reviewId] = images
-            Log.d("ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ","ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ")
-
             notifyItemChanged(datas.indexOfFirst { it.reviewId == reviewId })
         }
     }

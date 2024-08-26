@@ -44,7 +44,7 @@ class ProfileAddActivity : AppCompatActivity() {
 
     private val context = this@ProfileAddActivity
 
-    private val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/testing-f501e.appspot.com/o/images%2Fe16ef3a0-7724-4847-a490-d685d22789ce.jpg?alt=media&token=4196f722-af88-4c4d-b815-94ac70aca525"
+    private val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/${BuildConfig.FIREBASE_IMAGE_KEY}"
 
     private var userId: Int? = null
 

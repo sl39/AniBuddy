@@ -76,7 +76,7 @@ class StoreAddTwoFragment : Fragment() {
         val api = LocationApiService.create()
         val creatStoreApi = OwnerApiService.create(requireContext())
         if (address != null) {
-            api.getLocation("KakaoAK 5ad4598a787c971bf6290233c6bcbfc0", address)
+            api.getLocation(BuildConfig.KAKAO_LOCATION_KEY, address)
                 .enqueue(object : Callback<LocationResponse> {
                     override fun onResponse(
                         call: Call<LocationResponse>,
