@@ -58,7 +58,7 @@ class fragment_profile : Fragment() {
     private val REQUEST_IMAGE_SELECT = 1
     private var selectedImageUri: Uri? = null
     private val defaultImageUrl =
-        "https://firebasestorage.googleapis.com/v0/b/testing-f501e.appspot.com/o/images%2Fe16ef3a0-7724-4847-a490-d685d22789ce.jpg?alt=media&token=4196f722-af88-4c4d-b815-94ac70aca525"
+        "https://firebasestorage.googleapis.com/v0/b/${BuildConfig.FIREBASE_IMAGE_KEY}"
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
     private val userPreferencesRepository by lazy {
@@ -135,7 +135,7 @@ class fragment_profile : Fragment() {
         //유저프로필 수정 기능 추가. 24.08.20.
         userProfileEditButton.setOnClickListener {
             enableTextViewEditing(textView_user_name_show)
-            enableTextViewEditing(textView_user_email_show)
+        // enableTextViewEditing(textView_user_email_show)
 
             userProfileEditButton.visibility = View.GONE
             userProfileSaveButton.visibility = View.VISIBLE
@@ -157,17 +157,17 @@ class fragment_profile : Fragment() {
         }
 
         // 로그아웃 버튼 구현 24.08.15.
-        val logout = view.findViewById<Button>(R.id.logout_button)
-        logout.setOnClickListener {
-            val intent = Intent(requireContext(), LoginActivity::class.java)
-            val token : String = ""
-            lifecycleScope.launch {
-                userPreferencesRepository.setAccessToken(token)
-                userPreferencesRepository.setRefreshToken(token)
-                startActivity(intent)
-
-            }
-        }
+//        val logout = view.findViewById<Button>(R.id.logout_button)
+//        logout.setOnClickListener {
+//            val intent = Intent(requireContext(), LoginActivity::class.java)
+//            val token : String = ""
+//            lifecycleScope.launch {
+//                userPreferencesRepository.setAccessToken(token)
+//                userPreferencesRepository.setRefreshToken(token)
+//                startActivity(intent)
+//
+//            }
+//        }
 
         //FirebaseApp 실행 전 초기화.
         FirebaseApp.initializeApp(requireContext())

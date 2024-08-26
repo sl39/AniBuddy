@@ -167,7 +167,7 @@ class MessageListActivity : AppCompatActivity() {
                     val client = OkHttpClient()
                     val request: Request = Request.Builder()
                         .addHeader("Authorization", "Bearer $accessToken")
-                        .url("ws://3.36.140.201:8080/chat/$roomId").build()
+                        .url("${BuildConfig.MESSAGE_URL}/chat/$roomId").build()
 
                     val websocketListener = HttpWebSocket()
                     webSocket = client.newWebSocket(request, websocketListener)

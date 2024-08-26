@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.anibuddy.global.CustomUserDetails;
 import org.example.anibuddy.user.UserEntity;
 import org.example.anibuddy.user.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;

@@ -34,6 +34,7 @@ public class PetEntity {
 	@Column(nullable = false)
     private String petAge;
 
+
     @Column(nullable = false)
     private String petGender;
 

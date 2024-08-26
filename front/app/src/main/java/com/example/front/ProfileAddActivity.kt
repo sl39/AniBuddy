@@ -44,8 +44,7 @@ class ProfileAddActivity : AppCompatActivity() {
 
     private val context = this@ProfileAddActivity
 
-
-    private val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/testing-f501e.appspot.com/o/images%2Fe16ef3a0-7724-4847-a490-d685d22789ce.jpg?alt=media&token=4196f722-af88-4c4d-b815-94ac70aca525"
+    private val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/${BuildConfig.FIREBASE_IMAGE_KEY}"
 
     private var userId: Int? = null
 
@@ -299,7 +298,7 @@ class ProfileAddActivity : AppCompatActivity() {
         val petCategory = if (selectedMainCategory == "그 외") "P" else convertCategoryToEnglish(
             selectedMainCategory
         )
-        val petAge = petAgeEditText.getText().toString().toInt()
+        val petAge = petAgeEditText.getText().toString()
         val petChipNumber = petChipNumberEditText.getText().toString().toLong()
 
         val imageUrl = imageUrl
@@ -323,33 +322,36 @@ class ProfileAddActivity : AppCompatActivity() {
 //        if (base64Image.isNotEmpty()) {
 //            apiService.petProfileRegistration(petCreateDTO, userId).enqueue(object :
 //                Callback<UserResponse> {
-        apiService.petProfileRegistration(petCreateDTO, userId).enqueue(object : Callback<UserResponse> {
-            override fun onResponse(
-                call: Call<UserResponse>,
-                response: Response<UserResponse>
-            ) {
-                if (response.isSuccessful) {
-                    Toast.makeText(
-                        this@ProfileAddActivity,
-                        "프로필 추가 완료: ${response.body()?.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    finish()
-                } else {
-                    Toast.makeText(this@ProfileAddActivity, "요청 실패!", Toast.LENGTH_SHORT).show()
-                }
-            }
+        if (petCreateDTO.petName != null && petCreateDTO.petKind != null && petCreateDTO.petNeutering != null && petCreateDTO.petGender != null && petCreateDTO.petAge != null && petCreateDTO.petCategory != null) {
+            apiService.petProfileRegistration(petCreateDTO, userId)
+                .enqueue(object : Callback<UserResponse> {
+                    override fun onResponse(
+                        call: Call<UserResponse>,
+                        response: Response<UserResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            Toast.makeText(
+                                this@ProfileAddActivity,
+                                "프로필 추가 완료: ${response.body()?.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            finish()
+                        } else {
+                            Toast.makeText(this@ProfileAddActivity, "요청 실패!", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
 
-            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
-                Toast.makeText(
-                    this@ProfileAddActivity,
-                    "network error! : ${t.message}",
-                    Toast.LENGTH_SHORT
-                ).show();
-            }
-        })
+                    override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                        Toast.makeText(
+                            this@ProfileAddActivity,
+                            "network error! : ${t.message}",
+                            Toast.LENGTH_SHORT
+                        ).show();
+                    }
+                })
+        }
     }
-
     inner class ItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener {
         override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
             when (menuItem.itemId) {

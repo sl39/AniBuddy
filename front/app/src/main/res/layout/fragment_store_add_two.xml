@@ -48,7 +48,9 @@
                     android:text="사진 등록"
                     android:textSize="20dp"
                     android:textStyle="bold" />
+
                 <Button
+                    android:id="@+id/storeImageAddButton"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="+" />

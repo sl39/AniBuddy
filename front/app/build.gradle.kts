@@ -8,10 +8,12 @@ plugins {
     id("kotlin-kapt")
     id("realm-android")
     id("com.google.gms.google-services") //FCM
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 var properties = Properties()
 properties.load(FileInputStream("local.properties"))
+var NAVER_MAP = properties.getProperty("NAVER_MAP")
 
 android {
     namespace = "com.example.front"
@@ -23,8 +25,14 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        buildConfigField("String", "NAVER_MAP", properties.getProperty("NAVER_MAP"))
         buildConfigField("String", "BASE_URL", properties.getProperty("BASE_URL"))
+        buildConfigField("String", "MESSAGE_URL", properties.getProperty("MESSAGE_URL"))
+        buildConfigField("String", "ADDRESS_KEY", properties.getProperty("ADDRESS_KEY"))
+        buildConfigField("String", "FIREBASE_IMAGE_KEY", properties.getProperty("FIREBASE_IMAGE_KEY"))
+        buildConfigField("String", "KAKAO_LOCATION_KEY", properties.getProperty("KAKAO_LOCATION_KEY"))
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders["NAVER_MAP"] = NAVER_MAP
     }
 
     buildTypes {

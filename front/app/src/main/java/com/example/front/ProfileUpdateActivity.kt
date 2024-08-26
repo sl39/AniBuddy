@@ -59,7 +59,7 @@ class ProfileUpdateActivity : AppCompatActivity() {
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
     private val context = this@ProfileUpdateActivity
-    private val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/testing-f501e.appspot.com/o/images%2Fe16ef3a0-7724-4847-a490-d685d22789ce.jpg?alt=media&token=4196f722-af88-4c4d-b815-94ac70aca525"
+    private val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/${BuildConfig.FIREBASE_IMAGE_KEY}"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -275,32 +275,46 @@ class ProfileUpdateActivity : AppCompatActivity() {
         val petGender = petGenderEditText.getText().toString().trim()
         val petSignificant = petSignificantEditText.getText().toString().trim()
         val petCategory =  if (selectedMainCategory == "직접 입력") "P" else convertCategoryToEnglish(selectedMainCategory)
-        val petAge = petAgeEditText.getText().toString().toInt()
+        val petAge = petAgeEditText.getText().toString()
         val petChipNumber = petChipNumberEditText.getText().toString().toLong()
 
         val imageUrl = imageUrl
         val base64Image = imageUrl
 
-        val petCreateDTO = PetCreateDTO(petName, petKind, petNeutering, petGender, petSignificant, petCategory, base64Image, petAge, petChipNumber)
+        val petCreateDTO = PetCreateDTO(
+            petName,
+            petKind,
+            petNeutering,
+            petGender,
+            petSignificant,
+            petCategory,
+            base64Image,
+            petAge,
+            petChipNumber
+        )
 
         val petId = getIntent().getIntExtra("petId", -1)
-
-        apiService.petProfileUpdate(petCreateDTO, petId).enqueue(object :
-            Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>){
-                if(response.isSuccessful) {
-                    Toast.makeText(this@ProfileUpdateActivity,"프로필 수정 완료", Toast.LENGTH_SHORT).show();
-                    finish()
-                } else {
-                    Toast.makeText(this@ProfileUpdateActivity, "요청 실패!", Toast.LENGTH_SHORT).show()
+        if (petCreateDTO.petName != null && petCreateDTO.petKind != null && petCreateDTO.petNeutering != null && petCreateDTO.petGender != null && petCreateDTO.petAge != null && petCreateDTO.petCategory != null) {
+            apiService.petProfileUpdate(petCreateDTO, petId).enqueue(object :
+                Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@ProfileUpdateActivity, "프로필 수정 완료", Toast.LENGTH_SHORT)
+                            .show();
+                        finish()
+                    } else {
+                        Toast.makeText(this@ProfileUpdateActivity, "요청 실패!", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
-            }
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                Toast.makeText(this@ProfileUpdateActivity, "network error!", Toast.LENGTH_SHORT).show();
-            }
-        })
-    }
 
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Toast.makeText(this@ProfileUpdateActivity, "network error!", Toast.LENGTH_SHORT)
+                        .show();
+                }
+            })
+        }
+    }
     inner class ItemSelectedListener : BottomNavigationView.OnNavigationItemSelectedListener {
         override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
             when (menuItem.itemId) {

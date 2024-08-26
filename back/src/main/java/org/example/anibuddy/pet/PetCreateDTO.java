@@ -6,7 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PetCreateDTO {
-	private String petName, petKind, petNeutering, petGender, petSignificant, petCategory, base64Image;
-	private Integer petAge;
+	private String petName, petKind, petNeutering, petGender, petSignificant, petCategory, base64Image, petAge;
 	private long petChipNumber;
 }
