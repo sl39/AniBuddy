@@ -2,8 +2,6 @@
 
 ## AniBuddy
 
-
-
 ### 프로젝트 개요
 
 ---
@@ -28,19 +26,9 @@
   
   - 행동교정사 및 애견 미용샵의 입장에서 업체 홍보 및 본인들의 정보를 노출하고 예약을 연동하여 효율적 예약 서비스 이용 가능
 
-
-
 ### 주요기능
 
 ---
-
-
-
-
-
-
-
-
 
 ### 기술 스택
 
@@ -54,13 +42,11 @@
 
 - **CI/CD** : AWS EC2, AWS RDS, Firebase Storage
 
-
-
 ### 시스템 아키텍쳐
 
 ---
 
-![](C:\Users\Admin\Desktop\KakaoTalk_20240826_155813554.png)
+![KakaoTalk_20240826_155813554.png](D:\sw\petproject\AniBuddy\images\KakaoTalk_20240826_155813554.png)
 
 ### 설계 산출물 및 관련 문서
 
@@ -68,27 +54,21 @@
 
 ##### 요구사항 정의
 
-![](C:\Users\Admin\AppData\Roaming\marktext\images\2024-08-27-14-09-48-image.png)
+![2024-08-27-14-09-48-image.png](D:\sw\petproject\AniBuddy\images\2024-08-27-14-09-48-image.png)
 
-![](C:\Users\Admin\AppData\Roaming\marktext\images\2024-08-27-14-09-53-image.png)
-
-
+![2024-08-27-14-09-53-image.png](D:\sw\petproject\AniBuddy\images\2024-08-27-14-09-53-image.png)
 
 ##### 화면설계서
 
-![](C:\Users\Admin\AppData\Roaming\marktext\images\2024-08-27-14-11-20-image.png)
+![2024-08-27-14-11-20-image.png](D:\sw\petproject\AniBuddy\images\2024-08-27-14-11-20-image.png)
 
-![](C:\Users\Admin\AppData\Roaming\marktext\images\2024-08-27-14-11-37-image.png)
-
-
+![2024-08-27-14-11-37-image.png](D:\sw\petproject\AniBuddy\images\2024-08-27-14-11-37-image.png)
 
 ##### ERD
 
-![Untitled.png](C:\Users\Admin\Desktop\Untitled.png)
+![Untitled.png](D:\sw\petproject\AniBuddy\images\Untitled.png)
 
-![Untitled (1).png](C:\Users\Admin\Desktop\Untitled%20(1).png)
-
-
+![Untitled (1).png](D:\sw\petproject\AniBuddy\images\Untitled%20(1).png)
 
 ### 팀원 소개
 
