@@ -46,7 +46,7 @@
 
 ---
 
-![KakaoTalk_20240826_155813554.png](D:\sw\petproject\AniBuddy\images\KakaoTalk_20240826_155813554.png)
+<img title="" src="./images/KakaoTalk_20240826_155813554.png" alt="KakaoTalk_20240826_155813554.png" data-align="inline">
 
 ### 설계 산출물 및 관련 문서
 
@@ -54,21 +54,21 @@
 
 ##### 요구사항 정의
 
-![2024-08-27-14-09-48-image.png](D:\sw\petproject\AniBuddy\images\2024-08-27-14-09-48-image.png)
+![2024-08-27-14-09-48-image.png](.\images\2024-08-27-14-09-48-image.png)
 
-![2024-08-27-14-09-53-image.png](D:\sw\petproject\AniBuddy\images\2024-08-27-14-09-53-image.png)
+![2024-08-27-14-09-53-image.png](.\images\2024-08-27-14-09-53-image.png)
 
 ##### 화면설계서
 
-![2024-08-27-14-11-20-image.png](D:\sw\petproject\AniBuddy\images\2024-08-27-14-11-20-image.png)
+![2024-08-27-14-11-20-image.png](.\images\2024-08-27-14-11-20-image.png)
 
-![2024-08-27-14-11-37-image.png](D:\sw\petproject\AniBuddy\images\2024-08-27-14-11-37-image.png)
+![2024-08-27-14-11-37-image.png](.\images\2024-08-27-14-11-37-image.png)
 
 ##### ERD
 
-![Untitled.png](D:\sw\petproject\AniBuddy\images\Untitled.png)
+![Untitled.png](.\images\Untitled.png)
 
-![Untitled (1).png](D:\sw\petproject\AniBuddy\images\Untitled%20(1).png)
+![Untitled (1).png](.\images\Untitled%20(1).png)
 
 ### 팀원 소개
 
