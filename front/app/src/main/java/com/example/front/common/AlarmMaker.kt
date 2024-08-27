@@ -97,7 +97,6 @@ class AlarmMaker {
 
         val alarmId: RealmResults<AlarmId> = db.where<AlarmId>()
             .equalTo("reservationId", reservationId)
-            .sort("createdAt")
             .findAll()
 
         // 예약이 이미 확정되어 IntentId가 생성된 경우

@@ -71,7 +71,7 @@ public class ReservationService {
 
         notificationService.pushReservationNotification(user.get().getId(), Role.ROLE_USER, obj.toJSONString());
         //현재 데이터에는 Owner가 없는 Store가 대부분이라 getOwnerEntity()에서 에러가 나 예약 실패가 되기 때문에 주석 처리
-        //notificationService.pushReservationNotification(storeEntity.getOwnerEntity().getId(), Role.ROLE_OWNER, obj.toJSONString());
+        notificationService.pushReservationNotification(storeEntity.getOwnerEntity().getId(), Role.ROLE_OWNER, obj.toJSONString());
 
         return res.getId();
     }

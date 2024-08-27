@@ -68,7 +68,7 @@ class fragment_reservation_complete_owner_list : Fragment() {
                             val date = LocalDateTime.parse(reservation.reservationTime)
                             val now = LocalDateTime.now(ZoneId.of("Asia/Seoul"))
                             // 예약 시간이 현재 시간보다 크거나 같은지 비교
-                            date < now
+                            date < now || reservation.state == 2
 
                         }
                         reservationAdapter.updateReservations(reservationList) // 어댑터에 데이터 업데이트

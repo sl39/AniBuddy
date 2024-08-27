@@ -62,6 +62,8 @@ class ReservationCompleteOwnerActivity : AppCompatActivity() {
                             cancelBtn.text = "취소된 예약입니다"
                             cancelBtn.isEnabled = false
                             findViewById<TextView>(R.id.textNote).visibility = View.INVISIBLE
+                            findViewById<Button>(R.id.editReservationButton).visibility = View.INVISIBLE
+
                         } else if(data.state == 1){
                             val editBtn = findViewById<Button>(R.id.editReservationButton)
                             editBtn.text = "확정된 예약입니다"

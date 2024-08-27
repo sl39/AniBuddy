@@ -196,7 +196,7 @@ public class NotificationService {
                 otherFcmToken = optional.get().getFcmToken();
             } else {
                 //테스트 환경에서 Owner의 fcm Token을 발급받을 수 없어 주석처리
-                //throw new RuntimeException("상대방의 fcm 토큰이 존재하지 않습니다");
+                throw new RuntimeException("상대방의 fcm 토큰이 존재하지 않습니다");
             }
         }
 

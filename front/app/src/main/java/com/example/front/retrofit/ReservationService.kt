@@ -62,7 +62,7 @@ data class ReservationUpdateRequest(
 )
 
 data class ReservationResponse(
-    val resvationId: Int,
+        val resvationId: Int,
 )
 
 data class Reservation(
